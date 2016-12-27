@@ -5,7 +5,7 @@ import sys
 import time
 import random
 import base64
-
+import warnings
 from datetime import datetime
 
 import networkx as nx
@@ -43,9 +43,13 @@ def draw_graphviz(G, text, basename, command="dot"):
 
 
 def draw_cytoscape(G, text, basename):
-    from py2cytoscape.data.cyrest_client import CyRestClient
-    from py2cytoscape.data.util_network import NetworkUtil as util
-    from py2cytoscape.data.style import StyleUtil as s_util
+    from networkx.drawing.nx_agraph import graphviz_layout
+    # igraph uses deprecated things
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore",category=DeprecationWarning)
+        from py2cytoscape.data.cyrest_client import CyRestClient
+        from py2cytoscape.data.util_network import NetworkUtil as util
+        from py2cytoscape.data.style import StyleUtil as s_util
 
     # fixme should be asked from the server
     styles = ["Sample3", "Sample3", "Curved", 
