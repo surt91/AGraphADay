@@ -116,8 +116,9 @@ def draw_cytoscape(G, text, basename):
 
     cy.style.apply(style=style_s3, network=g_cy)
 
+    cy.layout.fit(g_cy)
     # cytoscape needs some time to rescale the graphic
-    time.sleep(10)
+    time.sleep(5)
 
     svg = g_cy.get_svg()
     with open(basename+".svg", "wb") as f:
