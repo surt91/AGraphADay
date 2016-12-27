@@ -208,7 +208,7 @@ def get_random_graph(seed):
         l = random.randint(1, 5)
         k = random.randint(1, 5)
         G = nx.relaxed_caveman_graph(l, k, p)
-        text = "Caveman, l = {}, k = {}, p = {:.2f} ({})".format(l, k, p, seed)
+        text = "Relaxed Caveman, l = {}, k = {}, p = {:.2f} ({})".format(l, k, p, seed)
 
     elif idx == 11:
         G = relative_neighborhood_graph(N)
