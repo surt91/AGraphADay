@@ -14,13 +14,25 @@ from networkx import generators as gen
 from twitter_helper import tweet_pic
 
 
+def has_explicit_coordinates(G):
+    # Guess if the graph has explicit coordinates
+    try:
+        float((G.nodes()[0][0]))
+        graph_has_coordinates = True
+    except:
+        graph_has_coordinates = False
+    return graph_has_coordinates
 
 
 def draw_graph(G, text, basename, command="neato"):
     from matplotlib import pyplot as plt
-    from networkx.drawing.nx_agraph import to_agraph, graphviz_layout
-    
-    pos = graphviz_layout(G, command)
+    from networkx.drawing.nx_agraph import graphviz_layout
+
+    if has_explicit_coordinates(G):
+        pos = {n: (n[0], n[1]) for n in G.nodes()}
+    else:
+        pos = graphviz_layout(G, command)
+
     nx.draw(G, pos)
     ax = plt.gca()
     plt.text(0.99, 0.01, text,
@@ -57,22 +69,48 @@ def draw_cytoscape(G, text, basename):
     # http://localhost:1234/v1/apply/layouts/
     layouts = [ "stacked-node-layout",
                 "circular", "kamada-kawai", "force-directed",
-                "hierarchical", "fruchterman-rheingold", "isom"]
+                "hierarchical", "isom"]
+#    graphviz = ["neato", "dot", "circo", "twopi", "fdp"]
+    graphviz = ["twopi", "neato"]
+    layouts += graphviz
 
     style = random.choice(styles)
     layout = random.choice(layouts)
 
-    details = "style = {}, layout = {}".format(style, layout)
-
     # Create Client
     cy = CyRestClient()
-    # Clear current session
     cy.session.delete()
-    
+
     g_cy = cy.network.create_from_networkx(G)
 
-    cy.layout.apply(network=g_cy, name=layout)
+    # assign lacations manual
+    locations = []
+    if has_explicit_coordinates(G):
+        layout = "explicit"
+
+        idmap = util.name2suid(g_cy)
+        for v in G.nodes():
+            locations.append([int(idmap[str(v)]), v[0]*1000, v[1]*1000])
+
+    elif layout in graphviz:
+        pos = graphviz_layout(G, layout)
+
+        idmap = util.name2suid(g_cy)
+
+        for k in pos.keys():
+            v = pos[k]
+            locations.append([int(idmap[k]), v[0] , v[1]])
+
+    details = "style = {}, layout = {}".format(style, layout)
+
+    # if there are explicit locations, use them
+    if locations:
+        cy.layout.apply_from_presets(g_cy, positions=locations)
+    else:
+        cy.layout.apply(network=g_cy, name=layout)
+
     style_s3 = cy.style.create(style)
+
     # do not show numbers at the nodes
     style_s3.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings={g: "" for g in G})
 
