@@ -11,14 +11,9 @@ from datetime import datetime
 import networkx as nx
 from networkx import generators as gen
 
-import twitter
-
-from keys_and_secrets import keys_and_secrets
+from twitter_helper import tweet_pic
 
 
-def tweet_pic(path):
-    api = twitter.Api(**keys_and_secrets)
-    api.PostUpdate("", path)
 
 
 def draw_graph(G, text, basename, command="neato"):
