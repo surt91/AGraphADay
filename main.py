@@ -31,6 +31,7 @@ def draw_graph(G, text, basename, command="neato"):
 
     if has_explicit_coordinates(G):
         pos = {n: (n[0], n[1]) for n in G.nodes()}
+        command = "explicit"
     else:
         pos = graphviz_layout(G, command)
 
@@ -234,6 +235,7 @@ if __name__ == "__main__":
     os.makedirs(folder, exist_ok=True)
     basename = str(int(datetime.timestamp(datetime.now())))
     basename = os.path.join(folder, basename)
+
     try:
         path, details = draw_cytoscape(G, text, basename)
     except:
