@@ -95,8 +95,8 @@ def draw_cytoscape(G, text, basename):
 
 def get_random_graph(seed):
     random.seed(seed)
-    total = 5
-    
+    total = 10
+
     idx = random.randint(1, total)
     N = random.randint(4, 100)
 
@@ -105,32 +105,67 @@ def get_random_graph(seed):
         while m < 0:
             m = int(random.gauss(N, N))
         G = gen.gnm_random_graph(N, m)
-        text = "Erdős-Rényi, N = {}, m = {}, ({})".format(N, m, seed)
+        text = "Erdős-Rényi, N = {}, m = {} ({})".format(N, m, seed)
 
     elif idx == 2:
         k = random.randint(2, 5)
         p = random.uniform(0, 0.2)
         s = random.randint(0, 10**7)
         G = gen.newman_watts_strogatz_graph(N, k, p, s)
-        text = "Newman-Watts-Strogatz, N = {}, k = {}, p = {:.2f}, s = {}, ({})".format(N, k, p, s, seed)
+        text = "Newman-Watts-Strogatz, N = {}, k = {}, p = {:.2f}, s = {} ({})".format(N, k, p, s, seed)
 
     elif idx == 3:
         d = random.randint(1, 5)
         if N*d % 2:
             N += 1
         G = gen.random_regular_graph(d, N)
-        text = "Random Regular, N = {}, d = {}, ({})".format(N, d, seed)
+        text = "Random Regular, N = {}, d = {} ({})".format(N, d, seed)
 
     elif idx == 4:
         m = random.randint(1, 5)
         G = gen.barabasi_albert_graph(N, m)
-        text = "Barabasi-Albert, N = {}, m = {}, ({})".format(N, m, seed)
+        text = "Barabasi-Albert, N = {}, m = {} ({})".format(N, m, seed)
 
     elif idx == 5:
         m = random.randint(1, 5)
         p = random.random()
         G = gen.powerlaw_cluster_graph(N, m, p)
         text = "Powerlaw Cluster, N = {}, m = {}, p = {:.2f} ({})".format(N, m, p, seed)
+
+    elif idx == 6:
+        p = random.random()
+        s = random.randint(0, 10**7)
+        G = gen.duplication_divergence_graph(N, p, s)
+        text = "Duplication Divergence, N = {}, p = {:.2f}, s = {} ({})".format(N, p, s, seed)
+
+    elif idx == 7:
+        p1 = random.uniform(0, 4)
+        p2 = random.uniform(0, 4)
+        G = gen.random_lobster(N, p1, p2)
+        text = "Random Lobster, N = {}, p1 = {:.2f}, p2 = {:.2f} ({})".format(N, p1, p2, seed)
+
+    elif idx == 8:
+        # special graphs, group under one, such that they are rare
+        generators = [gen.karate_club_graph,
+                      gen.davis_southern_women_graph,
+                      gen.florentine_families_graph]
+        label = ["Karate Club", "Davis Southern Women", "Florentine Families"]
+        j = random.randint(0, len(generators)-1)
+        G = generators[j]()
+        text = "{} ({})".format(label[j], seed)
+
+    elif idx == 9:
+        l = random.randint(1, 5)
+        k = random.randint(1, 5)
+        G = nx.caveman_graph(l, k)
+        text = "Caveman, l = {}, k = {} ({})".format(l, k, seed)
+
+    elif idx == 10:
+        p = random.uniform(0.1, 0.5)
+        l = random.randint(1, 5)
+        k = random.randint(1, 5)
+        G = nx.relaxed_caveman_graph(l, k, p)
+        text = "Caveman, l = {}, k = {}, p = {:.2f} ({})".format(l, k, p, seed)
 
     return G, text
 
