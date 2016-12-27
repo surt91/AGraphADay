@@ -47,9 +47,9 @@ def draw_cytoscape(G, text, basename):
     styles = ["Sample3", "Sample3", "Curved", 
               "Ripple", "Sample2", "default black", "Minimal"]
     # http://localhost:1234/v1/apply/layouts/
-    layouts = ["stacked-node-layout", "degree-circle", 
+    layouts = [ "stacked-node-layout",
                 "circular", "kamada-kawai", "force-directed",
-                "grid", "hierarchical", "fruchterman-rheingold", "isom"]
+                "hierarchical", "fruchterman-rheingold", "isom"]
 
     style = random.choice(styles)
     layout = random.choice(layouts)
