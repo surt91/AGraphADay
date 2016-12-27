@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import random
 import base64
 
@@ -70,13 +71,16 @@ def draw_cytoscape(G, text, basename):
 
     cy.style.apply(style=style_s3, network=g_cy)
 
-    png = g_cy.get_png(height=2000)
-    with open(basename+".png", "wb") as f:
-        f.write(png)
+    # cytoscape needs some time to rescale the graphic
+    time.sleep(10)
 
     svg = g_cy.get_svg()
     with open(basename+".svg", "wb") as f:
         f.write(svg)
+
+    png = g_cy.get_png(height=2000)
+    with open(basename+".png", "wb") as f:
+        f.write(png)
 
     return basename+".png", details
 
