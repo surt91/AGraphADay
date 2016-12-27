@@ -12,6 +12,7 @@ import networkx as nx
 from networkx import generators as gen
 
 from twitter_helper import tweet_pic
+from proximity_graphs import relative_neighborhood_graph, gabriel_graph
 
 
 def has_explicit_coordinates(G):
@@ -136,7 +137,7 @@ def draw_cytoscape(G, text, basename):
 
 def get_random_graph(seed):
     random.seed(seed)
-    total = 10
+    total = 12
 
     idx = random.randint(1, total)
     N = random.randint(4, 100)
@@ -207,6 +208,14 @@ def get_random_graph(seed):
         k = random.randint(1, 5)
         G = nx.relaxed_caveman_graph(l, k, p)
         text = "Caveman, l = {}, k = {}, p = {:.2f} ({})".format(l, k, p, seed)
+
+    elif idx == 11:
+        G = relative_neighborhood_graph(N)
+        text = "Relative Neighborhood Graph, N = {}".format(N)
+
+    elif idx == 12:
+        G = gabriel_graph(N)
+        text = "Gabriel Graph, N = {}".format(N)
 
     return G, text
 
