@@ -143,5 +143,6 @@ if __name__ == "__main__":
         f.write(details)
         f.write("\n")
 
-    tweet_pic(path)
+    if not "test" in sys.argv:
+        tweet_pic(path)
 
