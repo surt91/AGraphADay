@@ -137,7 +137,7 @@ if __name__ == "__main__":
     basename = str(int(datetime.timestamp(datetime.now())))
     path, details = draw_cytoscape(G, text, basename)
 
-    with open(basename+".txt", w) as f:
+    with open(basename+".txt", "w") as f:
         f.write(text)
         f.write("\n")
         f.write(details)
