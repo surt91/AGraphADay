@@ -70,9 +70,12 @@ def draw_cytoscape(G, text, basename):
     layouts = [ "stacked-node-layout",
                 "circular", "kamada-kawai", "force-directed",
                 "hierarchical", "isom"]
-#    graphviz = ["neato", "dot", "circo", "twopi", "fdp"]
-    graphviz = ["twopi", "neato"]
-    layouts += graphviz
+
+    graphviz = ["neato", "dot", "circo", "twopi", "fdp"]
+
+    # only use for small graphs
+    if len(G) < 60:
+        layouts += graphviz
 
     style = random.choice(styles)
     layout = random.choice(layouts)
