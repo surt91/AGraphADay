@@ -29,10 +29,16 @@ def draw_graph(G, text, basename, command="neato"):
     nx.draw(G, pos)
     ax = plt.gca()
     plt.text(0.99, 0.01, text,
-            verticalalignment='bottom', horizontalalignment='right',
+            verticalalignment='bottom', 
+            horizontalalignment='right',
             transform=ax.transAxes,
             fontsize=10)
     plt.savefig(basename+".svg")
+    plt.savefig(basename+".png")
+
+    details = "style = {}, layout = {}".format("default", command)
+
+    return basename+".png", details
 
 
 def draw_graphviz(G, text, basename, command="dot"):
@@ -130,18 +136,25 @@ def get_random_graph(seed):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 1 and sys.argv[1] != "test":
         seed = sys.argv[1]
     else:
         seed = base64.b64encode(os.urandom(8)).decode("ascii")
 
     print(seed)
     G, text = get_random_graph(seed)
-#    draw_graph(G, text, "test", "neato")
-#    draw_graphviz(G, text, "test")
+    print(text)
 
+    folder = "archive"
+    os.makedirs(folder, exist_ok=True)
     basename = str(int(datetime.timestamp(datetime.now())))
-    path, details = draw_cytoscape(G, text, basename)
+    basename = os.path.join(folder, basename)
+    try:
+        path, details = draw_cytoscape(G, text, basename)
+    except:
+        path, details = draw_graph(G, text, basename, "neato")
+
+    print(details)
 
     with open(basename+".txt", "w") as f:
         f.write(text)
