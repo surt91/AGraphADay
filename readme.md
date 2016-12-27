@@ -17,4 +17,4 @@ Dependencies
 
 * Cytoscape
     http://www.cytoscape.org/
-    run with Restserver on localhost at port 1234
+    run with REST server on localhost at port 1234
