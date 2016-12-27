@@ -140,7 +140,7 @@ def get_random_graph(seed):
     total = 12
 
     idx = random.randint(1, total)
-    N = random.randint(4, 100)
+    N = random.randint(4, 400)
 
     if idx == 1:
         m = -1
@@ -197,7 +197,7 @@ def get_random_graph(seed):
         text = "{} ({})".format(label[j], seed)
 
     elif idx == 9:
-        l = random.randint(1, 5)
+        l = random.randint(2, 10)
         k = random.randint(1, 5)
         G = nx.caveman_graph(l, k)
         text = "Caveman, l = {}, k = {} ({})".format(l, k, seed)
