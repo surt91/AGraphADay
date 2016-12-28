@@ -14,6 +14,8 @@ from networkx import generators as gen
 from twitter_helper import tweet_pic
 from proximity_graphs import relative_neighborhood_graph, gabriel_graph
 
+absdir = os.path.abspath(os.path.dirname(__file__))
+
 
 def has_explicit_coordinates(G):
     # Guess if the graph has explicit coordinates
@@ -231,7 +233,7 @@ if __name__ == "__main__":
     G, text = get_random_graph(seed)
     print(text)
 
-    folder = "archive"
+    folder = os.path.join(absdir, "archive")
     os.makedirs(folder, exist_ok=True)
     basename = str(int(datetime.timestamp(datetime.now())))
     basename = os.path.join(folder, basename)
