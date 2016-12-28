@@ -156,7 +156,9 @@ def get_random_graph(seed):
         k = random.randint(2, 5)
         p = random.uniform(0, 0.2)
         s = random.randint(0, 10**7)
+        state = random.getstate()
         G = gen.newman_watts_strogatz_graph(N, k, p, s)
+        random.setstate(state)
         text = "Newman-Watts-Strogatz, N = {}, k = {}, p = {:.2f}, s = {} ({})".format(N, k, p, s, seed)
 
     elif idx == 3:
@@ -180,14 +182,19 @@ def get_random_graph(seed):
     elif idx == 6:
         p = random.random()
         s = random.randint(0, 10**7)
+        state = random.getstate()
         G = gen.duplication_divergence_graph(N, p, s)
+        random.setstate(state)
         text = "Duplication Divergence, N = {}, p = {:.2f}, s = {} ({})".format(N, p, s, seed)
 
     elif idx == 7:
         p1 = random.uniform(0, 4)
         p2 = random.uniform(0, 4)
+        s = random.randint(0, 10**7)
+        state = random.getstate()
         G = gen.random_lobster(N, p1, p2)
-        text = "Random Lobster, N = {}, p1 = {:.2f}, p2 = {:.2f} ({})".format(N, p1, p2, seed)
+        random.setstate(state)
+        text = "Random Lobster, N = {}, p1 = {:.2f}, p2 = {:.2f}, s = {} ({})".format(N, p1, p2, s, seed)
 
     elif idx == 8:
         # special graphs, group under one, such that they are rare
@@ -200,24 +207,31 @@ def get_random_graph(seed):
         text = "{} ({})".format(label[j], seed)
 
     elif idx == 9:
-        l = random.randint(2, 10)
-        k = random.randint(1, 5)
+        l = random.randint(1, 5)
+        k = random.randint(2, 9)
         G = nx.caveman_graph(l, k)
         text = "Caveman, l = {}, k = {} ({})".format(l, k, seed)
 
     elif idx == 10:
         p = random.uniform(0.05, 0.3)
         l = random.randint(1, 5)
-        k = random.randint(1, 5)
+        k = random.randint(3, 10)
+        s = random.randint(0, 10**7)
+        state = random.getstate()
         G = nx.relaxed_caveman_graph(l, k, p)
-        text = "Relaxed Caveman, l = {}, k = {}, p = {:.2f} ({})".format(l, k, p, seed)
+        random.setstate(state)
+        text = "Relaxed Caveman, l = {}, k = {}, p = {:.2f}, s = {} ({})".format(l, k, p, s, seed)
 
     elif idx == 11:
+        state = random.getstate()
         G = relative_neighborhood_graph(N)
+        random.setstate(state)
         text = "Relative Neighborhood Graph, N = {}".format(N)
 
     elif idx == 12:
+        state = random.getstate()
         G = gabriel_graph(N)
+        random.setstate(state)
         text = "Gabriel Graph, N = {}".format(N)
 
     return G, text
