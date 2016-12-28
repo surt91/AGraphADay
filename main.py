@@ -206,7 +206,7 @@ def get_random_graph(seed):
         text = "Caveman, l = {}, k = {} ({})".format(l, k, seed)
 
     elif idx == 10:
-        p = random.uniform(0.1, 0.5)
+        p = random.uniform(0.05, 0.3)
         l = random.randint(1, 5)
         k = random.randint(1, 5)
         G = nx.relaxed_caveman_graph(l, k, p)
