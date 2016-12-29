@@ -7,6 +7,7 @@ import random
 import base64
 import warnings
 from datetime import datetime
+from subprocess import call
 
 import networkx as nx
 from networkx import generators as gen
@@ -127,15 +128,17 @@ def draw_cytoscape(G, text, basename):
     # cytoscape needs some time to rescale the graphic
     time.sleep(5)
 
+    infile = basename+".svg"
+    outfile = basename+".png"
+
     svg = g_cy.get_svg()
-    with open(basename+".svg", "wb") as f:
+    with open(infile, "wb") as f:
         f.write(svg)
 
-    png = g_cy.get_png(height=2000)
-    with open(basename+".png", "wb") as f:
-        f.write(png)
+    # postprocessing using imagemagick and conversion to png
+    call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
 
-    return basename+".png", details
+    return outfile, details
 
 
 def get_random_graph(seed):
