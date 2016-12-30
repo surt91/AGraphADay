@@ -17,7 +17,7 @@ Y=1024
 border=5%x5%
 
 # get background color
-color=$(convert "$IN" -format "%[pixel:p{1,1}]" info:)
+color="$(convert "$IN" -format "%[pixel:p{1,1}]" info:)"
 
 # trim, raster and resize the image
 convert -density 1000 -trim "$IN" -bordercolor "$color" -border "$border" +repage -resize "$X"x"$Y" -rotate "-90<" "$TMP"
