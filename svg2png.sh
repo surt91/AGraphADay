@@ -9,9 +9,11 @@ OUT=$2
 TMP=tmp.png
 BG=bg.png
 
-# twitters Android stream has 1.8:1 pictures
-X=2700
-Y=1500
+# twitters Android stream has 1.8:1 pictures (2048x1137)
+# but twitter web seems to have 2:1          (2048x1024)
+# it is probably better to crop left/right in android than up/down in web
+X=2048
+Y=1024
 border=5%x5%
 
 # get background color
