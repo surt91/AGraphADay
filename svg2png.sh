@@ -29,3 +29,4 @@ composite -gravity center "$TMP" "$BG" "$OUT"
 optipng -o7 "$OUT"
 
 rm "$BG" "$TMP"
+

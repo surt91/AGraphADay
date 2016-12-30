@@ -21,3 +21,4 @@ Dependencies
 
 * Imagemagick
 * optipng
+
