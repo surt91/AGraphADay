@@ -22,7 +22,9 @@ color="$(convert "$IN" -format "%[pixel:p{1,1}]" info:)"
 # trim, raster and resize the image
 convert -density 1000 -trim "$IN" -bordercolor "$color" -border "$border" +repage -resize "$X"x"$Y" -rotate "-90<" "$TMP"
 
-convert -size "$X"x"$Y" canvas:"$color" "$BG"
+# create background, but add 1% transaprency to top left pixel
+# this way twitter should not convert the png into a jpg full of artifacts
+convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -fx "i==0&&j==0?$(echo $color | sed 's/)/,0.99)/' | sed 's/srgb/rgba/'):u" "$BG"
 
 # place the graph in the center of the background
 composite -gravity center "$TMP" "$BG" "$OUT"
