@@ -20,3 +20,4 @@ Dependencies
     run with REST server on localhost at port 1234
 
 * Imagemagick
+* optipng

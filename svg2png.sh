@@ -25,4 +25,7 @@ convert -size "$X"x"$Y" canvas:"$color" "$BG"
 # place the graph in the center of the background
 composite -gravity center "$TMP" "$BG" "$OUT"
 
+# compress more
+optipng -o7 "$OUT"
+
 rm "$BG" "$TMP"
