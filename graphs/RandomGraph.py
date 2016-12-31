@@ -97,9 +97,9 @@ class RandomGraph:
         return G, details
 
     def generateRL(self, N=None, p1=None, p2=None, s=None):
-        if N is None: N = random.randint(4, 400),
-        if p1 is None: p1 = random.uniform(0, 4),
-        if p2 is None: p2 = random.uniform(0, 4),
+        if N is None: N = random.randint(4, 400)
+        if p1 is None: p1 = random.uniform(0, 4)
+        if p2 is None: p2 = random.uniform(0, 4)
         if s is None: s = random.randint(0, 10**7)
 
         state = random.getstate()
@@ -125,8 +125,8 @@ class RandomGraph:
         return G, details
 
     def generateCaveman(self, l=None, k=None):
-        if l is None: l=random.randint(1, 5),
-        if k is None: k=random.randint(2, 9)
+        if l is None: l = random.randint(1, 5)
+        if k is None: k = random.randint(2, 9)
 
         G = nx.caveman_graph(l, k)
         details = dict(name="Caveman Graph", N=l*k, l=l, k=k, seed=self.seed,
@@ -135,9 +135,9 @@ class RandomGraph:
         return G, details
 
     def generateRelaxedCaveman(self, ):
-        if l is None: l = random.randint(1, 5),
-        if k is None: k = random.randint(2, 9),
-        if p is None: p = random.uniform(0.05, 0.3),
+        if l is None: l = random.randint(1, 5)
+        if k is None: k = random.randint(2, 9)
+        if p is None: p = random.uniform(0.05, 0.3)
         if s is None: s = random.randint(0, 10**7)
 
         state = random.getstate()
