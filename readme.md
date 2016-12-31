@@ -14,6 +14,7 @@ Dependencies
     * matplotlib
     * py2cytoscape
     * python-twitter
+    * fuzzywuzzy
 
 * Cytoscape
     http://www.cytoscape.org/
