@@ -170,3 +170,31 @@ class RandomGraph:
 
         return G, details
 
+    def generateBarbell(self, m1=None, m2=None):
+        if m1 is None: m1 = random.randint(3, 20)
+        if m2 is None: m2 = random.randint(1, 20)
+
+        G = gen.barbell_graph(m1, m2)
+        details = dict(name="Barbell Graph", N=len(G.nodes()), m1=m1, m2=m2, seed=self.seed,
+                       template="{name}, N = {N}, m1 = {m1}, m2 = {m2}")
+
+        return G, details
+
+    def generateCircularLadder(self, n=None):
+        if n is None: n = random.randint(3, 200)
+
+        G = gen.circular_ladder_graph(n)
+        details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n, seed=self.seed,
+                       template="{name}, N = {N}, n = {n}")
+
+        return G, details
+
+    def generateDGM(self, n=None):
+        if n is None: n = random.randint(2, 7)
+
+        G = gen.dorogovtsev_goltsev_mendes_graph(n)
+        details = dict(name="Dorogovtsev-Goltsev-Mendes", N=len(G.nodes()), n=n, seed=self.seed,
+                       template="{name}, N = {N}, n = {n}")
+
+        return G, details
+
