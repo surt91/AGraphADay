@@ -1,10 +1,25 @@
 import random
 import inspect
+from functools import wraps
 
 import networkx as nx
 from networkx import generators as gen
 
 from . import proximity_graphs
+
+
+# decorator to add synonyms of the graph types
+# this enables us to do a fuzzy matching
+synonyms = {}
+def synonym(synonym_name):
+    def synonym_decorator(func):
+        synonyms[synonym_name] = func
+
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return func_wrapper
+    return synonym_decorator
 
 
 class RandomGraph:
@@ -23,16 +38,20 @@ class RandomGraph:
 
         return gen(self)
 
+    @synonym("Erdos Renyi")
+    @synonym("Erdős-Rényi")
     def generateErdosRenyi(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = abs(int(random.gauss(N, N)))
 
         G = gen.gnm_random_graph(N, m)
         details = dict(name="Erdős-Rényi", N=N, m=m, seed=self.seed,
-                       template="{name}, N = {N}, k = {k}, p = {p:.2f}, s = {s}")
+                       template="{name}, N = {N}, m = {m}")
 
         return G, details
 
+    @synonym("Watts Strogatz")
+    @synonym("Newman Watts Strogatz")
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if k is None: k = random.randint(2, 5)
@@ -47,6 +66,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("Random Regular")
     def generateRandomRegular(self, N=None, d=None):
         if N is None: N = random.randint(4, 400)
         if d is None: d = random.randint(1, 5)
@@ -61,6 +81,8 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("Barabasi Albert")
+    @synonym("preferential attachment")
     def generateBarabasiAlbert(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
@@ -71,7 +93,8 @@ class RandomGraph:
 
         return G, details
 
-
+    @synonym("power law cluster")
+    @synonym("power law")
     def generatePowerLawCluster(self, N=None, m=None, p=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
@@ -83,6 +106,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("duplication divergence")
     def generateDuplicationDivergence(self, N=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if p is None: p = random.random()
@@ -96,6 +120,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("lobster")
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None):
         if N is None: N = random.randint(4, 400)
         if p1 is None: p1 = random.uniform(0, 4)
@@ -124,6 +149,8 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("caveman")
+    @synonym("clique")
     def generateCaveman(self, l=None, k=None):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
@@ -134,6 +161,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("relaxed caveman")
     def generateRelaxedCaveman(self, ):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
@@ -148,6 +176,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("relative neighborhood")
     def generateRelativeNeighborhood(self, N=None):
         if N is None: N = random.randint(4, 400)
 
@@ -159,6 +188,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("gabriel")
     def generateGabriel(self, N=None):
         if N is None: N = random.randint(4, 400)
 
@@ -170,6 +200,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("barbell")
     def generateBarbell(self, m1=None, m2=None):
         if m1 is None: m1 = random.randint(3, 20)
         if m2 is None: m2 = random.randint(1, 20)
@@ -180,6 +211,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("circular ladder")
     def generateCircularLadder(self, n=None):
         if n is None: n = random.randint(3, 200)
 
@@ -189,6 +221,8 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("Dorogovtsev Goltsev Mendes")
+    @synonym("fractal")
     def generateDorogovtsevGoltsevMendes(self, n=None):
         if n is None: n = random.randint(2, 7)
 
