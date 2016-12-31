@@ -16,15 +16,20 @@ X=2048
 Y=1024
 border=5%x5%
 
+# we will add a transparent border of 1px. this way twitter will not convert
+# it to jpg and add compression artifacts
+# here, we account for the extra 2 pixels in both directions
+X=$((X-2))
+Y=$((Y-2))
+
 # get background color
 color="$(convert "$IN" -format "%[pixel:p{1,1}]" info:)"
 
 # trim, raster and resize the image
 convert -density 1000 -trim "$IN" -bordercolor "$color" -border "$border" +repage -resize "$X"x"$Y" -rotate "-90<" "$TMP"
 
-# create background, but add 1% transaprency to top left pixel
-# this way twitter should not convert the png into a jpg full of artifacts
-convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -fx "i==0&&j==0?$(echo $color | sed 's/)/,0.99)/' | sed 's/[s]rgb[a]/rgba/'):u" "$BG"
+# create background, this way we will always get the same aspect ratio
+convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -bordercolor "rgba(0,0,0,0)" -border "1x1" "$BG"
 
 # place the graph in the center of the background
 composite -gravity center "$TMP" "$BG" "$OUT"
