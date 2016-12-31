@@ -35,7 +35,7 @@ convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -bordercolor "rg
 composite -gravity center "$TMP" "$BG" "$OUT"
 
 # compress more
-optipng -o7 "$OUT"
+#optipng -o7 "$OUT"
 
 rm "$BG" "$TMP"
 
