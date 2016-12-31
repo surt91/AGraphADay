@@ -18,7 +18,6 @@ if __name__ == "__main__":
         seed = sys.argv[1]
     else:
         seed = base64.b64encode(os.urandom(8)).decode("ascii")
-    random.seed(seed)
 
     print(seed)
     GraphGenerator = RandomGraph(seed)
