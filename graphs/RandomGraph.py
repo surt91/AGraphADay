@@ -23,7 +23,7 @@ class RandomGraph:
 
         return gen(self)
 
-    def generateER(self, N=None, m=None):
+    def generateErdosRenyi(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = abs(int(random.gauss(N, N)))
 
@@ -33,7 +33,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateNWS(self, N=None, k=None, p=None, s=None):
+    def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if k is None: k = random.randint(2, 5)
         if p is None: p = random.uniform(0, 0.2)
@@ -47,7 +47,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateRR(self, N=None, d=None):
+    def generateRandomRegular(self, N=None, d=None):
         if N is None: N = random.randint(4, 400)
         if d is None: d = random.randint(1, 5)
 
@@ -61,7 +61,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateBA(self, N=None, m=None):
+    def generateBarabasiAlbert(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
 
@@ -72,7 +72,7 @@ class RandomGraph:
         return G, details
 
 
-    def generatePLC(self, N=None, m=None, p=None):
+    def generatePowerLawCluster(self, N=None, m=None, p=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
         if p is None: p = random.random()
@@ -83,7 +83,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateDD(self, N=None, p=None, s=None):
+    def generateDuplicationDivergence(self, N=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if p is None: p = random.random()
         if s is None: s = random.randint(0, 10**7)
@@ -96,7 +96,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateRL(self, N=None, p1=None, p2=None, s=None):
+    def generateRandomLobster(self, N=None, p1=None, p2=None, s=None):
         if N is None: N = random.randint(4, 400)
         if p1 is None: p1 = random.uniform(0, 4)
         if p2 is None: p2 = random.uniform(0, 4)
@@ -110,7 +110,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateSpec(self, idx=None):
+    def generateSpecial(self, idx=None):
         if idx is None: idx = random.randint(0, len(generators)-1)
 
         # special graphs, group under one, such that they are rare
@@ -148,7 +148,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateRNG(self, N=None):
+    def generateRelativeNeighborhood(self, N=None):
         if N is None: N = random.randint(4, 400)
 
         state = random.getstate()
@@ -159,7 +159,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateGG(self, N=None):
+    def generateGabriel(self, N=None):
         if N is None: N = random.randint(4, 400)
 
         state = random.getstate()
@@ -189,7 +189,7 @@ class RandomGraph:
 
         return G, details
 
-    def generateDGM(self, n=None):
+    def generateDorogovtsevGoltsevMendes(self, n=None):
         if n is None: n = random.randint(2, 7)
 
         G = gen.dorogovtsev_goltsev_mendes_graph(n)
