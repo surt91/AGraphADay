@@ -28,9 +28,10 @@ class RandomGraph:
         if m is None: m = abs(int(random.gauss(N, N)))
 
         G = gen.gnm_random_graph(N, m)
-        text = "Erdős-Rényi, N = {}, m = {}".format(N, m)
+        details = dict(name="Erdős-Rényi", N=N, m=m, seed=self.seed,
+                       template="{name}, N = {N}, k = {k}, p = {p:.2f}, s = {s}")
 
-        return G, text
+        return G, details
 
     def generateNWS(self, N=None, k=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
@@ -41,9 +42,10 @@ class RandomGraph:
         state = random.getstate()
         G = gen.newman_watts_strogatz_graph(N, k, p, s)
         random.setstate(state)
-        text = "Newman-Watts-Strogatz, N = {}, k = {}, p = {:.2f}, s = {}".format(N, k, p, s)
+        details = dict(name="Newman-Watts-Strogatz", N=N, k=k, p=p, s=s, seed=self.seed,
+                       template="{name}, N = {N}, k = {k}, p = {p:.2f}, s = {s}")
 
-        return G, text
+        return G, details
 
     def generateRR(self, N=None, d=None):
         if N is None: N = random.randint(4, 400)
@@ -54,18 +56,20 @@ class RandomGraph:
             N += 1
 
         G = gen.random_regular_graph(d, N)
-        text = "Random Regular, N = {}, d = {}".format(N, d)
+        details = dict(name="Random Regular Graph", N=N, d=d, seed=self.seed,
+                       template="{name}, N = {N}, d = {d}")
 
-        return G, text
+        return G, details
 
     def generateBA(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
 
         G = gen.barabasi_albert_graph(N, m)
-        text = "Barabasi-Albert, N = {}, m = {}".format(N, m)
+        details = dict(name="Barabási-Albert", N=N, m=m, seed=self.seed,
+                       template="{name}, N = {N}, m = {m}")
 
-        return G, text
+        return G, details
 
 
     def generatePLC(self, N=None, m=None, p=None):
@@ -74,9 +78,10 @@ class RandomGraph:
         if p is None: p = random.random()
 
         G = gen.powerlaw_cluster_graph(N, m, p)
-        text = "Powerlaw Cluster, N = {}, m = {}, p = {:.2f}".format(N, m, p)
+        details = dict(name="Powerlaw Cluster Graph", N=N, m=m, p=p, seed=self.seed,
+                       template="{name}, N = {N}, m = {m}, p = {p:.2f}")
 
-        return G, text
+        return G, details
 
     def generateDD(self, N=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
@@ -86,9 +91,10 @@ class RandomGraph:
         state = random.getstate()
         G = gen.duplication_divergence_graph(N, p, s)
         random.setstate(state)
-        text = "Duplication Divergence, N = {}, p = {:.2f}, s = {}".format(N, p, s)
+        details = dict(name="Duplication Divergence Graph", N=N, p=p, s=s, seed=self.seed,
+                       template="{name}, N = {N}, p = {p:.2f}, s = {s}")
 
-        return G, text
+        return G, details
 
     def generateRL(self, N=None, p1=None, p2=None, s=None):
         if N is None: N = random.randint(4, 400),
@@ -99,9 +105,10 @@ class RandomGraph:
         state = random.getstate()
         G = gen.random_lobster(N, p1, p2)
         random.setstate(state)
-        text = "Random Lobster, N = {}, p1 = {:.2f}, p2 = {:.2f}, s = {}".format(N, p1, p2, s)
+        details = dict(name="Random Lobster Graph", N=N, p1=p1, p2=p2, s=s, seed=self.seed,
+                       template="{name}, N = {N}, p1 = {p1:.2f}, p2 = {p2:.2f}, s = {s}")
 
-        return G, text
+        return G, details
 
     def generateSpec(self, idx=None):
         if idx is None: idx = random.randint(0, len(generators)-1)
@@ -112,18 +119,20 @@ class RandomGraph:
                       gen.florentine_families_graph]
         label = ["Karate Club", "Davis Southern Women", "Florentine Families"]
         G = generators[idx]()
-        text = "{}, N = {}".format(label[idx], len(G.nodes()))
+        details = dict(name=label[idx], N=len(G.nodes()), idx=idx, seed=self.seed,
+                       template="{name}, N = {N}")
 
-        return G, text
+        return G, details
 
     def generateCaveman(self, l=None, k=None):
         if l is None: l=random.randint(1, 5),
         if k is None: k=random.randint(2, 9)
 
         G = nx.caveman_graph(l, k)
-        text = "Caveman, N = {}, l = {}, k = {}".format(l*k, l, k)
+        details = dict(name="Caveman Graph", N=l*k, l=l, k=k, seed=self.seed,
+                       template="{name}, N = {N}, l = {l}, k = {k}")
 
-        return G, text
+        return G, details
 
     def generateRelaxedCaveman(self, ):
         if l is None: l = random.randint(1, 5),
@@ -134,9 +143,10 @@ class RandomGraph:
         state = random.getstate()
         G = nx.relaxed_caveman_graph(l, k, p)
         random.setstate(state)
-        text = "Relaxed Caveman, N = {}, l = {}, k = {}, p = {:.2f}, s = {}".format(l*k, l, k, p, s)
+        details = dict(name="Relaxed Caveman Graph", N=l*k, d=d, seed=self.seed,
+                       template="{name}, N = {N}, l = {l}, k = {k}, p = {p:.2f}, s = {s}")
 
-        return G, text
+        return G, details
 
     def generateRNG(self, N=None):
         if N is None: N = random.randint(4, 400)
@@ -144,9 +154,10 @@ class RandomGraph:
         state = random.getstate()
         G = proximity_graphs.relative_neighborhood_graph(N)
         random.setstate(state)
-        text = "Relative Neighborhood Graph, N = {}".format(N)
+        details = dict(name="Relative Neighborhood Graph", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
 
-        return G, text
+        return G, details
 
     def generateGG(self, N=None):
         if N is None: N = random.randint(4, 400)
@@ -154,7 +165,8 @@ class RandomGraph:
         state = random.getstate()
         G = proximity_graphs.gabriel_graph(N)
         random.setstate(state)
-        text = "Gabriel Graph, N = {}".format(N)
+        details = dict(name="Gabriel Graph", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
 
-        return G, text
+        return G, details
 

@@ -21,8 +21,8 @@ if __name__ == "__main__":
 
     print(seed)
     GraphGenerator = RandomGraph(seed)
-    G, text = GraphGenerator.randomGraph()
-    print(text)
+    G, details = GraphGenerator.randomGraph()
+    text = "{name} ({N} nodes)".format(**details)
 
     if not "test" in sys.argv:
         folder = os.path.join(absdir, "archive")
@@ -34,18 +34,19 @@ if __name__ == "__main__":
     basename = os.path.join(folder, basename)
 
     try:
-        path, details = draw_cytoscape(G, text, basename, absdir)
+        path, style = draw_cytoscape(G, text, basename, absdir)
     except:
-        path, details = draw_graph(G, text, basename, absdir, "neato")
+        path, style = draw_graph(G, text, basename, absdir, "neato")
 
-    print(details)
 
     with open(basename+".txt", "w") as f:
-        f.write(text)
+        f.write(details["seed"])
         f.write("\n")
-        f.write(details)
+        f.write(details["template"].format(**details))
+        f.write("\n")
+        f.write(style)
         f.write("\n")
 
     if not "test" in sys.argv:
-        tweet_pic(path)
+        tweet_pic(path, text)
 

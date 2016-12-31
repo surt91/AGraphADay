@@ -5,6 +5,6 @@ from keys_and_secrets import keys_and_secrets
 api = twitter.Api(**keys_and_secrets)
 
 
-def tweet_pic(path):
+def tweet_pic(path, text=""):
     
-    api.PostUpdate("", path)
+    api.PostUpdate(text, path)
