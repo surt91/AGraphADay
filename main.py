@@ -250,7 +250,11 @@ if __name__ == "__main__":
     G, text = get_random_graph(seed)
     print(text)
 
-    folder = os.path.join(absdir, "archive")
+    if not "test" in sys.argv:
+        folder = os.path.join(absdir, "archive")
+    else:
+        folder = os.path.join(absdir, "test")
+
     os.makedirs(folder, exist_ok=True)
     basename = str(int(datetime.timestamp(datetime.now())))
     basename = os.path.join(folder, basename)
