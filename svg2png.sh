@@ -24,7 +24,7 @@ convert -density 1000 -trim "$IN" -bordercolor "$color" -border "$border" +repag
 
 # create background, but add 1% transaprency to top left pixel
 # this way twitter should not convert the png into a jpg full of artifacts
-convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -fx "i==0&&j==0?$(echo $color | sed 's/)/,0.99)/' | sed 's/srgb/rgba/'):u" "$BG"
+convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -fx "i==0&&j==0?$(echo $color | sed 's/)/,0.99)/' | sed 's/[s]rgb[a]/rgba/'):u" "$BG"
 
 # place the graph in the center of the background
 composite -gravity center "$TMP" "$BG" "$OUT"
