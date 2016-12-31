@@ -6,8 +6,8 @@ fi
 
 IN=$1
 OUT=$2
-TMP=tmp.png
-BG=bg.png
+TMP=$1.tmp.png
+BG=$1.bg.png
 
 # twitters Android stream has 1.8:1 pictures (2048x1137)
 # but twitter web seems to have 2:1          (2048x1024)
