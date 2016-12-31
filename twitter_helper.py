@@ -6,5 +6,4 @@ api = twitter.Api(**keys_and_secrets)
 
 
 def tweet_pic(path, text=""):
-    
     api.PostUpdate(text, path)

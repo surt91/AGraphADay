@@ -19,7 +19,6 @@ if __name__ == "__main__":
     else:
         seed = base64.b64encode(os.urandom(8)).decode("ascii")
 
-    print(seed)
     GraphGenerator = RandomGraph(seed)
     G, details = GraphGenerator.randomGraph()
     text = "{name} ({N} nodes)".format(**details)
