@@ -6,12 +6,15 @@ import random
 import base64
 from datetime import datetime
 
-from twitter_helper import tweet_pic, obtain_dm
+import tweepy
+
+from twitter_helper import tweet_pic, obtain_dm, api
 from graphs import RandomGraph, synonyms
 from graphs import draw_cytoscape, draw_graph
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
+my_handle = "randomGraphs"
 
 
 def guess_graph(text=None, handle=""):
@@ -28,22 +31,24 @@ def guess_graph(text=None, handle=""):
         certainty = 0
         key = "n/a"
 
+    print(key, "({}%)".format(certainty))
+
     name = details["name"]
     if handle and handle[0] != "@":
         handle = "@"+handle
 
     if certainty < 20:
-        answer = "{handle} I am not sure what you mean, but I drew a {graph} for you"
+        answer = "{handle} I am not sure what you mean, but I drew a {graph} for you!"
     elif certainty < 70:
-        answer = "{handle} I think you requested a {graph}, I drew it for you"
+        answer = "{handle} I think you mentioned a {graph}, I drew it for you."
     else:
-        answer = "{handle} here is the {graph} you requested"
+        answer = "{handle} here is a picture of the {graph} you interested in!"
     answer = answer.format(handle=handle, graph=name).strip()
 
     folder = os.path.join(absdir, "answers")
 
     os.makedirs(folder, exist_ok=True)
-    basename = str(int(datetime.timestamp(datetime.now())))
+    basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
     basename = os.path.join(folder, basename)
 
     try:
@@ -66,12 +71,47 @@ def guess_graph(text=None, handle=""):
     return path, answer
 
 
-def answerMentions():
-    todo = obtain_dm()
+class MyStreamListener(tweepy.StreamListener):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        try:
+            with open("last_id.dat", "r") as f:
+                self.last_id = int(f.read().strip())
+        except:
+            self.last_id = 0
 
+    def on_status(self, status):
+        print(status.text)
+        print("@" + status.user.screen_name, ":", status.text)
+        # make sure that we are actually mentioned
+        mentioned = False
+        for i in status.entities["user_mentions"]:
+            if i["screen_name"] == my_handle:
+                mentioned = True
+        if mentioned:
+            print(status.text)
+            text = status.text.replace(my_handle, "")
+            path, answer = guess_graph(text=text, handle=status.user.screen_name)
+            tweet_pic(path, answer, status.id)
+
+            with open("last_id.dat", "w") as f:
+                f.write(str(self.last_id))
+
+
+def answerMentions():
+    # are there new mentions while we were not listening?
+    todo = obtain_dm()
+    print(len(todo), "new messages")
     for d in todo:
+        text = d["text"].replace(my_handle, "")
         path, answer = guess_graph(text=d["text"], handle=d["handle"])
-        tweet_pic(path, answer)
+        tweet_pic(path, answer, d["id"])
+
+    # listen for new mentions
+    print("listening for mentions")
+    myStreamListener = MyStreamListener()
+    myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
+    myStream.filter(track=['randomGraphs'])
 
 
 if __name__ == "__main__":
@@ -94,7 +134,7 @@ if __name__ == "__main__":
         folder = os.path.join(absdir, "test")
 
     os.makedirs(folder, exist_ok=True)
-    basename = str(int(datetime.timestamp(datetime.now())))
+    basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
     basename = os.path.join(folder, basename)
 
     try:
