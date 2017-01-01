@@ -94,6 +94,7 @@ class MyStreamListener(tweepy.StreamListener):
             path, answer = guess_graph(text=text, handle=status.user.screen_name)
             tweet_pic(path, answer, status.id)
 
+            self.last_id = status.id
             with open("last_id.dat", "w") as f:
                 f.write(str(self.last_id))
 
