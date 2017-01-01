@@ -27,12 +27,12 @@ def draw_graph(G, text, basename, absdir, command="neato"):
         pos = graphviz_layout(G, command)
 
     nx.draw(G, pos)
-    ax = plt.gca()
-    plt.text(0.99, 0.01, text,
-            verticalalignment='bottom', 
-            horizontalalignment='right',
-            transform=ax.transAxes,
-            fontsize=10)
+#    ax = plt.gca()
+#    plt.text(0.99, 0.01, text,
+#            verticalalignment='bottom',
+#            horizontalalignment='right',
+#            transform=ax.transAxes,
+#            fontsize=10)
     plt.savefig(basename+".svg")
     plt.savefig(basename+".png")
 
