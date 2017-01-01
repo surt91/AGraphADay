@@ -42,7 +42,7 @@ def guess_graph(text=None, handle=""):
     elif certainty < 70:
         answer = "{handle} I think you mentioned a {graph}, I drew it for you."
     else:
-        answer = "{handle} here is a picture of the {graph} you interested in!"
+        answer = "{handle} here is a picture of the {graph} you're interested in!"
     answer = answer.format(handle=handle, graph=name).strip()
 
     folder = os.path.join(absdir, "answers")
