@@ -1,12 +1,16 @@
-import twitter
+import tweepy
 
 from keys_and_secrets import keys_and_secrets
 
-api = twitter.Api(**keys_and_secrets)
+auth = tweepy.OAuthHandler(keys_and_secrets["consumer_key"], keys_and_secrets["consumer_secret"])
+auth.set_access_token(keys_and_secrets["access_token_key"], keys_and_secrets["access_token_secret"])
+
+api = tweepy.API(auth)
 
 
-def tweet_pic(path, text=""):
-    api.PostUpdate(text, path)
+def tweet_pic(path, text=None, reply_to=None):
+    api.update_with_media(path, text, in_reply_to_status_id=reply_to)
+
 
 def obtain_dm():
     try:
@@ -15,14 +19,12 @@ def obtain_dm():
     except:
         last_id = 0
 
-#    print(last_id)
-#    msg = api.GetDirectMessages()
     todo = []
-    mentions = api.GetMentions(since_id=last_id + 1)
+    mentions = api.mentions_timeline(since_id=last_id + 1)
     for i in mentions:
+        print("@" + i.user.screen_name, ":", i.text)
         last_id = max(i.id, last_id)
-        todo.append(dict(handle=i.user.screen_name, text=i.text))
-#        print(i.id, i.text, i.user.screen_name)
+        todo.append(dict(handle=i.user.screen_name, text=i.text, id=i.id))
 
     with open("last_id.dat", "w") as f:
         f.write(str(last_id))
