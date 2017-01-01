@@ -13,6 +13,7 @@ Dependencies
     * networkx
     * matplotlib
     * py2cytoscape
+    * python-pygraphviz
     * tweepy
     * fuzzywuzzy
 
