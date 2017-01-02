@@ -266,3 +266,18 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("geometric graph")
+    @synonym("minimum radius")
+    def generateMinimumRadius(self, N=None, r=None):
+        if N is None: N = random.randint(20, 400)
+        if r is None: r = random.uniform(0.05, 0.3)
+
+        state = random.getstate()
+        G = proximity_graphs.minimum_radius(N, r)
+        random.setstate(state)
+
+        details = dict(name="Minimum Radius Graph", N=N, r=r, seed=self.seed,
+                       template="{name}, N = {N}, r = {r}")
+
+        return G, details
+

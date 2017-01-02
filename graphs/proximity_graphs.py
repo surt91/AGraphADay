@@ -49,6 +49,15 @@ def gg(G):
                 G.add_edge(c1, c2)
 
 
+def mr(G, r):
+    for c1 in G.nodes():
+        for c2 in G.nodes():
+            if c1 == c2:
+                continue
+            if dist(c1, c2) < r:
+                G.add_edge(c1, c2)
+
+
 def relative_neighborhood_graph(N):
     coordinates = generateRandomCoordinates(N)
 
@@ -72,6 +81,19 @@ def gabriel_graph(N):
     pos = {n: (n[0], n[1]) for n in G.nodes()} 
 
     gg(G)
+
+    return G
+
+def minimum_radius(N, r):
+    coordinates = generateRandomCoordinates(N)
+
+    G = nx.Graph()
+    for x, y in coordinates:
+        G.add_node((x, y), x=x, y=y)
+
+    pos = {n: (n[0], n[1]) for n in G.nodes()}
+
+    mr(G, r)
 
     return G
 
