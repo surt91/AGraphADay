@@ -54,6 +54,7 @@ def guess_graph(text=None, handle=""):
     try:
         path, style = draw_cytoscape(G, text, basename, absdir)
     except:
+        print("unexpected error:", sys.exc_info())
         path, style = draw_graph(G, text, basename, absdir, "neato")
 
     with open(basename+".txt", "w") as f:
@@ -141,6 +142,7 @@ if __name__ == "__main__":
     try:
         path, style = draw_cytoscape(G, text, basename, absdir)
     except:
+        print("unexpected error:", sys.exc_info())
         path, style = draw_graph(G, text, basename, absdir, "neato")
 
 
