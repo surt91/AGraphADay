@@ -234,3 +234,35 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("partition")
+    def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None):
+        if sizes is None: sizes = [random.randint(6, 20) for _ in range(random.randint(2, 3))]
+        if p1 is None: p1 = random.uniform(0.2, 0.8)
+        if p2 is None: p2 = random.uniform(0.0, 0.1)
+        if s is None: s = random.randint(0, 10**7)
+
+        state = random.getstate()
+        G = gen.random_partition_graph(sizes, p1, p2, s)
+        random.setstate(state)
+        details = dict(name="Random Partition Graph", N=len(G.nodes()), sizes=sizes, p1=p1, p2=p2, s=s, seed=self.seed,
+                       template="{name}, N = {N}, sizes = {sizes}, p1 = {p1:.2f}, p2 = {p2:.2f}, s = {s}")
+
+        return G, details
+
+    @synonym("bipartite")
+    @synonym("random intersection")
+    def generateRandomIntersection(self, n=None, m=None, p=None, s=None):
+        if n is None: n = random.randint(3, 100)
+        if m is None: m = random.randint(3, 100)
+        if p is None: p = random.random()
+        if s is None: s = random.randint(0, 10**7)
+
+        state = random.getstate()
+        G = gen.uniform_random_intersection_graph(n, m, p, s)
+        random.setstate(state)
+
+        details = dict(name="Random Intersection Graph", N=len(G.nodes()), n=n, m=m, p=p, s=s, seed=self.seed,
+                       template="{name}, N = {N}, n = {n}, m = {m}, p = {p:.2f}, s = {s}")
+
+        return G, details
+
