@@ -45,13 +45,14 @@ class RandomGraph:
         if m is None: m = abs(int(random.gauss(N, N)))
 
         G = gen.gnm_random_graph(N, m)
-        details = dict(name="Erdős-Rényi", N=N, m=m, seed=self.seed,
+        details = dict(name="Erdős-Rényi Graph", N=N, m=m, seed=self.seed,
                        template="{name}, N = {N}, m = {m}")
 
         return G, details
 
     @synonym("Watts Strogatz")
     @synonym("Newman Watts Strogatz")
+    @synonym("small world")
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if k is None: k = random.randint(2, 5)
@@ -61,7 +62,7 @@ class RandomGraph:
         state = random.getstate()
         G = gen.newman_watts_strogatz_graph(N, k, p, s)
         random.setstate(state)
-        details = dict(name="Newman-Watts-Strogatz", N=N, k=k, p=p, s=s, seed=self.seed,
+        details = dict(name="Newman-Watts-Strogatz Graph", N=N, k=k, p=p, s=s, seed=self.seed,
                        template="{name}, N = {N}, k = {k}, p = {p:.2f}, s = {s}")
 
         return G, details
@@ -88,7 +89,7 @@ class RandomGraph:
         if m is None: m = random.randint(1, 5)
 
         G = gen.barabasi_albert_graph(N, m)
-        details = dict(name="Barabási-Albert", N=N, m=m, seed=self.seed,
+        details = dict(name="Barabási-Albert Graph", N=N, m=m, seed=self.seed,
                        template="{name}, N = {N}, m = {m}")
 
         return G, details
@@ -135,6 +136,7 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("social network")
     def generateSpecial(self, idx=None):
         if idx is None: idx = random.randint(0, len(generators)-1)
 
@@ -142,7 +144,7 @@ class RandomGraph:
         generators = [gen.karate_club_graph,
                       gen.davis_southern_women_graph,
                       gen.florentine_families_graph]
-        label = ["Karate Club", "Davis Southern Women", "Florentine Families"]
+        label = ["Zachary’s Karate Club", "Davis Southern Women", "Florentine Families"]
         G = generators[idx]()
         details = dict(name=label[idx], N=len(G.nodes()), idx=idx, seed=self.seed,
                        template="{name}, N = {N}")
@@ -178,7 +180,7 @@ class RandomGraph:
 
     @synonym("relative neighborhood")
     def generateRelativeNeighborhood(self, N=None):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(20, 400)
 
         state = random.getstate()
         G = proximity_graphs.relative_neighborhood_graph(N)
@@ -190,7 +192,7 @@ class RandomGraph:
 
     @synonym("gabriel")
     def generateGabriel(self, N=None):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(20, 400)
 
         state = random.getstate()
         G = proximity_graphs.gabriel_graph(N)
@@ -227,7 +229,7 @@ class RandomGraph:
         if n is None: n = random.randint(2, 7)
 
         G = gen.dorogovtsev_goltsev_mendes_graph(n)
-        details = dict(name="Dorogovtsev-Goltsev-Mendes", N=len(G.nodes()), n=n, seed=self.seed,
+        details = dict(name="Dorogovtsev-Goltsev-Mendes Graph", N=len(G.nodes()), n=n, seed=self.seed,
                        template="{name}, N = {N}, n = {n}")
 
         return G, details
