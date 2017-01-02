@@ -20,7 +20,7 @@ def obtain_dm():
         last_id = 0
 
     todo = []
-    mentions = api.mentions_timeline(since_id=last_id + 1)
+    mentions = api.mentions_timeline(since_id=last_id)
     for i in mentions:
         print("@" + i.user.screen_name, ":", i.text)
         last_id = max(i.id, last_id)
