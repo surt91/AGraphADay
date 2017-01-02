@@ -17,6 +17,8 @@ def has_explicit_coordinates(G):
 
 
 def draw_graph(G, text, basename, absdir, command="neato"):
+    import matplotlib
+    matplotlib.use('Agg')
     from matplotlib import pyplot as plt
     from networkx.drawing.nx_agraph import graphviz_layout
 
