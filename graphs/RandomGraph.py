@@ -162,7 +162,7 @@ class RandomGraph:
         return G, details
 
     @synonym("relaxed caveman")
-    def generateRelaxedCaveman(self, ):
+    def generateRelaxedCaveman(self, l=None, k=None, p=None, s=None):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
         if p is None: p = random.uniform(0.05, 0.3)
