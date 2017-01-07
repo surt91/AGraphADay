@@ -58,7 +58,7 @@ def guess_graph(text=None, handle=""):
     layout = None
 
     if text:
-        numbers = [int(s) for s in text.split() if s.isdigit()]
+        numbers = [int(s) for s in text.split() if s.isdigit() and int(s) < 1024]
         if numbers:
             N = random.choice(numbers)
             print("regocnized {} nodes".format(N))
