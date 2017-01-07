@@ -1,3 +1,66 @@
+A Graph A Day
+=============
+
+This is a Twitter bot, which can tweet pictures of random graphs.
+It also listens for mentions and answers them with pictures of graphs
+it detects in the tweet. The layout ans styles are also extracted from the
+tweet if possible. If a number smaller than 1025 is detected, it is used as
+the number of nodes.
+
+Selection of Recognized Keywords
+--------------------------------
+
+Graph Types
+___________
+
+* Newman-Watts-Strogatz
+* Barabási-Albert
+* Powerlaw cluster graph
+* Relative Neighborhood graph
+* Minimum Radius graph
+* some social networks
+* Caveman graph
+
+Styles
+______
+
+* Curved
+    * dark background
+    * orange nodes
+    * curved, white edges
+
+* Sample3
+    * dark background
+    * blue nodes
+    * white edges
+
+* default black
+    * dark background
+    * white nodes
+    * green edges
+
+* default
+    * white background
+    * blue nodes
+    * black edges
+
+* Ripple
+    * white background
+    * blue nodes
+    * blue edges
+
+Layouts
+_______
+
+* circular
+* kamada-kawai
+    also known as `neato`
+* force-directed
+* hierarchical
+* isom
+* some graphs have fixed node positions
+
+
 Setup
 -----
 
