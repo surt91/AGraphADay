@@ -180,18 +180,30 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateSpecial(self, idx=None, **kwargs):
-        if idx is None: idx = random.randint(0, len(generators)-1)
-
         # special graphs, group under one, such that they are rare
         generators = [gen.karate_club_graph,
                       gen.davis_southern_women_graph,
                       gen.florentine_families_graph]
+
+        if idx is None: idx = random.randint(0, len(generators)-1)
         label = ["Zachary’s Karate Club", "Davis Southern Women", "Florentine Families"]
         G = generators[idx]()
         details = dict(name=label[idx], N=len(G.nodes()), idx=idx, seed=self.seed,
                        template="{name}, N = {N}")
 
         return G, details
+
+    @synonym("Zachary’s Karate Club")
+    def karate(self, **kwargs):
+        return self.generateSpecial(0, **kwargs)
+
+    @synonym("Davis Southern Women")
+    def davis(self, **kwargs):
+        return self.generateSpecial(1, **kwargs)
+
+    @synonym("Florentine Families")
+    def florentine(self, **kwargs):
+        return self.generateSpecial(2, **kwargs)
 
     @synonym("caveman")
     @synonym("clique")
