@@ -2,6 +2,8 @@ import os
 import time
 import random
 import warnings
+import inspect
+from collections import defaultdict
 from subprocess import call
 
 import networkx as nx
@@ -16,7 +18,7 @@ def has_explicit_coordinates(G):
     return graph_has_coordinates
 
 
-def draw_graph(G, text, basename, absdir, command="neato"):
+def draw_graph(G, basename, absdir, command="neato"):
     import matplotlib
     matplotlib.use('Agg')
     from matplotlib import pyplot as plt
@@ -43,13 +45,59 @@ def draw_graph(G, text, basename, absdir, command="neato"):
     return basename+".png", details
 
 
-def draw_graphviz(G, text, basename, absdir, command="dot"):
+def draw_graphviz(G, basename, absdir, command="dot", **kwargs):
     from networkx.drawing.nx_agraph import to_agraph, graphviz_layout
     A = to_agraph(G)
     A.write(basename+".dot")
 
 
-def draw_cytoscape(G, text, basename, absdir):
+class CyStyle:
+    def __init__(self):
+        # get all methods that generate graphs (convention: starts with 'style')
+        members = inspect.getmembers(CyStyle)
+        styles = [i[1] for i in sorted(members) if "style" in i[0]]
+
+        self.styles = styles
+
+    def randomStyle(self):
+        gen = random.choice(self.styles)
+
+        return gen()
+
+    @staticmethod
+    def styleSample3(cy):
+        s = cy.style.create("Sample3")
+        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        return s
+
+    @staticmethod
+    def styleCurved(cy):
+        s = cy.style.create("Curved")
+        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        s.update_defaults([ ("NETWORK_BACKGROUND_PAINT", "#404040"), 
+                            ("EDGE_TARGET_ARROW_SHAPE", "NONE")])
+        return s
+
+    @staticmethod
+    def styleRipple(cy):
+        s = cy.style.create("Ripple")
+        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        return s
+
+    @staticmethod
+    def styleDefaultBlack(cy):
+        s = cy.style.create("default black")
+        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        return s
+
+    @staticmethod
+    def styleDefault(cy):
+        s = cy.style.create("default")
+        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        return s
+
+
+def draw_cytoscape(G, basename, absdir, style):
     from networkx.drawing.nx_agraph import graphviz_layout
     # igraph uses deprecated things
     with warnings.catch_warnings():
@@ -58,9 +106,6 @@ def draw_cytoscape(G, text, basename, absdir):
         from py2cytoscape.data.util_network import NetworkUtil as util
         from py2cytoscape.data.style import StyleUtil as s_util
 
-    # fixme should be asked from the server
-    styles = ["Sample3", "Sample3", "Curved", 
-              "Ripple", "Sample2", "default black"]
     # http://localhost:1234/v1/apply/layouts/
     layouts = [ "circular", "kamada-kawai", "force-directed",
                 "hierarchical", "isom"]
@@ -68,12 +113,10 @@ def draw_cytoscape(G, text, basename, absdir):
     graphviz = ["neato", "dot", "circo", "twopi", "fdp"]
 
     # only use for small graphs
-    if len(G) < 60:
-        styles += ["Minimal"]
-        layouts += ["stacked-node-layout"]
+    if len(G) <= 40:
+        #layouts += ["stacked-node-layout"]
         layouts += graphviz
 
-    style = random.choice(styles)
     layout = random.choice(layouts)
 
     # Create Client
@@ -100,7 +143,9 @@ def draw_cytoscape(G, text, basename, absdir):
             v = pos[k]
             locations.append([int(idmap[k]), v[0] , v[1]])
 
-    details = "style = {}, layout = {}".format(style, layout)
+    style = style(cy)
+
+    details = "style = {}, layout = {}".format(style.get_name(), layout)
 
     # if there are explicit locations, use them
     if locations:
@@ -108,12 +153,7 @@ def draw_cytoscape(G, text, basename, absdir):
     else:
         cy.layout.apply(network=g_cy, name=layout)
 
-    style_s3 = cy.style.create(style)
-
-    # do not show numbers at the nodes
-    style_s3.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings={g: "" for g in G})
-
-    cy.style.apply(style=style_s3, network=g_cy)
+    cy.style.apply(style=style, network=g_cy)
 
     cy.layout.fit(g_cy)
     # cytoscape needs some time to rescale the graphic

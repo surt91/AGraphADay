@@ -6,6 +6,7 @@ import networkx as nx
 from networkx import generators as gen
 
 from . import proximity_graphs
+from .visualize import CyStyle
 
 
 # decorator to add synonyms of the graph types
@@ -20,6 +21,32 @@ def synonym(synonym_name):
             return func(*args, **kwargs)
         return func_wrapper
     return synonym_decorator
+
+
+
+styles_all = CyStyle().styles
+def style(style_list):
+    def style_decorator(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            G, details = func(*args, **kwargs)
+            details["allowed_styles"] = style_list
+            return G, details
+        return func_wrapper
+    return style_decorator
+
+
+layouts_all = ["circular", "kamada-kawai", "force-directed", "hierarchical", "isom"]
+layouts= {}
+def layout(layout_name):
+    def layout_decorator(func):
+        layout[func.__name__] = layout_name
+
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return func_wrapper
+    return layout_decorator
 
 
 class RandomGraph:
@@ -40,6 +67,7 @@ class RandomGraph:
 
     @synonym("Erdos Renyi")
     @synonym("Erdős-Rényi")
+    @style(styles_all)
     def generateErdosRenyi(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = abs(int(random.gauss(N, N)))
@@ -53,6 +81,7 @@ class RandomGraph:
     @synonym("Watts Strogatz")
     @synonym("Newman Watts Strogatz")
     @synonym("small world")
+    @style(styles_all)
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if k is None: k = random.randint(2, 5)
@@ -68,6 +97,7 @@ class RandomGraph:
         return G, details
 
     @synonym("Random Regular")
+    @style(styles_all)
     def generateRandomRegular(self, N=None, d=None):
         if N is None: N = random.randint(4, 400)
         if d is None: d = random.randint(1, 5)
@@ -84,6 +114,7 @@ class RandomGraph:
 
     @synonym("Barabasi Albert")
     @synonym("preferential attachment")
+    @style(styles_all)
     def generateBarabasiAlbert(self, N=None, m=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
@@ -96,6 +127,7 @@ class RandomGraph:
 
     @synonym("power law cluster")
     @synonym("power law")
+    @style(styles_all)
     def generatePowerLawCluster(self, N=None, m=None, p=None):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
@@ -108,6 +140,7 @@ class RandomGraph:
         return G, details
 
     @synonym("duplication divergence")
+    @style(styles_all)
     def generateDuplicationDivergence(self, N=None, p=None, s=None):
         if N is None: N = random.randint(4, 400)
         if p is None: p = random.random()
@@ -122,6 +155,7 @@ class RandomGraph:
         return G, details
 
     @synonym("lobster")
+    @style(styles_all)
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None):
         if N is None: N = random.randint(4, 400)
         if p1 is None: p1 = random.uniform(0, 4)
@@ -137,6 +171,7 @@ class RandomGraph:
         return G, details
 
     @synonym("social network")
+    @style(styles_all)
     def generateSpecial(self, idx=None):
         if idx is None: idx = random.randint(0, len(generators)-1)
 
@@ -153,6 +188,7 @@ class RandomGraph:
 
     @synonym("caveman")
     @synonym("clique")
+    @style(styles_all)
     def generateCaveman(self, l=None, k=None):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
@@ -164,6 +200,7 @@ class RandomGraph:
         return G, details
 
     @synonym("relaxed caveman")
+    @style(styles_all)
     def generateRelaxedCaveman(self, l=None, k=None, p=None, s=None):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
@@ -173,12 +210,13 @@ class RandomGraph:
         state = random.getstate()
         G = nx.relaxed_caveman_graph(l, k, p)
         random.setstate(state)
-        details = dict(name="Relaxed Caveman Graph", N=l*k, d=d, seed=self.seed,
+        details = dict(name="Relaxed Caveman Graph", N=l*k, l=l, k=k, p=p, s=s, seed=self.seed,
                        template="{name}, N = {N}, l = {l}, k = {k}, p = {p:.2f}, s = {s}")
 
         return G, details
 
     @synonym("relative neighborhood")
+    @style(styles_all)
     def generateRelativeNeighborhood(self, N=None):
         if N is None: N = random.randint(20, 400)
 
@@ -191,6 +229,7 @@ class RandomGraph:
         return G, details
 
     @synonym("gabriel")
+    @style(styles_all)
     def generateGabriel(self, N=None):
         if N is None: N = random.randint(20, 400)
 
@@ -203,6 +242,7 @@ class RandomGraph:
         return G, details
 
     @synonym("barbell")
+    @style(styles_all)
     def generateBarbell(self, m1=None, m2=None):
         if m1 is None: m1 = random.randint(3, 20)
         if m2 is None: m2 = random.randint(1, 20)
@@ -214,6 +254,7 @@ class RandomGraph:
         return G, details
 
     @synonym("circular ladder")
+    @style(styles_all)
     def generateCircularLadder(self, n=None):
         if n is None: n = random.randint(3, 200)
 
@@ -225,6 +266,7 @@ class RandomGraph:
 
     @synonym("Dorogovtsev Goltsev Mendes")
     @synonym("fractal")
+    @style(styles_all)
     def generateDorogovtsevGoltsevMendes(self, n=None):
         if n is None: n = random.randint(2, 7)
 
@@ -235,6 +277,7 @@ class RandomGraph:
         return G, details
 
     @synonym("partition")
+    @style(styles_all)
     def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None):
         if sizes is None: sizes = [random.randint(6, 20) for _ in range(random.randint(2, 3))]
         if p1 is None: p1 = random.uniform(0.2, 0.8)
@@ -251,6 +294,7 @@ class RandomGraph:
 
     @synonym("bipartite")
     @synonym("random intersection")
+    @style(styles_all)
     def generateRandomIntersection(self, n=None, m=None, p=None, s=None):
         if n is None: n = random.randint(3, 100)
         if m is None: m = random.randint(3, 100)
@@ -268,6 +312,7 @@ class RandomGraph:
 
     @synonym("geometric graph")
     @synonym("minimum radius")
+    @style(styles_all)
     def generateMinimumRadius(self, N=None, r=None):
         if N is None: N = random.randint(20, 400)
         if r is None: r = random.uniform(0.05, 0.3)

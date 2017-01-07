@@ -17,6 +17,33 @@ absdir = os.path.abspath(os.path.dirname(__file__))
 my_handle = "randomGraphs"
 
 
+def createPlot(graphGenerator, folder, seed, comment="no comment"):
+    G, details = graphGenerator()
+
+    os.makedirs(folder, exist_ok=True)
+    basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
+    basename = os.path.join(folder, basename)
+
+    try:
+        style_factory = random.choice(details["allowed_styles"])
+        path, style = draw_cytoscape(G, basename, absdir, style_factory)
+    except:
+        print("unexpected error:", sys.exc_info())
+        path, style = draw_graph(G, basename, absdir, "neato")
+
+    with open(basename+".txt", "w") as f:
+        f.write(details["seed"])
+        f.write("\n")
+        f.write(comment)
+        f.write("\n")
+        f.write(details["template"].format(**details))
+        f.write("\n")
+        f.write(style)
+        f.write("\n")
+
+    return path, details
+
+
 def guess_graph(text=None, handle=""):
     seed = base64.b64encode(os.urandom(8)).decode("ascii")
 
@@ -24,14 +51,19 @@ def guess_graph(text=None, handle=""):
 
     if text:
         key, certainty = match(text, synonyms.keys())
-        G, details = synonyms[key](GraphGenerator)
+        gen = lambda : synonyms[key](GraphGenerator)
 
     if not text or certainty < 20:
-        G, details = GraphGenerator.randomGraph()
+        gen = GraphGenerator.randomGraph
         certainty = 0
         key = "n/a"
 
+    folder = os.path.join(absdir, "answers")
+    path, details = createPlot(gen, folder, seed, comment="'{}' -> {} ({}%)".format(text, key, certainty))
+
     print(key, "({}%)".format(certainty))
+
+    print(details["template"].format(**details))
 
     name = details["name"]
     if handle and handle[0] != "@":
@@ -44,30 +76,6 @@ def guess_graph(text=None, handle=""):
     else:
         answer = "{handle} here is a picture of the {graph} you're interested in!"
     answer = answer.format(handle=handle, graph=name).strip()
-
-    folder = os.path.join(absdir, "answers")
-
-    os.makedirs(folder, exist_ok=True)
-    basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
-    basename = os.path.join(folder, basename)
-
-    try:
-        path, style = draw_cytoscape(G, text, basename, absdir)
-    except:
-        print("unexpected error:", sys.exc_info())
-        path, style = draw_graph(G, text, basename, absdir, "neato")
-
-    with open(basename+".txt", "w") as f:
-        f.write(details["seed"])
-        f.write("\n")
-        f.write("'{}' -> {} ({}%)".format(text, key, certainty))
-        f.write("\n")
-        f.write("'{}'".format(answer))
-        f.write("\n")
-        f.write(details["template"].format(**details))
-        f.write("\n")
-        f.write(style)
-        f.write("\n")
 
     return path, answer
 
@@ -126,33 +134,15 @@ if __name__ == "__main__":
     else:
         seed = base64.b64encode(os.urandom(8)).decode("ascii")
 
-    GraphGenerator = RandomGraph(seed)
-    G, details = GraphGenerator.randomGraph()
-    text = "{name} ({N} nodes)".format(**details)
-
     if not "test" in sys.argv:
         folder = os.path.join(absdir, "archive")
     else:
         folder = os.path.join(absdir, "test")
 
-    os.makedirs(folder, exist_ok=True)
-    basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
-    basename = os.path.join(folder, basename)
+    GraphGenerator = RandomGraph(seed)
+    path, details = createPlot(GraphGenerator.randomGraph, folder, seed)
 
-    try:
-        path, style = draw_cytoscape(G, text, basename, absdir)
-    except:
-        print("unexpected error:", sys.exc_info())
-        path, style = draw_graph(G, text, basename, absdir, "neato")
-
-
-    with open(basename+".txt", "w") as f:
-        f.write(details["seed"])
-        f.write("\n")
-        f.write(details["template"].format(**details))
-        f.write("\n")
-        f.write(style)
-        f.write("\n")
+    text = "{name} ({N} nodes)".format(**details)
 
     if not "test" in sys.argv:
         tweet_pic(path, text)

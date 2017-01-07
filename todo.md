@@ -5,6 +5,8 @@
 * clustering algorithms to color the nodes
 * do something sensible with bipartite graphs (special layouts)
 * more styles
+* change styles
 
 * fix the duplicated code in main.py
 
+* SQLAlchemy/SQLite db to store data (instead of textfiles)
