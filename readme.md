@@ -1,5 +1,4 @@
-A Graph A Day
-=============
+#A Graph A Day
 
 This is a Twitter bot, which can tweet pictures of random graphs.
 It also listens for mentions and answers them with pictures of graphs
@@ -7,11 +6,9 @@ it detects in the tweet. The layout ans styles are also extracted from the
 tweet if possible. If a number smaller than 1025 is detected, it is used as
 the number of nodes.
 
-Selection of Recognized Keywords
---------------------------------
+##Selection of Recognized Keywords
 
-Graph Types
-___________
+###Graph Types
 
 * Newman-Watts-Strogatz
 * Barabási-Albert
@@ -21,8 +18,7 @@ ___________
 * some social networks
 * Caveman graph
 
-Styles
-______
+###Styles
 
 * Curved
     * dark background
@@ -49,8 +45,7 @@ ______
     * blue nodes
     * blue edges
 
-Layouts
-_______
+###Layouts
 
 * circular
 * kamada-kawai
@@ -61,16 +56,14 @@ _______
 * some graphs have fixed node positions
 
 
-Setup
------
+##Setup
 
 Install all dependencies, start Cytoscape as `cytoscape -R 1234`.
 Every time the program runs it will create a graph, save it as `png` and `svg`
 and its details in a `txt` named after the current unix timestamp and tweets
 it. Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
 
-Dependencies
-------------
+##Dependencies
 
 * from PyPI
     * networkx
