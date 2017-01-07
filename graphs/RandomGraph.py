@@ -68,7 +68,7 @@ class RandomGraph:
     @synonym("Erdős-Rényi")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateErdosRenyi(self, N=None, m=None):
+    def generateErdosRenyi(self, N=None, m=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if m is None: m = abs(int(random.gauss(N, N)))
 
@@ -83,7 +83,7 @@ class RandomGraph:
     @synonym("small world")
     @style(styles_all)
     @layout(["circular", "kamada-kawai", "force-directed"])
-    def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None):
+    def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if k is None: k = random.randint(2, 5)
         if p is None: p = random.uniform(0, 0.2)
@@ -100,7 +100,7 @@ class RandomGraph:
     @synonym("Random Regular")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateRandomRegular(self, N=None, d=None):
+    def generateRandomRegular(self, N=None, d=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if d is None: d = random.randint(1, 5)
 
@@ -118,7 +118,7 @@ class RandomGraph:
     @synonym("preferential attachment")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateBarabasiAlbert(self, N=None, m=None):
+    def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
 
@@ -132,7 +132,7 @@ class RandomGraph:
     @synonym("power law")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generatePowerLawCluster(self, N=None, m=None, p=None):
+    def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
         if p is None: p = random.random()
@@ -146,7 +146,7 @@ class RandomGraph:
     @synonym("duplication divergence")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateDuplicationDivergence(self, N=None, p=None, s=None):
+    def generateDuplicationDivergence(self, N=None, p=None, s=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if p is None: p = random.random()
         if s is None: s = random.randint(0, 10**7)
@@ -162,7 +162,7 @@ class RandomGraph:
     @synonym("lobster")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateRandomLobster(self, N=None, p1=None, p2=None, s=None):
+    def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
         if N is None: N = random.randint(4, 400)
         if p1 is None: p1 = random.uniform(0, 4)
         if p2 is None: p2 = random.uniform(0, 4)
@@ -179,7 +179,7 @@ class RandomGraph:
     @synonym("social network")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateSpecial(self, idx=None):
+    def generateSpecial(self, idx=None, **kwargs):
         if idx is None: idx = random.randint(0, len(generators)-1)
 
         # special graphs, group under one, such that they are rare
@@ -197,7 +197,7 @@ class RandomGraph:
     @synonym("clique")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateCaveman(self, l=None, k=None):
+    def generateCaveman(self, l=None, k=None, **kwargs):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
 
@@ -210,7 +210,7 @@ class RandomGraph:
     @synonym("relaxed caveman")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateRelaxedCaveman(self, l=None, k=None, p=None, s=None):
+    def generateRelaxedCaveman(self, l=None, k=None, p=None, s=None, **kwargs):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
         if p is None: p = random.uniform(0.05, 0.3)
@@ -227,7 +227,7 @@ class RandomGraph:
     @synonym("relative neighborhood")
     @style(styles_all)
     @layout(layouts_all)
-    def generateRelativeNeighborhood(self, N=None):
+    def generateRelativeNeighborhood(self, N=None, **kwargs):
         if N is None: N = random.randint(20, 400)
 
         state = random.getstate()
@@ -241,7 +241,7 @@ class RandomGraph:
     @synonym("gabriel")
     @style(styles_all)
     @layout(layouts_all)
-    def generateGabriel(self, N=None):
+    def generateGabriel(self, N=None, **kwargs):
         if N is None: N = random.randint(20, 400)
 
         state = random.getstate()
@@ -255,7 +255,7 @@ class RandomGraph:
     @synonym("barbell")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateBarbell(self, m1=None, m2=None):
+    def generateBarbell(self, m1=None, m2=None, **kwargs):
         if m1 is None: m1 = random.randint(3, 20)
         if m2 is None: m2 = random.randint(1, 20)
 
@@ -268,7 +268,7 @@ class RandomGraph:
     @synonym("circular ladder")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateCircularLadder(self, n=None):
+    def generateCircularLadder(self, n=None, **kwargs):
         if n is None: n = random.randint(3, 200)
 
         G = gen.circular_ladder_graph(n)
@@ -281,7 +281,7 @@ class RandomGraph:
     @synonym("fractal")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateDorogovtsevGoltsevMendes(self, n=None):
+    def generateDorogovtsevGoltsevMendes(self, n=None, **kwargs):
         if n is None: n = random.randint(2, 7)
 
         G = gen.dorogovtsev_goltsev_mendes_graph(n)
@@ -293,7 +293,7 @@ class RandomGraph:
     @synonym("partition")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None):
+    def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None, **kwargs):
         if sizes is None: sizes = [random.randint(6, 20) for _ in range(random.randint(2, 3))]
         if p1 is None: p1 = random.uniform(0.2, 0.8)
         if p2 is None: p2 = random.uniform(0.0, 0.1)
@@ -311,7 +311,7 @@ class RandomGraph:
     @synonym("random intersection")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateRandomIntersection(self, n=None, m=None, p=None, s=None):
+    def generateRandomIntersection(self, n=None, m=None, p=None, s=None, **kwargs):
         if n is None: n = random.randint(3, 100)
         if m is None: m = random.randint(3, 100)
         if p is None: p = random.random()
@@ -330,7 +330,7 @@ class RandomGraph:
     @synonym("minimum radius")
     @style(styles_all)
     @layout(layouts_all)
-    def generateMinimumRadius(self, N=None, r=None):
+    def generateMinimumRadius(self, N=None, r=None, **kwargs):
         if N is None: N = random.randint(20, 400)
         if r is None: r = random.uniform(0.05, 0.3)
 

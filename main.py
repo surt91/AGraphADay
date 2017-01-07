@@ -58,8 +58,15 @@ def guess_graph(text=None, handle=""):
     layout = None
 
     if text:
+        numbers = [int(s) for s in text.split() if s.isdigit()]
+        if numbers:
+            N = random.choice(numbers)
+            print("regocnized {} nodes".format(N))
+        else:
+            N = None
+
         key, certainty = match(text, synonyms.keys())
-        gen = lambda : synonyms[key](GraphGenerator)
+        gen = lambda : synonyms[key](GraphGenerator, N=N)
 
         cs = CyStyle()
         styleKey, styleCertainty = match(text, cs.names.keys())
