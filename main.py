@@ -95,12 +95,12 @@ def guess_graph(text=None, handle=""):
         handle = "@"+handle
 
     if certainty < 20:
-        answer = "{handle} I am not sure what you mean, but I drew a {graph} for you!"
+        answer = "{handle} I am not sure what you mean, but I drew a {graph} for you! ({N} nodes)"
     elif certainty < 70:
-        answer = "{handle} I think you mentioned a {graph}, I drew it for you."
+        answer = "{handle} I think you mentioned a {graph}, I drew it for you. ({N} nodes)"
     else:
-        answer = "{handle} here is a picture of the {graph} you're interested in!"
-    answer = answer.format(handle=handle, graph=name).strip()
+        answer = "{handle} here is a picture of the {graph} you're interested in! ({N} nodes)"
+    answer = answer.format(handle=handle, graph=name, N=details["N"]).strip()
 
     return path, answer
 
