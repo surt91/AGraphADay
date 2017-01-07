@@ -53,7 +53,6 @@ the number of nodes.
 * force-directed
 * hierarchical
 * isom
-* some graphs have fixed node positions
 
 
 ##Setup
