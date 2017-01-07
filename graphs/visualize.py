@@ -75,8 +75,8 @@ class CyStyle:
     def styleCurved(cy):
         s = cy.style.create("Curved")
         s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
-        s.update_defaults([ ("NETWORK_BACKGROUND_PAINT", "#404040"), 
-                            ("EDGE_TARGET_ARROW_SHAPE", "NONE")])
+        s.update_defaults({"NETWORK_BACKGROUND_PAINT": "#404040",
+                           "EDGE_TARGET_ARROW_SHAPE" : "NONE"})
         return s
 
     @staticmethod
@@ -98,7 +98,17 @@ class CyStyle:
         return s
 
 
-def draw_cytoscape(G, basename, absdir, style):
+class CyLayout:
+    def __init__(self):
+        self.layouts = ["circular", "kamada-kawai", "force-directed", "hierarchical", "isom"]
+
+    def randomLayout(self):
+        layout = random.choice(self.layouts)
+
+        return layout
+
+
+def draw_cytoscape(G, basename, absdir, style, layout):
     from networkx.drawing.nx_agraph import graphviz_layout
     # igraph uses deprecated things
     with warnings.catch_warnings():
@@ -107,26 +117,13 @@ def draw_cytoscape(G, basename, absdir, style):
         from py2cytoscape.data.util_network import NetworkUtil as util
         from py2cytoscape.data.style import StyleUtil as s_util
 
-    # http://localhost:1234/v1/apply/layouts/
-    layouts = [ "circular", "kamada-kawai", "force-directed",
-                "hierarchical", "isom"]
-
-    graphviz = ["neato", "dot", "circo", "twopi", "fdp"]
-
-    # only use for small graphs
-    if len(G) <= 40:
-        #layouts += ["stacked-node-layout"]
-        layouts += graphviz
-
-    layout = random.choice(layouts)
-
     # Create Client
     cy = CyRestClient()
     cy.session.delete()
 
     g_cy = cy.network.create_from_networkx(G)
 
-    # assign lacations manual
+    # assign locations manual
     locations = []
     if has_explicit_coordinates(G):
         layout = "explicit"
@@ -134,15 +131,6 @@ def draw_cytoscape(G, basename, absdir, style):
         idmap = util.name2suid(g_cy)
         for v in G.nodes():
             locations.append([int(idmap[str(v)]), v[0]*1000, v[1]*1000])
-
-    elif layout in graphviz:
-        pos = graphviz_layout(G, layout)
-
-        idmap = util.name2suid(g_cy)
-
-        for k in pos.keys():
-            v = pos[k]
-            locations.append([int(idmap[k]), v[0] , v[1]])
 
     style = style(cy)
 

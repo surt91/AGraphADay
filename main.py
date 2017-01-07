@@ -11,14 +11,14 @@ import tweepy
 from twitter_helper import tweet_pic, obtain_dm, api
 from graphs import RandomGraph, synonyms
 from graphs import draw_cytoscape, draw_graph
-from graphs.visualize import CyStyle
+from graphs.visualize import CyStyle, CyLayout
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
 my_handle = "randomGraphs"
 
 
-def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory=None):
+def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory=None, layout=None):
     G, details = graphGenerator()
 
     os.makedirs(folder, exist_ok=True)
@@ -28,8 +28,11 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory
     if style_factory is None:
         style_factory = random.choice(details["allowed_styles"])
 
+    if layout is None:
+        layout = random.choice(details["allowed_layouts"])
+
     try:
-        path, style = draw_cytoscape(G, basename, absdir, style_factory)
+        path, style = draw_cytoscape(G, basename, absdir, style_factory, layout)
     except:
         print("unexpected error:", sys.exc_info())
         path, style = draw_graph(G, basename, absdir, "neato")
@@ -52,6 +55,7 @@ def guess_graph(text=None, handle=""):
 
     GraphGenerator = RandomGraph(seed)
     style = None
+    layout = None
 
     if text:
         key, certainty = match(text, synonyms.keys())
@@ -64,6 +68,13 @@ def guess_graph(text=None, handle=""):
             print("regocnized style: {} ({})".format(styleKey, styleCertainty))
             style = cs.names[styleKey]
 
+        cl = CyLayout()
+        layoutKey, layoutCertainty = match(text, cl.layouts)
+
+        if layoutCertainty >= 80:
+            print("regocnized layout: {} ({})".format(layoutKey, layoutCertainty))
+            layout = layoutKey
+
     if not text or certainty < 20:
         gen = GraphGenerator.randomGraph
         certainty = 0
@@ -72,7 +83,8 @@ def guess_graph(text=None, handle=""):
     folder = os.path.join(absdir, "answers")
     path, details = createPlot(gen, folder, seed,
                                comment="'{}' -> {} ({}%)".format(text, key, certainty),
-                               style_factory=style)
+                               style_factory=style,
+                               layout=layout)
 
     print(key, "({}%)".format(certainty))
 
