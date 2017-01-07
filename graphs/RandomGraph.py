@@ -130,6 +130,8 @@ class RandomGraph:
 
     @synonym("power law cluster")
     @synonym("power law")
+    @synonym("powerlaw")
+    @synonym("powerlaw cluster")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
@@ -277,7 +279,7 @@ class RandomGraph:
 
         return G, details
 
-    @synonym("circular ladder")
+    @synonym("ladder")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateCircularLadder(self, n=None, **kwargs):
