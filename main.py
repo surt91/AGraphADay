@@ -11,21 +11,24 @@ import tweepy
 from twitter_helper import tweet_pic, obtain_dm, api
 from graphs import RandomGraph, synonyms
 from graphs import draw_cytoscape, draw_graph
+from graphs.visualize import CyStyle
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
 my_handle = "randomGraphs"
 
 
-def createPlot(graphGenerator, folder, seed, comment="no comment"):
+def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory=None):
     G, details = graphGenerator()
 
     os.makedirs(folder, exist_ok=True)
     basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
     basename = os.path.join(folder, basename)
 
-    try:
+    if style_factory is None:
         style_factory = random.choice(details["allowed_styles"])
+
+    try:
         path, style = draw_cytoscape(G, basename, absdir, style_factory)
     except:
         print("unexpected error:", sys.exc_info())
@@ -48,10 +51,18 @@ def guess_graph(text=None, handle=""):
     seed = base64.b64encode(os.urandom(8)).decode("ascii")
 
     GraphGenerator = RandomGraph(seed)
+    style = None
 
     if text:
         key, certainty = match(text, synonyms.keys())
         gen = lambda : synonyms[key](GraphGenerator)
+
+        cs = CyStyle()
+        styleKey, styleCertainty = match(text, cs.names.keys())
+
+        if styleCertainty >= 80:
+            print("regocnized style: {} ({})".format(styleKey, styleCertainty))
+            style = cs.names[styleKey]
 
     if not text or certainty < 20:
         gen = GraphGenerator.randomGraph
@@ -59,7 +70,9 @@ def guess_graph(text=None, handle=""):
         key = "n/a"
 
     folder = os.path.join(absdir, "answers")
-    path, details = createPlot(gen, folder, seed, comment="'{}' -> {} ({}%)".format(text, key, certainty))
+    path, details = createPlot(gen, folder, seed,
+                               comment="'{}' -> {} ({}%)".format(text, key, certainty),
+                               style_factory=style)
 
     print(key, "({}%)".format(certainty))
 

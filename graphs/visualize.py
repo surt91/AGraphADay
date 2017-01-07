@@ -58,6 +58,7 @@ class CyStyle:
         styles = [i[1] for i in sorted(members) if "style" in i[0]]
 
         self.styles = styles
+        self.names = {i[0][5:]: i[1] for i in sorted(members) if "style" in i[0]}
 
     def randomStyle(self):
         gen = random.choice(self.styles)
