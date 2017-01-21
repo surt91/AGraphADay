@@ -69,7 +69,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateErdosRenyi(self, N=None, m=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if m is None: m = abs(int(random.gauss(N, N)))
 
         G = gen.gnm_random_graph(N, m)
@@ -84,7 +84,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["circular", "kamada-kawai", "force-directed"])
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if k is None: k = random.randint(2, 5)
         if p is None: p = random.uniform(0, 0.2)
         if s is None: s = random.randint(0, 10**7)
@@ -101,7 +101,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateRandomRegular(self, N=None, d=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if d is None: d = random.randint(1, 5)
 
         # the product of N*d must be even, otherwise the regular graph does not exist
@@ -119,7 +119,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if m is None: m = random.randint(1, 5)
 
         G = gen.barabasi_albert_graph(N, m)
@@ -135,7 +135,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if m is None: m = random.randint(1, 5)
         if p is None: p = random.random()
 
@@ -149,7 +149,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateDuplicationDivergence(self, N=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if p is None: p = random.random()
         if s is None: s = random.randint(0, 10**7)
 
@@ -165,7 +165,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None: N = random.randint(4, 100)
         if p1 is None: p1 = random.uniform(0, 4)
         if p2 is None: p2 = random.uniform(0, 4)
         if s is None: s = random.randint(0, 10**7)
@@ -272,6 +272,9 @@ class RandomGraph:
     def generateBarbell(self, m1=None, m2=None, **kwargs):
         if m1 is None: m1 = random.randint(3, 20)
         if m2 is None: m2 = random.randint(1, 20)
+        if N is not None: 
+            m1 = random.randint(3, N/2-2)
+            m2 = N - 2*m1
 
         G = gen.barbell_graph(m1, m2)
         details = dict(name="Barbell Graph", N=len(G.nodes()), m1=m1, m2=m2, seed=self.seed,
@@ -283,7 +286,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
     def generateCircularLadder(self, n=None, **kwargs):
-        if n is None: n = random.randint(3, 200)
+        if n is None: n = random.randint(3, 100)
 
         G = gen.circular_ladder_graph(n)
         details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n, seed=self.seed,
