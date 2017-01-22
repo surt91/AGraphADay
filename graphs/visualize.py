@@ -68,6 +68,7 @@ class CyStyle:
     @staticmethod
     def styleSample3(cy):
         s = cy.style.create("Sample3")
+        # the mappings=defaultdict(str) will assign empty strings to the nodes
         s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
         return s
 
