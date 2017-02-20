@@ -10,8 +10,8 @@ import tweepy
 
 from twitter_helper import tweet_pic, obtain_dm, api
 from graphs import RandomGraph, synonyms
-from graphs import draw_cytoscape, draw_graph
-from graphs.visualize import CyStyle, CyLayout
+from graphs import draw_cytoscape, draw_graph, draw_graphtool, draw_blockmodel
+from graphs.visualize import CyStyle, CyLayout, GtLayout
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
@@ -31,11 +31,21 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory
     if layout is None:
         layout = random.choice(details["allowed_layouts"])
 
-    try:
-        path, style = draw_cytoscape(G, basename, absdir, style_factory, layout)
-    except:
-        print("unexpected error:", sys.exc_info())
-        path, style = draw_graph(G, basename, absdir, "neato")
+    if layout in CyLayout.layouts:
+        try:
+            path, style = draw_cytoscape(G, basename, absdir, style_factory, layout)
+        except:
+            layout = random.choice(GtLayout.layouts + ["blockmodel"])
+    # try:
+    if layout in GtLayout.layouts:
+        path, style = draw_graphtool(G, basename, absdir, "None", layout)
+    elif layout == "blockmodel":
+        path, style = draw_blockmodel(G, basename, absdir, "None", layout)
+    else:
+        raise
+    # except:
+    #     print("unexpected error:", sys.exc_info())
+    #     path, style = draw_graph(G, basename, absdir, "neato")
 
     with open(basename+".txt", "w") as f:
         f.write(details["seed"])
@@ -178,4 +188,3 @@ if __name__ == "__main__":
 
     if not "test" in sys.argv:
         tweet_pic(path, text)
-

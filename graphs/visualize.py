@@ -1,5 +1,6 @@
 import os
 import time
+import math
 import random
 import warnings
 import inspect
@@ -7,6 +8,13 @@ from collections import defaultdict
 from subprocess import call
 
 import networkx as nx
+import graph_tool as gt
+import graph_tool.inference
+import graph_tool.draw
+import graph_tool.centrality
+
+from .nx2gt.nx2gt import nx2gt
+
 
 def has_explicit_coordinates(G):
     # Guess if the graph has explicit coordinates
@@ -94,17 +102,10 @@ class CyStyle:
                                   mappings=defaultdict(str))
         return s
 
-    #~ @staticmethod
-    #~ def styleDefault(cy):
-        #~ s = cy.style.create("default")
-        #~ s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
-        #~ return s
-
 
 class CyLayout:
-    def __init__(self):
-        self.layouts = ["circular", "kamada-kawai", "force-directed",
-                        "hierarchical", "isom"]
+    layouts = ["circular", "kamada-kawai", "force-directed",
+               "hierarchical", "isom"]
 
     def randomLayout(self):
         layout = random.choice(self.layouts)
@@ -164,3 +165,80 @@ def draw_cytoscape(G, basename, absdir, style, layout):
 
     return outfile, details
 
+
+class GtLayout:
+    layouts = ["sfdp",
+               "fruchterman_reingold",
+               "arf",
+               "radial_tree"]
+
+    def randomLayout(self):
+        layout = random.choice(self.layouts)
+
+        return layout
+
+
+def draw_graphtool(G, basename, absdir, style, layout):
+    g = nx2gt(G)
+
+    # assign locations manual
+    locations = []
+    if has_explicit_coordinates(G):
+        layout = "explicit"
+        pos = g.new_vertex_property("vector<double>")
+        for v in G.nodes():
+            pos[g.vertex(i)] = [v[0]*1000, v[1]*1000]
+    else:
+        if layout == "sfdp":
+            pos = gt.draw.sfdp_layout(g)
+        elif layout == "fruchterman_reingold":
+            pos = gt.draw.fruchterman_reingold_layout(g)
+        elif layout == "arf":
+            pos = gt.draw.arf_layout(g)
+        elif layout == "radial_tree":
+            pos = gt.draw.radial_tree_layout(g, 0)
+        else:
+            pos = gt.draw.sfdp_layout(g)
+
+    style = "not implemented yet"
+
+    details = "style = {}, layout = {}".format(style, layout)
+
+    # this style comes directly from the graph tool documentation
+    # https://graph-tool.skewed.de/static/doc/draw.html#graph_tool.draw.graph_draw
+    deg = g.degree_property_map("in")
+    deg.a = 4 * (deg.a**0.5 * 0.5 + 0.4)
+    ebet = gt.centrality.betweenness(g)[1]
+    ebet.a /= ebet.a.max() / 10.
+    eorder = ebet.copy()
+    eorder.a *= -1
+    control = g.new_edge_property("vector<double>")
+    for e in g.edges():
+        d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a) ** 2)) / 5
+        control[e] = [0.3, d, 0.7, d]
+    bg_color = (0.25, 0.25, 0.25, 1.0)
+
+    infile = basename+".svg"
+    outfile = basename+".png"
+
+    gt.draw.graph_draw(g, pos=pos, vertex_size=deg, vertex_fill_color=deg, vorder=deg,
+                  edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
+                  edge_control_points=control,  # some curvy edges
+                  bg_color=bg_color,
+                  output=infile)
+    call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
+    return outfile, details
+
+
+def draw_blockmodel(G, basename, absdir, style, layout):
+    g = nx2gt(G)
+    state = gt.inference.minimize_nested_blockmodel_dl(g, deg_corr=True)
+
+    details = "style = {}, layout = {}".format("blockmodel", "blockmodel")
+
+    infile = basename+".svg"
+    outfile = basename+".png"
+
+    gt.draw.draw_hierarchy(state, bg_color=(0.25, 0.25, 0.25, 1.0), output=infile)
+    call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
+    return outfile, details

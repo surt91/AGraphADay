@@ -1,0 +1,3 @@
+[submodule "graphs/nx2gt"]
+	path = graphs/nx2gt
+	url = git@gist.github.com:f6a6f96bade07a4eafb4b3199b3aca24.git

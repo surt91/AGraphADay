@@ -62,6 +62,9 @@ Every time the program runs it will create a graph, save it as `png` and `svg`
 and its details in a `txt` named after the current unix timestamp and tweets
 it. Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
 
+Also there is at least one submodule which should be loaded from GitHub,
+therefore run `git submodule update --init --recursive`
+
 ##Dependencies
 
     * from PyPI
@@ -71,6 +74,7 @@ it. Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
         * python-pygraphviz
         * tweepy
         * fuzzywuzzy
+        * graph-tool
 
     * Cytoscape
         http://www.cytoscape.org/
