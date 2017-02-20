@@ -136,6 +136,9 @@ class MyStreamListener(tweepy.StreamListener):
         # make sure that we are actually mentioned
         mentioned = False
         for i in status.entities["user_mentions"]:
+            if status.text[:3] == "RT ":
+                # this is a retweet, ignore it
+                continue
             if i["screen_name"] == my_handle:
                 mentioned = True
         if mentioned:
