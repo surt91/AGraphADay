@@ -186,11 +186,11 @@ class RandomGraph:
         generators = [gen.karate_club_graph,
                       gen.davis_southern_women_graph,
                       gen.florentine_families_graph]
-
-        if idx is None: idx = random.randint(0, len(generators)-1)
         label = ["Zachary’s Karate Club",
                  "Davis Southern Women",
                  "Florentine Families"]
+
+        if idx is None: idx = random.randint(0, len(generators)-1)
         G = generators[idx]()
         details = dict(name=label[idx], N=len(G.nodes()), idx=idx, seed=self.seed,
                        template="{name}, N = {N}")
@@ -208,6 +208,139 @@ class RandomGraph:
     @synonym("Florentine Families")
     def florentine(self, **kwargs):
         return self.generateSpecial(2, **kwargs)
+
+    @synonym("real world network")
+    @style(styles_all)
+    @layout(["kamada-kawai", "force-directed"])
+    def generateRealWorld(self, idx=None, **kwargs):
+        files = ["adjnoun",
+                 "celegansneural",
+                 "dolphins",
+                 "football",
+                 "lesmis",
+                 "polbooks"]
+        label = ["word adjacencies in David Copperfield by Charles Dickens",
+                 "neural network of c. elegans",
+                 "a dolphin social network",
+                 "American college football",
+                 "Les Misérables",
+                 "Amazon's copurchases of political books"]
+
+        if idx is None: idx = random.randint(0, len(files)-1)
+
+        G = nx.read_gml("graphs/networks/{}.gml".format(files[idx]))
+        details = dict(name=label[idx],
+                       N=len(G.nodes()),
+                       idx=idx,
+                       seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
+    @synonym("word adjacencies")
+    @synonym("David Copperfield by Charles Dickens")
+    def adjnoun(self, **kwargs):
+        return self.generateRealWorld(0, **kwargs)
+
+    @synonym("c. elegans")
+    @synonym("neural network")
+    def celegans(self, **kwargs):
+        return self.generateRealWorld(1, **kwargs)
+
+    @synonym("dolphins")
+    def dolphins(self, **kwargs):
+        return self.generateRealWorld(2, **kwargs)
+
+    @synonym("american football")
+    def football(self, **kwargs):
+        return self.generateRealWorld(3, **kwargs)
+
+    @synonym("Les Miserables")
+    @synonym("book")
+    def lesmis(self, **kwargs):
+        return self.generateRealWorld(4, **kwargs)
+
+    @synonym("political books")
+    def polbooks(self, **kwargs):
+        return self.generateRealWorld(5, **kwargs)
+
+    @synonym("large network")
+    @style(styles_all)
+    @layout(["kamada-kawai", "force-directed"])
+    def generateLargeNetwork(self, idx=None, **kwargs):
+        files = ["as-22july06",
+                 "power",
+                 "polblogs"]
+        label = ["internet 2006",
+                 "power grid",
+                 "political blogs"]
+
+        if idx is None: idx = random.randint(0, len(files)-1)
+
+        G = nx.read_gml("graphs/networks/{}.gml".format(files[idx]))
+        details = dict(name=label[idx],
+                       N=len(G.nodes()),
+                       idx=idx,
+                       seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
+    @synonym("internet")
+    def internet(self, **kwargs):
+        return self.generateLargeNetwork(0, **kwargs)
+
+    @synonym("power grind")
+    def powergrid(self, **kwargs):
+        return self.generateLargeNetwork(1, **kwargs)
+
+    @synonym("political blogs")
+    def polblogs(self, **kwargs):
+        return self.generateLargeNetwork(2, **kwargs)
+
+    @synonym("science network")
+    @style(styles_all)
+    @layout(["kamada-kawai", "force-directed"])
+    def generateScience(self, idx=None, **kwargs):
+        files = ["astro-ph",
+                 "cond-mat",
+                 "cond-mat-2003",
+                 "cond-mat-2005",
+                 "hep-th",
+                 "netscience"]
+        label = ["citations astrophysics (1995-2000)",
+                 "citations condensed matter (1995-2000)",
+                 "citations condensed matter (1995-2003)",
+                 "citations condensed matter (1995-2005)",
+                 "citations high energy physics (1995-2000)",
+                 "citations network science (-2006)"]
+
+        if idx is None: idx = random.randint(0, len(files)-1)
+
+        G = nx.read_gml("graphs/networks/{}.gml".format(files[idx]))
+        details = dict(name=label[idx],
+                       N=len(G.nodes()),
+                       idx=idx,
+                       seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
+    @synonym("astro physics")
+    def astro(self, **kwargs):
+        return self.generateScience(0, **kwargs)
+
+    @synonym("condensed matter physics")
+    def condmat(self, **kwargs):
+        return self.generateScience(1, **kwargs)
+
+    @synonym("high energy physics")
+    def hep(self, **kwargs):
+        return self.generateScience(4, **kwargs)
+
+    @synonym("netscience")
+    def netsci(self, **kwargs):
+        return self.generateScience(5, **kwargs)
 
     @synonym("caveman")
     @synonym("clique")

@@ -15,7 +15,7 @@ the number of nodes.
     * Powerlaw cluster graph
     * Relative Neighborhood graph
     * Minimum Radius graph
-    * some social networks
+    * some real world networks (source: http://www-personal.umich.edu/~mejn/netdata/)
     * Caveman graph
 
 ###Styles
