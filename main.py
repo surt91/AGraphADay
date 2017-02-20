@@ -9,7 +9,7 @@ from datetime import datetime
 import tweepy
 
 from twitter_helper import tweet_pic, obtain_dm, api
-from graphs import RandomGraph, synonyms
+from graphs import RandomGraph, synonyms, layouts_all
 from graphs import draw_cytoscape, draw_graph, draw_graphtool, draw_blockmodel
 from graphs.visualize import CyStyle, CyLayout, GtLayout
 from parse import match
@@ -85,8 +85,7 @@ def guess_graph(text=None, handle=""):
             print("regocnized style: {} ({})".format(styleKey, styleCertainty))
             style = cs.names[styleKey]
 
-        cl = CyLayout()
-        layoutKey, layoutCertainty = match(text, cl.layouts)
+        layoutKey, layoutCertainty = match(text, layouts_all)
 
         if layoutCertainty >= 80:
             print("regocnized layout: {} ({})".format(layoutKey, layoutCertainty))
