@@ -186,8 +186,8 @@ def draw_graphtool(G, basename, absdir, style, layout):
     if has_explicit_coordinates(G):
         layout = "explicit"
         pos = g.new_vertex_property("vector<double>")
-        for v in G.nodes():
-            pos[g.vertex(i)] = [v[0]*1000, v[1]*1000]
+        for n, v in enumerate(G.nodes()):
+            pos[g.vertex(n)] = [v[0]*1000, v[1]*1000]
     else:
         if layout == "sfdp":
             pos = gt.draw.sfdp_layout(g)
