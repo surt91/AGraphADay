@@ -1,13 +1,15 @@
-* answer to tweets with a graph
-    * try to guess parameters
+#TODO
+    * answer to tweets with a graph
 
-* clustering algorithms to color the nodes
-* do something sensible with bipartite graphs (special layouts)
-* more styles
-* change styles
+        * try to guess parameters
 
-* SQLAlchemy/SQLite db to store data (instead of textfiles)
+    * clustering algorithms to color the nodes
+    * do something sensible with bipartite graphs (special layouts)
+    * more styles
+    * change styles
 
-* introduce some kind of rate limiting against DOS attacks
+    * SQLAlchemy/SQLite db to store data (instead of textfiles)
 
-* generate social network on request (graph of followers on twitter)
+    * introduce some kind of rate limiting against DOS attacks
+
+    * generate social network on request (graph of followers on twitter)

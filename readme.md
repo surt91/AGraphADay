@@ -10,49 +10,49 @@ the number of nodes.
 
 ###Graph Types
 
-* Newman-Watts-Strogatz
-* Barabási-Albert
-* Powerlaw cluster graph
-* Relative Neighborhood graph
-* Minimum Radius graph
-* some social networks
-* Caveman graph
+    * Newman-Watts-Strogatz
+    * Barabási-Albert
+    * Powerlaw cluster graph
+    * Relative Neighborhood graph
+    * Minimum Radius graph
+    * some social networks
+    * Caveman graph
 
 ###Styles
 
-* Curved
-    * dark background
-    * orange nodes
-    * curved, white edges
+    * Curved
+        * dark background
+        * orange nodes
+        * curved, white edges
 
-* Sample3
-    * dark background
-    * blue nodes
-    * white edges
+    * Sample3
+        * dark background
+        * blue nodes
+        * white edges
 
-* default black
-    * dark background
-    * white nodes
-    * green edges
+    * default black
+        * dark background
+        * white nodes
+        * green edges
 
-* default
-    * white background
-    * blue nodes
-    * black edges
+    * default
+        * white background
+        * blue nodes
+        * black edges
 
-* Ripple
-    * white background
-    * blue nodes
-    * blue edges
+    * Ripple
+        * white background
+        * blue nodes
+        * blue edges
 
 ###Layouts
 
-* circular
-* kamada-kawai
-    also known as `neato`
-* force-directed
-* hierarchical
-* isom
+    * circular
+    * kamada-kawai
+        also known as `neato`
+    * force-directed
+    * hierarchical
+    * isom
 
 
 ##Setup
@@ -64,18 +64,17 @@ it. Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
 
 ##Dependencies
 
-* from PyPI
-    * networkx
-    * matplotlib
-    * py2cytoscape
-    * python-pygraphviz
-    * tweepy
-    * fuzzywuzzy
+    * from PyPI
+        * networkx
+        * matplotlib
+        * py2cytoscape
+        * python-pygraphviz
+        * tweepy
+        * fuzzywuzzy
 
-* Cytoscape
-    http://www.cytoscape.org/
-    run with REST server on localhost at port 1234
+    * Cytoscape
+        http://www.cytoscape.org/
+        run with REST server on localhost at port 1234
 
-* Imagemagick
-* optipng
-
+    * Imagemagick
+    * optipng
