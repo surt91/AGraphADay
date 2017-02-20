@@ -188,7 +188,9 @@ class RandomGraph:
                       gen.florentine_families_graph]
 
         if idx is None: idx = random.randint(0, len(generators)-1)
-        label = ["Zachary’s Karate Club", "Davis Southern Women", "Florentine Families"]
+        label = ["Zachary’s Karate Club",
+                 "Davis Southern Women",
+                 "Florentine Families"]
         G = generators[idx]()
         details = dict(name=label[idx], N=len(G.nodes()), idx=idx, seed=self.seed,
                        template="{name}, N = {N}")

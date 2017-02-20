@@ -31,12 +31,6 @@ def draw_graph(G, basename, absdir, command="neato"):
         pos = graphviz_layout(G, command)
 
     nx.draw(G, pos)
-#    ax = plt.gca()
-#    plt.text(0.99, 0.01, text,
-#            verticalalignment='bottom',
-#            horizontalalignment='right',
-#            transform=ax.transAxes,
-#            fontsize=10)
     plt.savefig(basename+".svg")
     plt.savefig(basename+".png")
 
@@ -69,39 +63,48 @@ class CyStyle:
     def styleSample3(cy):
         s = cy.style.create("Sample3")
         # the mappings=defaultdict(str) will assign empty strings to the nodes
-        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        s.create_discrete_mapping(column="name",
+                                  vp="NODE_LABEL",
+                                  mappings=defaultdict(str))
         return s
 
     @staticmethod
     def styleCurved(cy):
         s = cy.style.create("Curved")
-        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        s.create_discrete_mapping(column="name",
+                                  vp="NODE_LABEL",
+                                  mappings=defaultdict(str))
         s.update_defaults({"NETWORK_BACKGROUND_PAINT": "#404040",
-                           "EDGE_TARGET_ARROW_SHAPE" : "NONE"})
+                           "EDGE_TARGET_ARROW_SHAPE":  "NONE"})
         return s
 
     @staticmethod
     def styleRipple(cy):
         s = cy.style.create("Ripple")
-        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        s.create_discrete_mapping(column="name",
+                                  vp="NODE_LABEL",
+                                  mappings=defaultdict(str))
         return s
 
     @staticmethod
     def styleDefaultBlack(cy):
         s = cy.style.create("default black")
-        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        s.create_discrete_mapping(column="name",
+                                  vp="NODE_LABEL",
+                                  mappings=defaultdict(str))
         return s
 
-    @staticmethod
-    def styleDefault(cy):
-        s = cy.style.create("default")
-        s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
-        return s
+    #~ @staticmethod
+    #~ def styleDefault(cy):
+        #~ s = cy.style.create("default")
+        #~ s.create_discrete_mapping(column="name", vp="NODE_LABEL", mappings=defaultdict(str))
+        #~ return s
 
 
 class CyLayout:
     def __init__(self):
-        self.layouts = ["circular", "kamada-kawai", "force-directed", "hierarchical", "isom"]
+        self.layouts = ["circular", "kamada-kawai", "force-directed",
+                        "hierarchical", "isom"]
 
     def randomLayout(self):
         layout = random.choice(self.layouts)
@@ -113,7 +116,7 @@ def draw_cytoscape(G, basename, absdir, style, layout):
     from networkx.drawing.nx_agraph import graphviz_layout
     # igraph uses deprecated things
     with warnings.catch_warnings():
-        warnings.filterwarnings("ignore",category=DeprecationWarning)
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
         from py2cytoscape.data.cyrest_client import CyRestClient
         from py2cytoscape.data.util_network import NetworkUtil as util
         from py2cytoscape.data.style import StyleUtil as s_util
