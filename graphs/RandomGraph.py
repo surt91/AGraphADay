@@ -269,10 +269,10 @@ class RandomGraph:
     @synonym("barbell")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed"])
-    def generateBarbell(self, m1=None, m2=None, **kwargs):
+    def generateBarbell(self, N=None, m1=None, m2=None, **kwargs):
         if m1 is None: m1 = random.randint(3, 20)
         if m2 is None: m2 = random.randint(1, 20)
-        if N is not None: 
+        if N is not None:
             m1 = random.randint(3, N/2-2)
             m2 = N - 2*m1
 
@@ -359,4 +359,3 @@ class RandomGraph:
                        template="{name}, N = {N}, r = {r}")
 
         return G, details
-
