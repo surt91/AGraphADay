@@ -264,40 +264,6 @@ class RandomGraph:
     def polbooks(self, **kwargs):
         return self.generateRealWorld(5, **kwargs)
 
-    @synonym("large network")
-    @style(styles_all)
-    @layout(["kamada-kawai", "force-directed"])
-    def generateLargeNetwork(self, idx=None, **kwargs):
-        files = ["as-22july06",
-                 "power",
-                 "polblogs"]
-        label = ["internet 2006",
-                 "power grid",
-                 "political blogs"]
-
-        if idx is None: idx = random.randint(0, len(files)-1)
-
-        G = nx.read_gml("graphs/networks/{}.gml".format(files[idx]))
-        details = dict(name=label[idx],
-                       N=len(G.nodes()),
-                       idx=idx,
-                       seed=self.seed,
-                       template="{name}, N = {N}")
-
-        return G, details
-
-    @synonym("internet")
-    def internet(self, **kwargs):
-        return self.generateLargeNetwork(0, **kwargs)
-
-    @synonym("power grind")
-    def powergrid(self, **kwargs):
-        return self.generateLargeNetwork(1, **kwargs)
-
-    @synonym("political blogs")
-    def polblogs(self, **kwargs):
-        return self.generateLargeNetwork(2, **kwargs)
-
     @synonym("science network")
     @style(styles_all)
     @layout(["kamada-kawai", "sfpd", "arf", "radial_tree"])
