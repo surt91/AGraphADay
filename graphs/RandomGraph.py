@@ -67,7 +67,7 @@ class RandomGraph:
     @synonym("Erdos Renyi")
     @synonym("Erdős-Rényi")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf"])
     def generateErdosRenyi(self, N=None, m=None, **kwargs):
         if N is None: N = random.randint(4, 100)
         if m is None: m = abs(int(random.gauss(N, N)))
@@ -82,7 +82,7 @@ class RandomGraph:
     @synonym("Newman Watts Strogatz")
     @synonym("small world")
     @style(styles_all)
-    @layout(["circular", "kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["circular", "kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
         if N is None: N = random.randint(4, 100)
         if k is None: k = random.randint(2, 5)
@@ -99,7 +99,7 @@ class RandomGraph:
 
     @synonym("Random Regular")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomRegular(self, N=None, d=None, **kwargs):
         if N is None: N = random.randint(4, 100)
         if d is None: d = random.randint(1, 5)
@@ -117,7 +117,7 @@ class RandomGraph:
     @synonym("Barabasi Albert")
     @synonym("preferential attachment")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
         if N is None: N = random.randint(4, 100)
         if m is None: m = random.randint(1, 5)
@@ -163,7 +163,7 @@ class RandomGraph:
 
     @synonym("lobster")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
         if N is None: N = random.randint(4, 100)
         if p1 is None: p1 = random.uniform(0, 4)
@@ -180,7 +180,7 @@ class RandomGraph:
 
     @synonym("social network")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "blockmodel"])
     def generateSpecial(self, idx=None, **kwargs):
         # special graphs, group under one, such that they are rare
         generators = [gen.karate_club_graph,
@@ -211,7 +211,7 @@ class RandomGraph:
 
     @synonym("real world network")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "blockmodel"])
     def generateRealWorld(self, idx=None, **kwargs):
         files = ["adjnoun",
                  "celegansneural",
@@ -264,7 +264,8 @@ class RandomGraph:
     def polbooks(self, **kwargs):
         return self.generateRealWorld(5, **kwargs)
 
-    @synonym("science network")
+    @synonym("science")
+    @synonym("citation")
     @style(styles_all)
     @layout(["kamada-kawai", "sfpd", "arf", "radial_tree"])
     def generateScience(self, idx=None, **kwargs):
@@ -389,7 +390,7 @@ class RandomGraph:
 
     @synonym("ladder")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateCircularLadder(self, n=None, **kwargs):
         if n is None: n = random.randint(3, 100)
 
@@ -432,7 +433,7 @@ class RandomGraph:
     @synonym("bipartite")
     @synonym("random intersection")
     @style(styles_all)
-    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomIntersection(self, n=None, m=None, p=None, s=None, **kwargs):
         if n is None: n = random.randint(3, 100)
         if m is None: m = random.randint(3, 100)
