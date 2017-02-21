@@ -69,7 +69,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf"])
     def generateErdosRenyi(self, N=None, m=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if m is None: m = abs(int(random.gauss(N, N)))
 
         G = gen.gnm_random_graph(N, m)
@@ -84,7 +84,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["circular", "kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if k is None: k = random.randint(2, 5)
         if p is None: p = random.uniform(0, 0.2)
         if s is None: s = random.randint(0, 10**7)
@@ -101,7 +101,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomRegular(self, N=None, d=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if d is None: d = random.randint(1, 5)
 
         # the product of N*d must be even, otherwise the regular graph does not exist
@@ -119,7 +119,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
 
         G = gen.barabasi_albert_graph(N, m)
@@ -135,7 +135,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if m is None: m = random.randint(1, 5)
         if p is None: p = random.random()
 
@@ -149,7 +149,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateDuplicationDivergence(self, N=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if p is None: p = random.random()
         if s is None: s = random.randint(0, 10**7)
 
@@ -165,7 +165,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 100)
+        if N is None: N = random.randint(4, 400)
         if p1 is None: p1 = random.uniform(0, 4)
         if p2 is None: p2 = random.uniform(0, 4)
         if s is None: s = random.randint(0, 10**7)
@@ -314,8 +314,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateCaveman(self, N=None, l=None, k=None, **kwargs):
-        if l is None: l = random.randint(1, 5)
-        if k is None: k = random.randint(2, 9)
+        if l is None: l = random.randint(1, 8)
+        if k is None: k = random.randint(2, 14)
 
         if N is not None: k = N//l
 
@@ -329,8 +329,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateRelaxedCaveman(self, N=None, l=None, k=None, p=None, s=None, **kwargs):
-        if l is None: l = random.randint(1, 5)
-        if k is None: k = random.randint(2, 9)
+        if l is None: l = random.randint(1, 8)
+        if k is None: k = random.randint(2, 14)
         if p is None: p = random.uniform(0.05, 0.3)
         if s is None: s = random.randint(0, 10**7)
 
@@ -348,7 +348,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(layouts_all)
     def generateRelativeNeighborhood(self, N=None, **kwargs):
-        if N is None: N = random.randint(20, 400)
+        if N is None: N = random.randint(20, 800)
 
         state = random.getstate()
         G = proximity_graphs.relative_neighborhood_graph(N)
@@ -362,7 +362,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(layouts_all)
     def generateGabriel(self, N=None, **kwargs):
-        if N is None: N = random.randint(20, 400)
+        if N is None: N = random.randint(20, 800)
 
         state = random.getstate()
         G = proximity_graphs.gabriel_graph(N)
@@ -392,7 +392,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateCircularLadder(self, n=None, **kwargs):
-        if n is None: n = random.randint(3, 100)
+        if n is None: n = random.randint(3, 400)
 
         G = gen.circular_ladder_graph(n)
         details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n, seed=self.seed,
@@ -417,7 +417,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None, **kwargs):
-        if sizes is None: sizes = [random.randint(6, 20) for _ in range(random.randint(2, 3))]
+        if sizes is None: sizes = [random.randint(6, 120) for _ in range(random.randint(2, 3))]
         if p1 is None: p1 = random.uniform(0.2, 0.8)
         if p2 is None: p2 = random.uniform(0.0, 0.1)
         if s is None: s = random.randint(0, 10**7)
@@ -454,7 +454,7 @@ class RandomGraph:
     @style(styles_all)
     @layout(layouts_all)
     def generateMinimumRadius(self, N=None, r=None, **kwargs):
-        if N is None: N = random.randint(20, 400)
+        if N is None: N = random.randint(20, 800)
         if r is None: r = random.uniform(0.05, 0.3)
 
         state = random.getstate()
