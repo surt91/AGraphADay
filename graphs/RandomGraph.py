@@ -312,9 +312,11 @@ class RandomGraph:
     @synonym("clique")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
-    def generateCaveman(self, l=None, k=None, **kwargs):
+    def generateCaveman(self, N=None, l=None, k=None, **kwargs):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
+
+        if N is not None: k = N//l
 
         G = nx.caveman_graph(l, k)
         details = dict(name="Caveman Graph", N=l*k, l=l, k=k, seed=self.seed,
@@ -325,11 +327,13 @@ class RandomGraph:
     @synonym("relaxed caveman")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
-    def generateRelaxedCaveman(self, l=None, k=None, p=None, s=None, **kwargs):
+    def generateRelaxedCaveman(self, N=None, l=None, k=None, p=None, s=None, **kwargs):
         if l is None: l = random.randint(1, 5)
         if k is None: k = random.randint(2, 9)
         if p is None: p = random.uniform(0.05, 0.3)
         if s is None: s = random.randint(0, 10**7)
+
+        if N is not None: k = N//l
 
         state = random.getstate()
         G = nx.relaxed_caveman_graph(l, k, p)
