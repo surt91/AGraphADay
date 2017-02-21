@@ -76,7 +76,7 @@ therefore run `git submodule update --init --recursive`
         * fuzzywuzzy
         * graph-tool
 
-    * Cytoscape
+    * Cytoscape [optional]
         http://www.cytoscape.org/
         run with REST server on localhost at port 1234
 
