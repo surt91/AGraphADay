@@ -19,10 +19,12 @@ def obtain_dm():
     except:
         last_id = 0
 
+    print(last_id)
+
     todo = []
     mentions = api.mentions_timeline(since_id=last_id)
     for i in mentions:
-        if status.text[:3] == "RT ":
+        if i.text[:3] == "RT ":
             # this is a retweet, ignore it
             print("ignored retweet: @" + i.user.screen_name, ":", i.text)
             continue
