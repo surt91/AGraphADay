@@ -9,7 +9,7 @@ from datetime import datetime
 import tweepy
 
 from twitter_helper import tweet_pic, obtain_dm, api
-from graphs import RandomGraph, synonyms, layouts_all
+from graphs import RandomGraph, synonyms, layouts_all, styles_all
 from graphs import draw_cytoscape, draw_graph, draw_graphtool, draw_blockmodel
 from graphs.visualize import CyStyle, CyLayout, GtLayout
 from parse import match
@@ -18,29 +18,30 @@ absdir = os.path.abspath(os.path.dirname(__file__))
 my_handle = "randomGraphs"
 
 
-def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory=None, layout=None):
+def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, layout=None):
     G, details = graphGenerator()
 
     os.makedirs(folder, exist_ok=True)
     basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
     basename = os.path.join(folder, basename)
 
-    if style_factory is None:
-        style_factory = random.choice(details["allowed_styles"])
+    if style is None:
+        style = random.choice(details["allowed_styles"])
 
     if layout is None:
         layout = random.choice(details["allowed_layouts"])
 
+    # TODO I need to make this pretty
     if layout in CyLayout.layouts:
         try:
-            path, style = draw_cytoscape(G, basename, absdir, style_factory, layout)
+            path, style_detail = draw_cytoscape(G, basename, absdir, style, layout)
         except:
             layout = random.choice(GtLayout.layouts + ["blockmodel"])
     # try:
     if layout in GtLayout.layouts:
-        path, style = draw_graphtool(G, basename, absdir, "None", layout)
+        path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
     elif layout == "blockmodel":
-        path, style = draw_blockmodel(G, basename, absdir, "None", layout)
+        path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)
     else:
         raise
     # except:
@@ -54,7 +55,7 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style_factory
         f.write("\n")
         f.write(details["template"].format(**details))
         f.write("\n")
-        f.write(style)
+        f.write(style_detail)
         f.write("\n")
 
     return path, details
@@ -78,12 +79,11 @@ def guess_graph(text=None, handle=""):
         key, certainty = match(text, synonyms.keys())
         gen = lambda : synonyms[key](GraphGenerator, N=N)
 
-        cs = CyStyle()
-        styleKey, styleCertainty = match(text, cs.names.keys())
+        styleKey, styleCertainty = match(text, styles_all)
 
         if styleCertainty >= 80:
             print("regocnized style: {} ({})".format(styleKey, styleCertainty))
-            style = cs.names[styleKey]
+            style = styleKey
 
         layoutKey, layoutCertainty = match(text, layouts_all)
 
@@ -99,7 +99,7 @@ def guess_graph(text=None, handle=""):
     folder = os.path.join(absdir, "answers")
     path, details = createPlot(gen, folder, seed,
                                comment="'{}' -> {} ({}%)".format(text, key, certainty),
-                               style_factory=style,
+                               style=style,
                                layout=layout)
 
     print(key, "({}%)".format(certainty))

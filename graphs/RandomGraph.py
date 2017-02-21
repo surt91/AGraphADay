@@ -6,7 +6,7 @@ import networkx as nx
 from networkx import generators as gen
 
 from . import proximity_graphs
-from .visualize import CyStyle, CyLayout, GtLayout
+from .visualize import CyStyle, CyLayout, GtLayout, GtStyle
 
 
 # decorator to add synonyms of the graph types
@@ -24,7 +24,7 @@ def synonym(synonym_name):
 
 
 
-styles_all = CyStyle().styles
+styles_all = CyStyle().styles + GtStyle().styles
 def style(style_list):
     def style_decorator(func):
         @wraps(func)

@@ -57,9 +57,9 @@ class CyStyle:
     def __init__(self):
         # get all methods that generate graphs (convention: starts with 'style')
         members = inspect.getmembers(CyStyle)
-        styles = [i[1] for i in sorted(members) if "style" in i[0]]
 
-        self.styles = styles
+        self.styles = [i[0][5:] for i in sorted(members) if "style" in i[0]]
+        self.functions = [i[1] for i in sorted(members) if "style" in i[0]]
         self.names = {i[0][5:]: i[1] for i in sorted(members) if "style" in i[0]}
 
     def randomStyle(self):
@@ -128,6 +128,9 @@ def draw_cytoscape(G, basename, absdir, style, layout):
 
     g_cy = cy.network.create_from_networkx(G)
 
+    if style not in CyStyle.styles:
+        style = CyStyle().randomStyle()
+
     # assign locations manual
     locations = []
     if has_explicit_coordinates(G):
@@ -137,7 +140,7 @@ def draw_cytoscape(G, basename, absdir, style, layout):
         for v in G.nodes():
             locations.append([int(idmap[str(v)]), v[0]*1000, v[1]*1000])
 
-    style = style(cy)
+    style = CyStyle().names[style](cy)
 
     details = "style = {}, layout = {}".format(style.get_name(), layout)
 
@@ -178,8 +181,23 @@ class GtLayout:
         return layout
 
 
+# TODO methods take g and return a dict that can be splatted into draw_graph
+class GtStyle:
+    styles = ["degree",
+              "betweenness"]
+
+    def randomStyle(self):
+        style = random.choice(self.styles)
+
+        return style
+
+
 def draw_graphtool(G, basename, absdir, style, layout):
     g = nx2gt(G)
+
+    if style not in GtStyle().styles:
+        print(style, "not valid, draw random style")
+        style = GtStyle().randomStyle()
 
     # assign locations manual
     locations = []
@@ -203,34 +221,39 @@ def draw_graphtool(G, basename, absdir, style, layout):
         else:
             pos = gt.draw.sfdp_layout(g)
 
-    style = "not implemented yet"
-
     details = "style = {}, layout = {}".format(style, layout)
-
-    # this style comes directly from the graph tool documentation
-    # https://graph-tool.skewed.de/static/doc/draw.html#graph_tool.draw.graph_draw
-    deg = g.degree_property_map("in")
-    deg.a = 4 * (deg.a**0.5 * 0.5 + 0.4)
-    ebet = gt.centrality.betweenness(g)[1]
-    ebet.a /= ebet.a.max() / 10.
-    eorder = ebet.copy()
-    eorder.a *= -1
-    control = g.new_edge_property("vector<double>")
-    for e in g.edges():
-        d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a) ** 2)) / 5
-        control[e] = [0.3, d, 0.7, d]
-    bg_color = (0.25, 0.25, 0.25, 1.0)
 
     infile = basename+"_raw.png"
     outfile = basename+".png"
+    if style == "degree":
+        deg.a = np.sqrt(deg.a) / deg.a.max() * 10
+        gt.draw.graph_draw(g, pos=pos,
+                           vertex_size=deg, vertex_fill_color=deg, vorder=deg,
+                           output_size=outsize,
+                           bg_color=(1, 1, 1, 1),
+                           output=infile)
+    elif style == "betweenness":
+        vbet, ebet = gt.centrality.betweenness(g)
+        vbet.a /= vbet.a.max() / 10
+        ebet.a /= ebet.a.max() / 10.
+        eorder = ebet.copy()
+        eorder.a *= -1
+        control = g.new_edge_property("vector<double>")
+        for e in g.edges():
+            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a) ** 2)) / 5
+            control[e] = [0.3, d, 0.7, d]
+        bg_color = (0.25, 0.25, 0.25, 1.0)
 
-    gt.draw.graph_draw(g, pos=pos,
-                       vertex_size=deg, vertex_fill_color=deg, vorder=deg,
-                       edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
-                       edge_control_points=control,
-                       bg_color=bg_color,
-                       output_size=(4096, 4096),
-                       output=infile)
+        gt.draw.graph_draw(g, pos=pos,
+                           vertex_size=vbet, vertex_fill_color=deg, vorder=vbet,
+                           edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
+                           edge_control_points=control,
+                           bg_color=bg_color,
+                           output_size=(4096, 4096),
+                           output=infile)
+    else:
+        gt.draw.graph_draw(g, pos=pos, output_size=(4096, 4096), output=infile)
+
     call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
     return outfile, details
 
