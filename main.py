@@ -38,7 +38,7 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, l
         except:
             layout = random.choice(GtLayout.layouts + ["blockmodel"])
     # try:
-    if layout in GtLayout.layouts:
+    if layout in GtLayout.layouts or layout == "explicit":
         path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
     elif layout == "blockmodel":
         path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)

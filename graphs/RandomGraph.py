@@ -346,7 +346,7 @@ class RandomGraph:
 
     @synonym("relative neighborhood")
     @style(styles_all)
-    @layout(layouts_all)
+    @layout(["explicit"])
     def generateRelativeNeighborhood(self, N=None, **kwargs):
         if N is None: N = random.randint(20, 800)
 
@@ -360,7 +360,7 @@ class RandomGraph:
 
     @synonym("gabriel")
     @style(styles_all)
-    @layout(layouts_all)
+    @layout(["explicit"])
     def generateGabriel(self, N=None, **kwargs):
         if N is None: N = random.randint(20, 800)
 
@@ -452,7 +452,7 @@ class RandomGraph:
     @synonym("geometric graph")
     @synonym("minimum radius")
     @style(styles_all)
-    @layout(layouts_all)
+    @layout(["explicit"])
     def generateMinimumRadius(self, N=None, r=None, **kwargs):
         if N is None: N = random.randint(20, 800)
         if r is None: r = random.uniform(0.05, 0.3)
