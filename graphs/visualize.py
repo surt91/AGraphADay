@@ -196,7 +196,10 @@ def draw_graphtool(G, basename, absdir, style, layout):
         elif layout == "arf":
             pos = gt.draw.arf_layout(g)
         elif layout == "radial_tree":
-            pos = gt.draw.radial_tree_layout(g, 0)
+            # take the node with the highest degree as the root
+            deg = g.degree_property_map("in")
+            root_node = deg.a.argmax()
+            pos = gt.draw.radial_tree_layout(g, root_node)
         else:
             pos = gt.draw.sfdp_layout(g)
 
