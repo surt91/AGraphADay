@@ -25,8 +25,14 @@ Y=$((Y-2))
 # get background color
 color="$(convert "$IN" -format "%[pixel:p{1,1}]" info:)"
 
-# trim, raster and resize the image
-convert -density 1000 -trim "$IN" -bordercolor "$color" -border "$border" +repage -resize "$X"x"$Y" -rotate "-90<" "$TMP"
+if [[ "$IN" == *.svg ]]
+then
+    # trim, raster and resize the image
+    convert -density 1000 -trim "$IN" -bordercolor "$color" -border "$border" +repage -rotate "-90<" -resize "$X"x"$Y" "$TMP"
+else
+    # trim and resize the image
+    convert -trim "$IN" -bordercolor "$color" -border "$border" +repage -rotate "-90<" -resize "$X"x"$Y" "$TMP"
+fi
 
 # create background, this way we will always get the same aspect ratio
 convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -bordercolor "rgba(0,0,0,0)" -border "1x1" "$BG"
@@ -38,4 +44,3 @@ composite -gravity center "$TMP" "$BG" "$OUT"
 #optipng -o7 "$OUT"
 
 rm "$BG" "$TMP"
-

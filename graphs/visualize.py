@@ -218,14 +218,16 @@ def draw_graphtool(G, basename, absdir, style, layout):
         control[e] = [0.3, d, 0.7, d]
     bg_color = (0.25, 0.25, 0.25, 1.0)
 
-    infile = basename+".svg"
+    infile = basename+"_raw.png"
     outfile = basename+".png"
 
-    gt.draw.graph_draw(g, pos=pos, vertex_size=deg, vertex_fill_color=deg, vorder=deg,
-                  edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
-                  edge_control_points=control,  # some curvy edges
-                  bg_color=bg_color,
-                  output=infile)
+    gt.draw.graph_draw(g, pos=pos,
+                       vertex_size=deg, vertex_fill_color=deg, vorder=deg,
+                       edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
+                       edge_control_points=control,
+                       bg_color=bg_color,
+                       output_size=(4096, 4096),
+                       output=infile)
     call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
     return outfile, details
 
@@ -236,9 +238,12 @@ def draw_blockmodel(G, basename, absdir, style, layout):
 
     details = "style = {}, layout = {}".format("blockmodel", "blockmodel")
 
-    infile = basename+".svg"
+    infile = basename+"_raw.png"
     outfile = basename+".png"
 
-    gt.draw.draw_hierarchy(state, bg_color=(0.25, 0.25, 0.25, 1.0), output=infile)
+    gt.draw.draw_hierarchy(state,
+                           bg_color=(0.25, 0.25, 0.25, 1.0),
+                           output_size=(4096, 4096),
+                           output=infile)
     call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
     return outfile, details
