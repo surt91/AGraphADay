@@ -219,11 +219,11 @@ class RandomGraph:
                  "football",
                  "lesmis",
                  "polbooks"]
-        label = ["word adjacencies [arxiv:physics/0605087]",
-                 "neural network of c. elegans [doi:10.1098/rstb.1986.0056]",
-                 "a dolphin social network [doi:10.1007/s00265-003-0651-y]",
-                 "American college football [doi:10.1073/pnas.122653799]",
-                 "Les Misérables [D. E. Knuth, The Stanford GraphBase]",
+        label = ["word adjacencies in David Copperfield by Charles Dickens",
+                 "neural network of c. elegans",
+                 "a dolphin social network",
+                 "American college football",
+                 "Les Misérables",
                  "Amazon's copurchases of political books"]
 
         if idx is None: idx = random.randint(0, len(files)-1)
@@ -275,12 +275,12 @@ class RandomGraph:
                  "cond-mat-2005",
                  "hep-th",
                  "netscience"]
-        label = ["citations astrophysics (1995-2000) [doi:10.1073/pnas.98.2.404]",
-                 "citations condensed matter (1995-2000) [doi:10.1073/pnas.98.2.404]",
-                 "citations condensed matter (1995-2003) [doi:10.1073/pnas.98.2.404]",
-                 "citations condensed matter (1995-2005) [doi:10.1073/pnas.98.2.404]",
-                 "citations high energy physics (1995-2000) [doi:10.1073/pnas.98.2.404]",
-                 "citations network science (until 2006) [arxiv:physics/0605087]"]
+        label = ["citations astrophysics (1995-2000)",
+                 "citations condensed matter (1995-2000)",
+                 "citations condensed matter (1995-2003)",
+                 "citations condensed matter (1995-2005)",
+                 "citations high energy physics (1995-2000)",
+                 "citations network science (until 2006)"]
 
         if idx is None: idx = random.randint(0, len(files)-1)
 
