@@ -238,7 +238,7 @@ class RandomGraph:
         return G, details
 
     @synonym("word adjacencies")
-    @synonym("David Copperfield by Charles Dickens")
+    @synonym("David Copperfield")
     def adjnoun(self, **kwargs):
         return self.generateRealWorld(0, **kwargs)
 
