@@ -12,6 +12,7 @@ import graph_tool as gt
 import graph_tool.inference
 import graph_tool.draw
 import graph_tool.centrality
+import numpy as np
 
 from .nx2gt.nx2gt import nx2gt
 
@@ -192,12 +193,36 @@ class GtStyle:
         return style
 
 
+def mean_distance_from_gt_pos(g, pos):
+    d = 0
+    max_d = 0
+    ctr = 0
+    for v in g.vertices():
+        for w in v.out_neighbours():
+            i = pos[v]
+            j = pos[w]
+            d += math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
+            ctr += 1
+    d /= ctr
+
+    for v in g.vertices():
+        for w in g.vertices():
+            i = pos[v]
+            j = pos[w]
+            tmp = math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
+            max_d = max(tmp, max_d)
+
+    return d, max_d
+
 def draw_graphtool(G, basename, absdir, style, layout):
+    N = len(G.nodes())
     g = nx2gt(G)
 
     if style not in GtStyle().styles:
         print(style, "not valid, draw random style")
         style = GtStyle().randomStyle()
+
+    deg = g.degree_property_map("total")
 
     # assign locations manual
     locations = []
@@ -215,7 +240,6 @@ def draw_graphtool(G, basename, absdir, style, layout):
             pos = gt.draw.arf_layout(g)
         elif layout == "radial_tree":
             # take the node with the highest degree as the root
-            deg = g.degree_property_map("in")
             root_node = deg.a.argmax()
             pos = gt.draw.radial_tree_layout(g, root_node)
         else:
@@ -225,8 +249,16 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
     infile = basename+"_raw.png"
     outfile = basename+".png"
+    outsize = (4096, 4096)
+    # calculate the node size: a node should have a diameter of the mean
+    # neighbor distance
+    mean_d, max_d = mean_distance_from_gt_pos(g, pos)
+    # since node size is given in pixel and or coordinates are arbitary,
+    # we need to rescale
+    max_node_size = mean_d / max_d * min(outsize)
+
     if style == "degree":
-        deg.a = np.sqrt(deg.a) / deg.a.max() * 10
+        deg.a = np.sqrt(deg.a) / deg.a.max() * max_node_size
         gt.draw.graph_draw(g, pos=pos,
                            vertex_size=deg, vertex_fill_color=deg, vorder=deg,
                            output_size=outsize,
@@ -234,7 +266,7 @@ def draw_graphtool(G, basename, absdir, style, layout):
                            output=infile)
     elif style == "betweenness":
         vbet, ebet = gt.centrality.betweenness(g)
-        vbet.a /= vbet.a.max() / 10
+        vbet.a /= vbet.a.max() / max_node_size
         ebet.a /= ebet.a.max() / 10.
         eorder = ebet.copy()
         eorder.a *= -1
