@@ -194,16 +194,16 @@ class GtStyle:
 
 
 def mean_distance_from_gt_pos(g, pos):
-    d = 0
+    ds = []
     max_d = 0
-    ctr = 0
     for v in g.vertices():
         for w in v.out_neighbours():
             i = pos[v]
             j = pos[w]
-            d += math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
-            ctr += 1
-    d /= ctr
+            ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
+    # d = sum(ds) / len(ds)
+    short_edges = sorted(ds)[:max(1, len(ds)//10)]
+    d = sum(short_edges) / len(short_edges)
 
     for v in g.vertices():
         for w in g.vertices():
@@ -251,11 +251,12 @@ def draw_graphtool(G, basename, absdir, style, layout):
     outfile = basename+".png"
     outsize = (4096, 4096)
     # calculate the node size: a node should have a diameter of the mean
-    # neighbor distance
+    # neighbor distance, but only for the 10% of nearest neighbors
     mean_d, max_d = mean_distance_from_gt_pos(g, pos)
     # since node size is given in pixel and or coordinates are arbitary,
     # we need to rescale
-    max_node_size = mean_d / max_d * min(outsize)
+    # we multiply by 1.8 since the node size is diameter and not radius
+    max_node_size = 1.8 * mean_d / max_d * min(outsize)
 
     if style == "degree":
         deg.a = np.sqrt(deg.a) / deg.a.max() * max_node_size
