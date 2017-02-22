@@ -434,18 +434,18 @@ class RandomGraph:
     @synonym("random intersection")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
-    def generateRandomIntersection(self, n=None, m=None, p=None, s=None, **kwargs):
-        if n is None: n = random.randint(3, 100)
+    def generateRandomIntersection(self, N=None, m=None, p=None, s=None, **kwargs):
+        if N is None: N = random.randint(3, 100)
         if m is None: m = random.randint(3, 100)
         if p is None: p = random.random()
         if s is None: s = random.randint(0, 10**7)
 
         state = random.getstate()
-        G = gen.uniform_random_intersection_graph(n, m, p, s)
+        G = gen.uniform_random_intersection_graph(N, m, p, s)
         random.setstate(state)
 
-        details = dict(name="Random Intersection Graph", N=len(G.nodes()), n=n, m=m, p=p, s=s, seed=self.seed,
-                       template="{name}, N = {N}, n = {n}, m = {m}, p = {p:.2f}, s = {s}")
+        details = dict(name="Random Intersection Graph", N=N, m=m, p=p, s=s, seed=self.seed,
+                       template="{name}, N = {N}, m = {m}, p = {p:.2f}, s = {s}")
 
         return G, details
 
