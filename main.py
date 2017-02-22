@@ -32,21 +32,23 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, l
         layout = random.choice(details["allowed_layouts"])
 
     # TODO I need to make this pretty
-    if layout in CyLayout.layouts:
-        try:
-            path, style_detail = draw_cytoscape(G, basename, absdir, style, layout)
-        except:
-            layout = random.choice(GtLayout.layouts + ["blockmodel"])
-    # try:
-    if layout in GtLayout.layouts or layout == "explicit":
-        path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
-    elif layout == "blockmodel":
-        path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)
-    else:
-        raise
-    # except:
-    #     print("unexpected error:", sys.exc_info())
-    #     path, style = draw_graph(G, basename, absdir, "neato")
+    try:
+        if layout in CyLayout.layouts:
+            try:
+                path, style_detail = draw_cytoscape(G, basename, absdir, style, layout)
+            except:
+                print("wut?", layout, sys.exc_info())
+                layout = random.choice(GtLayout.layouts)
+                path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
+        elif layout in GtLayout.layouts or layout == "explicit":
+            path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
+        elif layout == "blockmodel":
+            path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)
+        else:
+            raise
+    except:
+        print("unexpected error:", sys.exc_info())
+        path, style = draw_graph(G, basename, absdir, "neato")
 
     with open(basename+".txt", "w") as f:
         f.write(details["seed"])

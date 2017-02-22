@@ -64,9 +64,9 @@ class CyStyle:
         self.names = {i[0][5:]: i[1] for i in sorted(members) if "style" in i[0]}
 
     def randomStyle(self):
-        gen = random.choice(self.styles)
+        style = random.choice(self.functions)
 
-        return gen()
+        return style
 
     @staticmethod
     def styleSample3(cy):
@@ -129,7 +129,7 @@ def draw_cytoscape(G, basename, absdir, style, layout):
 
     g_cy = cy.network.create_from_networkx(G)
 
-    if style not in CyStyle.styles:
+    if style not in CyStyle().styles:
         style = CyStyle().randomStyle()
 
     # assign locations manual
@@ -184,35 +184,89 @@ class GtLayout:
 
 # TODO methods take g and return a dict that can be splatted into draw_graph
 class GtStyle:
-    styles = ["degree",
-              "betweenness"]
+    outsize = (4096, 4096)
+
+    def __init__(self):
+        # get all methods that generate graphs (convention: starts with 'style')
+        members = inspect.getmembers(GtStyle)
+
+        self.styles = [i[0][5:] for i in sorted(members) if "style" in i[0]]
+        self.functions = [i[1] for i in sorted(members) if "style" in i[0]]
+        self.names = {i[0][5:]: i[1] for i in sorted(members) if "style" in i[0]}
 
     def randomStyle(self):
         style = random.choice(self.styles)
 
         return style
 
+    @staticmethod
+    def styleDegree(g, pos):
+        deg = g.degree_property_map("total")
+        deg.a += 1  # nodes with value zero should be 5% of maximum
+        deg.a = np.sqrt(deg.a) / np.sqrt(deg.a).max() * GtStyle.max_node_size(g, pos)
+        style_dict = dict(vertex_size=deg,
+                          vertex_fill_color=deg,
+                          vorder=deg,
+                          output_size=GtStyle.outsize,
+                          bg_color=(1, 1, 1, 1))
 
-def mean_distance_from_gt_pos(g, pos):
-    ds = []
-    max_d = 0
-    for v in g.vertices():
-        for w in v.out_neighbours():
-            i = pos[v]
-            j = pos[w]
-            ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
-    # d = sum(ds) / len(ds)
-    short_edges = sorted(ds)[:max(1, len(ds)//10)]
-    d = sum(short_edges) / len(short_edges)
+        return style_dict
 
-    for v in g.vertices():
-        for w in g.vertices():
-            i = pos[v]
-            j = pos[w]
-            tmp = math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
-            max_d = max(tmp, max_d)
+    @staticmethod
+    def styleBetweenness(g, pos):
+        deg = g.degree_property_map("total")
+        vbet, ebet = gt.centrality.betweenness(g)
+        vbet.a += vbet.a.max()*0.05  # nodes with value zero should be 5% of maximum
+        vbet.a = np.sqrt(vbet.a)
+        vbet.a /= vbet.a.max() / GtStyle.max_node_size(g, pos)
+        ebet.a /= ebet.a.max() / 10.
+        eorder = ebet.copy()
+        eorder.a *= -1
+        control = g.new_edge_property("vector<double>")
+        for e in g.edges():
+            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a) ** 2)) / 5
+            control[e] = [0.3, d, 0.7, d]
+        bg_color = (0.25, 0.25, 0.25, 1.0)
 
-    return d, max_d
+        style_dict = dict(vertex_size=vbet, vertex_fill_color=deg, vorder=vbet,
+                          edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
+                          edge_control_points=control,
+                          output_size=GtStyle.outsize,
+                          bg_color=bg_color)
+
+        return style_dict
+
+    @staticmethod
+    def mean_distance_from_gt_pos(g, pos):
+        ds = []
+        max_d = 0
+        for v in g.vertices():
+            for w in v.out_neighbours():
+                i = pos[v]
+                j = pos[w]
+                ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
+        # d = sum(ds) / len(ds)
+        short_edges = sorted(ds)[:max(1, len(ds)//20)]
+        d = sum(short_edges) / len(short_edges)
+
+        for v in g.vertices():
+            for w in g.vertices():
+                i = pos[v]
+                j = pos[w]
+                tmp = math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
+                max_d = max(tmp, max_d)
+
+        return d, max_d
+
+    @staticmethod
+    def max_node_size(g, pos):
+        # calculate the node size: a node should have a diameter of the mean
+        # neighbor distance, but only for the 10% of nearest neighbors
+        mean_d, max_d = GtStyle.mean_distance_from_gt_pos(g, pos)
+        # since node size is given in pixel and or coordinates are arbitary,
+        # we need to rescale
+        # we multiply by >1 since the node size is diameter and not radius
+        return 0.8 * mean_d / max_d * min(GtStyle.outsize)
 
 def draw_graphtool(G, basename, absdir, style, layout):
     N = len(G.nodes())
@@ -249,43 +303,10 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
     infile = basename+"_raw.png"
     outfile = basename+".png"
-    outsize = (4096, 4096)
-    # calculate the node size: a node should have a diameter of the mean
-    # neighbor distance, but only for the 10% of nearest neighbors
-    mean_d, max_d = mean_distance_from_gt_pos(g, pos)
-    # since node size is given in pixel and or coordinates are arbitary,
-    # we need to rescale
-    # we multiply by 1.8 since the node size is diameter and not radius
-    max_node_size = 1.8 * mean_d / max_d * min(outsize)
 
-    if style == "degree":
-        deg.a = np.sqrt(deg.a) / deg.a.max() * max_node_size
-        gt.draw.graph_draw(g, pos=pos,
-                           vertex_size=deg, vertex_fill_color=deg, vorder=deg,
-                           output_size=outsize,
-                           bg_color=(1, 1, 1, 1),
-                           output=infile)
-    elif style == "betweenness":
-        vbet, ebet = gt.centrality.betweenness(g)
-        vbet.a /= vbet.a.max() / max_node_size
-        ebet.a /= ebet.a.max() / 10.
-        eorder = ebet.copy()
-        eorder.a *= -1
-        control = g.new_edge_property("vector<double>")
-        for e in g.edges():
-            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a) ** 2)) / 5
-            control[e] = [0.3, d, 0.7, d]
-        bg_color = (0.25, 0.25, 0.25, 1.0)
+    style_dict = GtStyle().names[style](g, pos)
 
-        gt.draw.graph_draw(g, pos=pos,
-                           vertex_size=vbet, vertex_fill_color=deg, vorder=vbet,
-                           edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
-                           edge_control_points=control,
-                           bg_color=bg_color,
-                           output_size=(4096, 4096),
-                           output=infile)
-    else:
-        gt.draw.graph_draw(g, pos=pos, output_size=(4096, 4096), output=infile)
+    gt.draw.graph_draw(g, pos=pos, output=infile, **style_dict)
 
     call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
     return outfile, details
