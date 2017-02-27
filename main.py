@@ -177,9 +177,9 @@ if __name__ == "__main__":
                 answerMentions()
             except KeyboardInterrupt:
                 print("closed by KeyboardInterrupt")
+                sys.exit()
             except:
                 print("some strange exception:", sys.exc_info())
-        sys.exit()
 
     if len(sys.argv) > 1 and sys.argv[1] != "test":
         seed = sys.argv[1]
