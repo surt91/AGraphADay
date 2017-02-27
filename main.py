@@ -172,7 +172,11 @@ def answerMentions():
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and "mentions" in sys.argv:
-        answerMentions()
+        while True:
+            try:
+                answerMentions()
+            except:
+                print("some strange exception:", sys.exc_info())
         sys.exit()
 
     if len(sys.argv) > 1 and sys.argv[1] != "test":
