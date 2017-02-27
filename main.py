@@ -175,6 +175,8 @@ if __name__ == "__main__":
         while True:
             try:
                 answerMentions()
+            except KeyboardInterrupt:
+                print("closed by KeyboardInterrupt")
             except:
                 print("some strange exception:", sys.exc_info())
         sys.exit()
