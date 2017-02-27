@@ -21,6 +21,9 @@ def has_explicit_coordinates(G):
     # Guess if the graph has explicit coordinates
     try:
         float((G.nodes()[0][0]))
+        # we can only use d=2
+        if len(G.nodes()[0] != 2):
+            raise
         graph_has_coordinates = True
     except:
         graph_has_coordinates = False
