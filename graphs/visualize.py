@@ -200,10 +200,10 @@ class GtStyle:
         return style
 
     @staticmethod
-    def styleDegree(g, pos):
+    def styleDegree(g, pos, fixed=False):
         deg = g.degree_property_map("total")
         deg.a += 1  # nodes with value zero should be 5% of maximum
-        deg.a = np.sqrt(deg.a) / np.sqrt(deg.a).max() * GtStyle.max_node_size(g, pos)
+        deg.a = np.sqrt(deg.a) / np.sqrt(deg.a).max() * GtStyle.max_node_size(g, pos, fixed)
         style_dict = dict(vertex_size=deg,
                           vertex_fill_color=deg,
                           vorder=deg,
@@ -213,12 +213,12 @@ class GtStyle:
         return style_dict
 
     @staticmethod
-    def styleBetweenness(g, pos):
+    def styleBetweenness(g, pos, fixed=False):
         deg = g.degree_property_map("total")
         vbet, ebet = gt.centrality.betweenness(g)
         vbet.a += max(vbet.a.max(), 1)*0.05  # nodes with value zero should be 5% of maximum
         vbet.a = np.sqrt(vbet.a)
-        vbet.a /= vbet.a.max() / GtStyle.max_node_size(g, pos)
+        vbet.a /= vbet.a.max() / GtStyle.max_node_size(g, pos, fixed)
         ebet.a /= ebet.a.max() / 10.
         eorder = ebet.copy()
         eorder.a *= -1
@@ -237,7 +237,7 @@ class GtStyle:
         return style_dict
 
     @staticmethod
-    def mean_distance_from_gt_pos(g, pos):
+    def mean_distance_from_gt_pos(g, pos, fixed=False):
         ds = []
         max_d = 0
         for v in g.vertices():
@@ -245,8 +245,12 @@ class GtStyle:
                 i = pos[v]
                 j = pos[w]
                 ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
-        # d = sum(ds) / len(ds)
-        short_edges = sorted(ds)[:max(1, len(ds)//20)]
+        if fixed:
+            # fixed nodes -> Geometric graph, take shortest 20% of edges
+            short_edges = sorted(ds)[:max(1, len(ds)//5)]
+        else:
+            # not fixed -> take shortes 5% of egdes
+            short_edges = sorted(ds)[:max(1, len(ds)//20)]
         d = sum(short_edges) / len(short_edges)
 
         for v in g.vertices():
@@ -259,14 +263,15 @@ class GtStyle:
         return d, max_d
 
     @staticmethod
-    def max_node_size(g, pos):
+    def max_node_size(g, pos, fixed=False):
         # calculate the node size: a node should have a diameter of the mean
         # neighbor distance, but only for the 10% of nearest neighbors
-        mean_d, max_d = GtStyle.mean_distance_from_gt_pos(g, pos)
+        mean_d, max_d = GtStyle.mean_distance_from_gt_pos(g, pos, fixed)
         # since node size is given in pixel and or coordinates are arbitary,
         # we need to rescale
         # we multiply by >1 since the node size is diameter and not radius
         return 0.8 * mean_d / max_d * min(GtStyle.outsize)
+
 
 def draw_graphtool(G, basename, absdir, style, layout):
     N = len(G.nodes())
@@ -304,7 +309,7 @@ def draw_graphtool(G, basename, absdir, style, layout):
     infile = basename+"_raw.png"
     outfile = basename+".png"
 
-    style_dict = GtStyle().names[style](g, pos)
+    style_dict = GtStyle().names[style](g, pos, fixed=layout == "explicit")
 
     gt.draw.graph_draw(g, pos=pos, output=infile, **style_dict)
 
