@@ -1,3 +1,4 @@
+import math
 import random
 import inspect
 from functools import wraps
@@ -123,6 +124,22 @@ class RandomGraph:
         G = gen.random_regular_graph(d, N)
         details = dict(name="Random Regular Graph", N=N, d=d, seed=self.seed,
                        template="{name}, N = {N}, d = {d}")
+
+        return G, details
+
+    @synonym("balanced tree")
+    @synonym("ary tree")
+    @style(styles_all)
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    def generateBalancedTree(self, N=None, h=None, r=None, **kwargs):
+        if h is None: h = random.randint(2, 6)
+        if r is None: r = random.randint(2, 3)
+
+        if N is not None: h = round(math.log(h, base=r))
+
+        G = gen.balanced_tree(h, r)
+        details = dict(name="Balanced Tree", N=len(G.nodes()), h=h, r=r, seed=self.seed,
+                       template="{name}, h = {h}, r = {r}")
 
         return G, details
 
