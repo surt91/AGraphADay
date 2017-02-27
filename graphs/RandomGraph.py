@@ -143,6 +143,18 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("cycle")
+    @style(styles_all)
+    @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    def generateCycle(self, N=None, **kwargs):
+        if N is None: N = random.randint(4, 400)
+
+        G = gen.cycle_graph(N)
+        details = dict(name="Cycle", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
     @synonym("Barabasi Albert")
     @synonym("preferential attachment")
     @style(styles_all)
