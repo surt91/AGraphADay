@@ -199,7 +199,7 @@ class RandomGraph:
                       gen.davis_southern_women_graph,
                       gen.florentine_families_graph]
         label = ["Zachary’s Karate Club",
-                 "Davis Southern Women",
+                 "Davis' Southern Women",
                  "Florentine Families"]
 
         if idx is None: idx = random.randint(0, len(generators)-1)
