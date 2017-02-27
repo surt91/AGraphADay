@@ -97,6 +97,18 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("Complete")
+    @style(styles_all)
+    @layout(["kamada-kawai", "force-directed", "circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    def generateComplete(self, N=None, **kwargs):
+        if N is None: N = random.randint(3, 40)
+
+        G = gen.complete_graph(N)
+        details = dict(name="Complete Graph", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
     @synonym("Random Regular")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
