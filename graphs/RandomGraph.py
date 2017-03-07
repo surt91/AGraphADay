@@ -128,20 +128,36 @@ class RandomGraph:
         return G, details
 
     @synonym("balanced tree")
-    @synonym("ary tree")
+    @synonym("n-ary tree")
     @style(styles_all)
     @layout(["kamada-kawai", "force-directed", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateBalancedTree(self, N=None, h=None, r=None, **kwargs):
-        if h is None: h = random.randint(2, 6)
-        if r is None: r = random.randint(2, 3)
+        if h is None: h = random.randint(2, 3)
+        if r is None: r = random.randint(2, 6)
 
-        if N is not None: h = round(math.log(h, base=r))
+        if N is not None: h = round(math.log(N, r))
 
-        G = gen.balanced_tree(h, r)
+        G = gen.balanced_tree(r, h)
         details = dict(name="Balanced Tree", N=len(G.nodes()), h=h, r=r, seed=self.seed,
                        template="{name}, h = {h}, r = {r}")
 
         return G, details
+
+    @synonym("binary tree")
+    def generateBinaryTree(self, N=None, h=None, **kwargs):
+        if h is None: h = random.randint(2, 9)
+
+        if N is not None: h = round(math.log(N, 2))
+
+        return self.generateBalancedTree(N, h, 2)
+
+    @synonym("ternary tree")
+    def generateTernaryTree(self, N=None, h=None, **kwargs):
+        if h is None: h = random.randint(3, 6)
+
+        if N is not None: h = round(math.log(N, 3))
+
+        return self.generateBalancedTree(N, h, 3)
 
     @synonym("cycle")
     @style(styles_all)
