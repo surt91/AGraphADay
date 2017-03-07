@@ -222,6 +222,7 @@ class GtStyle:
         vbet.a += max(vbet.a.max(), 1)*0.05  # nodes with value zero should be 5% of maximum
         vbet.a = np.sqrt(vbet.a)
         vbet.a /= vbet.a.max() / GtStyle.max_node_size(g, pos, fixed)
+        ebet.a += 0.05*ebet.a.max()
         ebet.a /= ebet.a.max() / 10.
         eorder = ebet.copy()
         eorder.a *= -1
