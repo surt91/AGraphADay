@@ -22,7 +22,7 @@ def has_explicit_coordinates(G):
     try:
         float((G.nodes()[0][0]))
         # we can only use d=2
-        if len(G.nodes()[0] != 2):
+        if len(G.nodes()[0]) != 2:
             raise
         graph_has_coordinates = True
     except:
