@@ -5,6 +5,7 @@ import sys
 import random
 import base64
 from datetime import datetime
+from time import sleep
 
 import tweepy
 
@@ -180,6 +181,7 @@ if __name__ == "__main__":
                 sys.exit()
             except:
                 print("some strange exception:", sys.exc_info())
+                sleep(60)
 
     if len(sys.argv) > 1 and sys.argv[1] != "test":
         seed = sys.argv[1]
