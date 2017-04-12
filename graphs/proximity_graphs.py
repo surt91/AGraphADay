@@ -30,6 +30,7 @@ def rng(G):
                     break
             else:
                 G.add_edge(c1, c2)
+    return G
 
 
 def gg(G):
@@ -47,53 +48,70 @@ def gg(G):
                     break
             else:
                 G.add_edge(c1, c2)
+    return G
 
 
-def mr(G, r):
+def mst(G):
+    candidates = G.copy()
+    rng(candidates)
+    for u, v, d in candidates.edges(data=True):
+        d['weight'] = dist(u, v)
+    G = nx.minimum_spanning_tree(candidates)
+    return G
+
+
+def mr(G, r=None):
+    # radius: minimum radius such that the graph is connected
+    # -> longest edge of the minimum spanning tree half
+    tmp = mst(G.copy())
+    if r is None:
+        r = max(e[2]["weight"] for e in tmp.edges(data=True))
+
     for c1 in G.nodes():
         for c2 in G.nodes():
             if c1 == c2:
                 continue
-            if dist(c1, c2) < r:
+            if dist(c1, c2) <= r:
                 G.add_edge(c1, c2)
+    return G
+
+
+def random_points(N):
+    coordinates = generateRandomCoordinates(N)
+
+    G = nx.Graph()
+    for x, y in coordinates:
+        G.add_node((x, y), x=x, y=y)
+    return G
 
 
 def relative_neighborhood_graph(N):
-    coordinates = generateRandomCoordinates(N)
+    G = random_points(N)
 
-    G = nx.Graph()
-    for x, y in coordinates:
-        G.add_node((x, y), x=x, y=y)
-
-    pos = {n: (n[0], n[1]) for n in G.nodes()} 
-
-    rng(G)
+    G = rng(G)
 
     return G
+
 
 def gabriel_graph(N):
-    coordinates = generateRandomCoordinates(N)
+    G = random_points(N)
 
-    G = nx.Graph()
-    for x, y in coordinates:
-        G.add_node((x, y), x=x, y=y)
-
-    pos = {n: (n[0], n[1]) for n in G.nodes()} 
-
-    gg(G)
+    G = gg(G)
 
     return G
 
-def minimum_radius(N, r):
-    coordinates = generateRandomCoordinates(N)
 
-    G = nx.Graph()
-    for x, y in coordinates:
-        G.add_node((x, y), x=x, y=y)
+def minimum_radius(N, r=None):
+    G = random_points(N)
 
-    pos = {n: (n[0], n[1]) for n in G.nodes()}
-
-    mr(G, r)
+    G = mr(G, r)
 
     return G
 
+
+def minimum_spanning_tree(N):
+    G = random_points(N)
+
+    G = mst(G)
+
+    return G

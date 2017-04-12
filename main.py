@@ -156,13 +156,16 @@ class MyStreamListener(tweepy.StreamListener):
 
 
 def answerMentions():
-    # are there new mentions while we were not listening?
-    todo = obtain_dm()
-    print(len(todo), "new messages")
-    for d in todo:
-        text = d["text"].replace(my_handle, "")
-        path, answer = guess_graph(text=d["text"], handle=d["handle"])
-        tweet_pic(path, answer, d["id"])
+    try:
+        # are there new mentions while we were not listening?
+        todo = obtain_dm()
+        print(len(todo), "new messages")
+        for d in todo:
+            text = d["text"].replace(my_handle, "")
+            path, answer = guess_graph(text=d["text"], handle=d["handle"])
+            tweet_pic(path, answer, d["id"])
+    except:
+        print("something went wrong", sys.exc_info())
 
     # listen for new mentions
     print("listening for mentions")

@@ -506,11 +506,25 @@ class RandomGraph:
 
         return G, details
 
-    @synonym("geometric graph")
     @synonym("minimum radius")
     @style(styles_all)
     @layout(["explicit"])
-    def generateMinimumRadius(self, N=None, r=None, **kwargs):
+    def generateMinimumRadius(self, N=None, **kwargs):
+        if N is None: N = random.randint(20, 800)
+
+        state = random.getstate()
+        G = proximity_graphs.minimum_radius(N)
+        random.setstate(state)
+
+        details = dict(name="Minimum Radius Graph", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
+    @synonym("geometric graph")
+    @style(styles_all)
+    @layout(["explicit"])
+    def generateGeometric(self, N=None, r=None, **kwargs):
         if N is None: N = random.randint(20, 800)
         if r is None: r = random.uniform(0.05, 0.3)
 
@@ -520,5 +534,20 @@ class RandomGraph:
 
         details = dict(name="Minimum Radius Graph", N=N, r=r, seed=self.seed,
                        template="{name}, N = {N}, r = {r}")
+
+        return G, details
+
+    @synonym("minimum spanning tree")
+    @style(styles_all)
+    @layout(["explicit"])
+    def generateMST(self, N=None, **kwargs):
+        if N is None: N = random.randint(20, 800)
+
+        state = random.getstate()
+        G = proximity_graphs.minimum_spanning_tree(N)
+        random.setstate(state)
+
+        details = dict(name="Minimum Spanning Tree", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
 
         return G, details
