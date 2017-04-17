@@ -1,3 +1,4 @@
+import os
 import math
 import random
 import inspect
@@ -53,6 +54,11 @@ class RandomGraph:
     def __init__(self, seed=None):
         self.seed = seed
         random.seed(self.seed)
+
+        try:
+            self.folder = os.path.dirname(os.path.realpath(__file__))
+        except:
+            self.folder = "."
 
         # get all methods that generate graphs (convention: starts with 'generate')
         members = inspect.getmembers(RandomGraph)
@@ -285,7 +291,7 @@ class RandomGraph:
 
         if idx is None: idx = random.randint(0, len(files)-1)
 
-        G = nx.read_gml("graphs/networks/{}.gml".format(files[idx]))
+        G = nx.read_gml(os.path.join(self.folder, "graphs/networks/{}.gml".format(files[idx])))
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
@@ -341,7 +347,7 @@ class RandomGraph:
 
         if idx is None: idx = random.randint(0, len(files)-1)
 
-        G = nx.read_gml("graphs/networks/{}.gml".format(files[idx]))
+        G = nx.read_gml(os.path.join(self.folder, "graphs/networks/{}.gml".format(files[idx])))
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
