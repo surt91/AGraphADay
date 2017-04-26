@@ -291,7 +291,7 @@ class RandomGraph:
 
         if idx is None: idx = random.randint(0, len(files)-1)
 
-        G = nx.read_gml(os.path.join(self.folder, "graphs/networks/{}.gml".format(files[idx])))
+        G = nx.read_gml(os.path.join(self.folder, "networks/{}.gml".format(files[idx])))
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
@@ -347,7 +347,7 @@ class RandomGraph:
 
         if idx is None: idx = random.randint(0, len(files)-1)
 
-        G = nx.read_gml(os.path.join(self.folder, "graphs/networks/{}.gml".format(files[idx])))
+        G = nx.read_gml(os.path.join(self.folder, "networks/{}.gml".format(files[idx])))
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
