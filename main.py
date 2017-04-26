@@ -48,7 +48,9 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, l
         else:
             raise
     except:
-        print("unexpected error:", sys.exc_info())
+        import traceback
+        # print("unexpected error:", sys.exc_info())
+        print_exc()
         path, style = draw_graph(G, basename, absdir, "neato")
 
     with open(basename+".txt", "w") as f:
