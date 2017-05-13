@@ -538,7 +538,7 @@ class RandomGraph:
         G = proximity_graphs.minimum_radius(N, r)
         random.setstate(state)
 
-        details = dict(name="Minimum Radius Graph", N=N, r=r, seed=self.seed,
+        details = dict(name="Geometric Graph", N=N, r=r, seed=self.seed,
                        template="{name}, N = {N}, r = {r}")
 
         return G, details
