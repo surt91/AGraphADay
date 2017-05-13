@@ -1,4 +1,4 @@
-#TODO
+# TODO
     * answer to tweets with a graph
 
         * try to guess parameters
@@ -11,3 +11,5 @@
     * introduce some kind of rate limiting against DOS attacks
 
     * generate social network on request (graph of followers on twitter)
+
+    * Delaunay Triangulation
