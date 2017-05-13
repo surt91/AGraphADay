@@ -70,7 +70,7 @@ therefore run `git submodule update --init --recursive`
     * from PyPI
         * networkx
         * matplotlib
-        * py2cytoscape [optinal]
+        * py2cytoscape [optional]
         * python-pygraphviz
         * tweepy
         * fuzzywuzzy
