@@ -10,66 +10,50 @@ the number of nodes.
 
 ### Graph Types
 
-    * Newman-Watts-Strogatz
+    * Watts-Strogatz
     * Barabási-Albert
     * Powerlaw cluster graph
-    * Relative Neighborhood graph
+    * Delaunay triangulation and some subgraphs
     * Minimum Radius graph
     * some real world networks (source: http://www-personal.umich.edu/~mejn/netdata/)
     * Caveman graph
 
 ### Styles
 
-    * Curved
+    * Betweenness
         * dark background
-        * orange nodes
-        * curved, white edges
+        * node color and size dependent on betweenness centrality
+        * edge thickness dependent on betweenness centrality
 
-    * Sample3
-        * dark background
-        * blue nodes
-        * white edges
-
-    * default black
-        * dark background
-        * white nodes
-        * green edges
-
-    * default
+    * Degree
         * white background
-        * blue nodes
-        * black edges
-
-    * Ripple
-        * white background
-        * blue nodes
-        * blue edges
+        * node size and color dependent on their degree
 
 ### Layouts
 
-    * circular
-    * kamada-kawai
-        also known as `neato`
-    * force-directed
-    * hierarchical
-    * isom
-
+    * sfdp
+    * Fruchterman Reingold
+    * ARF (attractive and repulsive forces, nodes inside a disk)
+    * radial tree
+    * blockmodel (stochastic blockmodel based hirachic layout)
 
 ## Setup
 
-Install all dependencies, start Cytoscape as `cytoscape -R 1234`.
-Every time the program runs it will create a graph, save it as `png` and `svg`
+Every time the program runs it will create a graph, save it as `png`
 and its details in a `txt` named after the current unix timestamp and tweets
-it. Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
+it.
+
+**Important:** Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
 
 Also there is at least one submodule which should be loaded from GitHub,
-therefore run `git submodule update --init --recursive`
+therefore run `git submodule update --init --recursive` after cloning.
 
 ## Dependencies
 
     * from PyPI
         * networkx
         * matplotlib
+        * scipy
         * python-pygraphviz
         * tweepy
         * fuzzywuzzy
