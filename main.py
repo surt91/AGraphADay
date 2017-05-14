@@ -7,16 +7,13 @@ import base64
 from datetime import datetime
 from time import sleep
 
-import tweepy
-
-from twitter_helper import tweet_pic, obtain_dm, api
+from twitter import tweet_pic, answerMentions
 from graphs import RandomGraph, synonyms, layouts_all, styles_all
 from graphs import draw_graph, draw_graphtool, draw_blockmodel
 from graphs.visualize import GtLayout
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
-my_handle = "randomGraphs"
 
 
 def createPlot(graphGenerator, folder, seed,
@@ -121,62 +118,11 @@ def guess_graph(text=None, handle=""):
     return path, answer
 
 
-class MyStreamListener(tweepy.StreamListener):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        try:
-            with open("last_id.dat", "r") as f:
-                self.last_id = int(f.read().strip())
-        except:
-            self.last_id = 0
-
-    def on_status(self, status):
-        print(status.text)
-        print("@" + status.user.screen_name, ":", status.text)
-        # make sure that we are actually mentioned
-        mentioned = False
-        for i in status.entities["user_mentions"]:
-            if status.text[:3] == "RT ":
-                # this is a retweet, ignore it
-                continue
-            if i["screen_name"] == my_handle:
-                mentioned = True
-        if mentioned:
-            print(status.text)
-            text = status.text.replace(my_handle, "")
-            path, answer = guess_graph(text=text,
-                                       handle=status.user.screen_name)
-            tweet_pic(path, answer, status.id)
-
-            self.last_id = status.id
-            with open("last_id.dat", "w") as f:
-                f.write(str(self.last_id))
-
-
-def answerMentions():
-    try:
-        # are there new mentions while we were not listening?
-        todo = obtain_dm()
-        print(len(todo), "new messages")
-        for d in todo:
-            text = d["text"].replace(my_handle, "")
-            path, answer = guess_graph(text=text, handle=d["handle"])
-            tweet_pic(path, answer, d["id"])
-    except:
-        print("something went wrong", sys.exc_info())
-
-    # listen for new mentions
-    print("listening for mentions")
-    myStreamListener = MyStreamListener()
-    myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
-    myStream.filter(track=['randomGraphs'])
-
-
 if __name__ == "__main__":
     if len(sys.argv) > 1 and "mentions" in sys.argv:
         while True:
             try:
-                answerMentions()
+                answerMentions(guess_graph)
             except KeyboardInterrupt:
                 print("closed by KeyboardInterrupt")
                 sys.exit()

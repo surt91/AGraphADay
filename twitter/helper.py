@@ -38,3 +38,8 @@ def obtain_dm():
         f.write(str(last_id))
 
     return todo
+
+
+def get_my_handle():
+    myself = api.me()
+    return f"@{myself.screen_name}"

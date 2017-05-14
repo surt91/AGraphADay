@@ -1,7 +1,7 @@
 import sys
 
 from main import guess_graph
-from twitter_helper import obtain_dm
+from twitter import obtain_dm
 
 
 if __name__ == "__main__":
