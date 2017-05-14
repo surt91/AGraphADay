@@ -15,6 +15,26 @@ def dist(n1, n2):
     return ((n1[0] - n2[0])**2 + (n1[1] - n2[1])**2)**0.5
 
 
+def dt(G):
+    points = G.nodes()
+    delaunay = scipy.spatial.Delaunay(points, qhull_options="QJ")
+
+    # create a set for edges that are indexes of the points
+    edges = set()
+    # for each Delaunay triangle
+    for n in range(delaunay.nsimplex):
+        # iterate over the 3 vertices of the simplex
+        for i, j in [(0, 1), (1, 2), (2, 0)]:
+            # sorting since edges may appear multiple times,
+            # if they are always sorted, the set will kill duplicates
+            u, v = sorted((delaunay.vertices[n, i], delaunay.vertices[n, j]))
+            edges.add((points[u], points[v]))
+
+    G.add_edges_from(edges)
+
+    return G
+
+
 def rng(G):
     for c1 in G.nodes():
         for c2 in G.nodes():
@@ -87,21 +107,9 @@ def random_points(N):
 
 
 def delaunay(N):
-    points = generateRandomCoordinates(N)
-    delaunay = scipy.spatial.Delaunay(points, qhull_options="QJ")
+    G = random_points(N)
 
-    # create a set for edges that are indexes of the points
-    edges = set()
-    # for each Delaunay triangle
-    for n in range(delaunay.nsimplex):
-        # iterate over the 3 vertices of the simplex
-        for i, j in [(0, 1), (1, 2), (2, 0)]:
-            # sorting since edges may appear multiple times,
-            # if they are always sorted, the set will kill duplicates
-            u, v = sorted((delaunay.vertices[n, i], delaunay.vertices[n, j]))
-            edges.add((points[u], points[v]))
-
-    G = nx.Graph(list(edges))
+    G = dt(G)
 
     return G
 
