@@ -36,45 +36,43 @@ def dt(G):
 
 
 def rng(G):
-    for c1 in G.nodes():
-        for c2 in G.nodes():
-            if c1 == c2:
+    G = dt(G)
+    to_remove = set()
+    for c1, c2 in G.edges():
+        if c1 == c2:
+            continue
+        d = dist(c1, c2)
+        for possible_blocker in G.nodes():
+            if c1 == possible_blocker or c2 == possible_blocker:
                 continue
-            d = dist(c1, c2)
-            for possible_blocker in G.nodes():
-                if c1 == possible_blocker or c2 == possible_blocker:
-                    continue
-                distToC1 = dist(possible_blocker, c1)
-                distToC2 = dist(possible_blocker, c2)
-                if distToC1 < d and distToC2 < d:
-                    # this node is in the lune and blocks
-                    break
-            else:
-                G.add_edge(c1, c2)
+            distToC1 = dist(possible_blocker, c1)
+            distToC2 = dist(possible_blocker, c2)
+            if distToC1 < d and distToC2 < d:
+                # this node is in the lune and blocks
+                to_remove.add((c1, c2))
+    G.remove_edges_from(to_remove)
     return G
 
 
 def gg(G):
-    for c1 in G.nodes():
-        for c2 in G.nodes():
-            if c1 == c2:
+    G = dt(G)
+    to_remove = set()
+    for c1, c2 in G.edges():
+        mid = ((c1[0] + c2[0]) / 2, (c1[1] + c2[1]) / 2)
+        r = dist(c1, c2) / 2
+        for possible_blocker in G.nodes():
+            if c1 == possible_blocker or c2 == possible_blocker:
                 continue
-            mid = ((c1[0] + c2[0]) / 2, (c1[1] + c2[1]) / 2)
-            r = dist(c1, c2) / 2
-            for possible_blocker in G.nodes():
-                if c1 == possible_blocker or c2 == possible_blocker:
-                    continue
-                if dist(possible_blocker, mid) <= r:
-                    # this node is in the lune and blocks
-                    break
-            else:
-                G.add_edge(c1, c2)
+            if dist(possible_blocker, mid) <= r:
+                # this node is in the lune and blocks
+                to_remove.add((c1, c2))
+    G.remove_edges_from(to_remove)
     return G
 
 
 def mst(G):
     candidates = G.copy()
-    rng(candidates)
+    dt(candidates)
     for u, v, d in candidates.edges(data=True):
         d['weight'] = dist(u, v)
     G = nx.minimum_spanning_tree(candidates)
