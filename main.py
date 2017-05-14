@@ -69,7 +69,7 @@ def guess_graph(text=None, handle=""):
         numbers = [int(s) for s in text.split() if s.isdigit() and int(s) < 1024]
         if numbers:
             N = random.choice(numbers)
-            print("recognized {} nodes".format(N))
+            print(f"recognized {N} nodes")
         else:
             N = None
 
@@ -79,13 +79,13 @@ def guess_graph(text=None, handle=""):
         styleKey, styleCertainty = match(text, styles_all)
 
         if styleCertainty >= 80:
-            print("regocnized style: {} ({})".format(styleKey, styleCertainty))
+            print(f"regocnized style: {styleKey} ({styleCertainty})")
             style = styleKey
 
         layoutKey, layoutCertainty = match(text, layouts_all)
 
         if layoutCertainty >= 80:
-            print("recognized layout: {} ({})".format(layoutKey, layoutCertainty))
+            print(f"recognized layout: {layoutKey} ({layoutCertainty})")
             layout = layoutKey
 
     if not text or certainty < 20:
@@ -95,7 +95,7 @@ def guess_graph(text=None, handle=""):
 
     folder = os.path.join(absdir, "answers")
     path, details = createPlot(gen, folder, seed,
-                               comment="'{}' -> {} ({}%)".format(text, key, certainty),
+                               comment="'{text}' -> {key} ({certainty}%)",
                                style=style,
                                layout=layout)
 
