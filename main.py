@@ -11,8 +11,8 @@ import tweepy
 
 from twitter_helper import tweet_pic, obtain_dm, api
 from graphs import RandomGraph, synonyms, layouts_all, styles_all
-from graphs import draw_cytoscape, draw_graph, draw_graphtool, draw_blockmodel
-from graphs.visualize import CyStyle, CyLayout, GtLayout
+from graphs import draw_graph, draw_graphtool, draw_blockmodel
+from graphs.visualize import GtLayout
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
@@ -34,14 +34,7 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, l
 
     # TODO I need to make this pretty
     try:
-        if layout in CyLayout.layouts:
-            try:
-                path, style_detail = draw_cytoscape(G, basename, absdir, style, layout)
-            except:
-                print("wut?", layout, sys.exc_info())
-                layout = random.choice(GtLayout.layouts)
-                path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
-        elif layout in GtLayout.layouts or layout == "explicit":
+        if layout in GtLayout.layouts or layout == "explicit":
             path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
         elif layout == "blockmodel":
             path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)

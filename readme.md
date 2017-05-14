@@ -70,15 +70,10 @@ therefore run `git submodule update --init --recursive`
     * from PyPI
         * networkx
         * matplotlib
-        * py2cytoscape [optional]
         * python-pygraphviz
         * tweepy
         * fuzzywuzzy
         * graph-tool
-
-    * Cytoscape [optional]
-        http://www.cytoscape.org/
-        run with REST server on localhost at port 1234
 
     * Imagemagick
     * optipng
