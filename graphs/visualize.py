@@ -43,12 +43,12 @@ def draw_graph(G, basename, absdir, command="neato"):
         pos = graphviz_layout(G, command)
 
     nx.draw(G, pos)
-    plt.savefig(basename + ".svg")
-    plt.savefig(basename + ".png")
+    plt.savefig(f"{basename}.svg")
+    plt.savefig(f"{basename}.png")
 
     details = "style = {}, layout = {}".format("default", command)
 
-    return basename+".png", details
+    return f"{basename}.png", details
 
 
 def draw_graphviz(G, basename, absdir, command="dot", **kwargs):
@@ -198,8 +198,8 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
     details = "style = {}, layout = {}".format(style, layout)
 
-    infile = basename+"_raw.png"
-    outfile = basename+".png"
+    infile = f"{basename}_raw.png"
+    outfile = f"{basename}.png"
 
     style_dict = GtStyle().names[style](g, pos, fixed=layout == "explicit")
 
@@ -215,8 +215,8 @@ def draw_blockmodel(G, basename, absdir, style, layout):
 
     details = "style = {}, layout = {}".format("blockmodel", "blockmodel")
 
-    infile = basename+"_raw.png"
-    outfile = basename+".png"
+    infile = f"{basename}_raw.png"
+    outfile = f"{basename}.png"
 
     gt.draw.draw_hierarchy(state,
                            bg_color=(0.25, 0.25, 0.25, 1.0),
