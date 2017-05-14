@@ -1,6 +1,7 @@
 import random
 
 import networkx as nx
+import scipy.spatial
 
 
 def generateRandomCoordinates(N=100):
@@ -82,6 +83,26 @@ def random_points(N):
     G = nx.Graph()
     for x, y in coordinates:
         G.add_node((x, y), x=x, y=y)
+    return G
+
+
+def delaunay(N):
+    points = generateRandomCoordinates(N)
+    delaunay = scipy.spatial.Delaunay(points, qhull_options="QJ")
+
+    # create a set for edges that are indexes of the points
+    edges = set()
+    # for each Delaunay triangle
+    for n in range(delaunay.nsimplex):
+        # iterate over the 3 vertices of the simplex
+        for i, j in [(0, 1), (1, 2), (2, 0)]:
+            # sorting since edges may appear multiple times,
+            # if they are always sorted, the set will kill duplicates
+            u, v = sorted((delaunay.vertices[n, i], delaunay.vertices[n, j]))
+            edges.add((points[u], points[v]))
+
+    G = nx.Graph(list(edges))
+
     return G
 
 

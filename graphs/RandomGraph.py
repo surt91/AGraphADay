@@ -640,3 +640,19 @@ class RandomGraph:
                        template="{name}, N = {N}")
 
         return G, details
+
+    @synonym("delaunay triangulation")
+    @style(styles_all)
+    @layout(["explicit"])
+    def generateDelaunay(self, N=None, **kwargs):
+        if N is None:
+            N = random.randint(20, 800)
+
+        state = random.getstate()
+        G = proximity_graphs.delaunay(N)
+        random.setstate(state)
+
+        details = dict(name="Delaunay Triangulation", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
