@@ -58,9 +58,31 @@ def draw_graphviz(G, basename, absdir, command="dot", **kwargs):
 
 
 class NxLayout:
-    ...
-    # TODO: generate layout by networkx and somehow pass that on
-    #pos=nx.graphviz_layout(G,prog='dot')
+    def __init__(self):
+        members = inspect.getmembers(NxLayout)
+
+        self.layouts = [i[0][6:] for i in sorted(members) if "layout" in i[0]]
+        self.names = {i[0][6:]: i[1] for i in sorted(members) if "layout" in i[0]}
+
+    @staticmethod
+    def layoutDot(G):
+        return nx.nx_pydot.graphviz_layout(G, prog="dot")
+
+    @staticmethod
+    def layoutNeato(G):
+        return nx.nx_pydot.graphviz_layout(G, prog="neato")
+
+    @staticmethod
+    def layoutKamadaKawai(G):
+        return NxLayout.layoutNeato(G)
+
+    @staticmethod
+    def layoutCircular(G):
+        return nx.circular_layout(G)
+
+    @staticmethod
+    def layoutSpectral(G):
+        return nx.spectral_layout(G)
 
 
 class GtLayout:
@@ -169,6 +191,13 @@ class GtStyle:
 
 
 def draw_graphtool(G, basename, absdir, style, layout):
+    """Draw the graph G using graph-tool.
+
+    basename    -- filename
+    absdir      -- output path
+    style       -- style to use
+    layout      -- layout to use
+    """
     g = nx2gt(G)
 
     if style not in GtStyle().styles:
@@ -182,6 +211,11 @@ def draw_graphtool(G, basename, absdir, style, layout):
         pos = g.new_vertex_property("vector<double>")
         for n, v in enumerate(G.nodes()):
             pos[g.vertex(n)] = [v[0] * 1000, v[1] * 1000]
+    elif layout in NxLayout().layouts:
+        pos = g.new_vertex_property("vector<double>")
+        fixed_positions = NxLayout().names[layout](G)
+        for n, v in enumerate(G.nodes()):
+            pos[g.vertex(n)] = fixed_positions[v]
     else:
         if layout == "sfdp":
             pos = gt.draw.sfdp_layout(g)

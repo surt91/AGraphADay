@@ -8,7 +8,7 @@ import networkx as nx
 from networkx import generators as gen
 
 from . import proximity_graphs
-from .visualize import GtLayout, GtStyle
+from .visualize import GtLayout, NxLayout, GtStyle
 
 
 # decorator to add synonyms of the graph types
@@ -37,7 +37,7 @@ def style(style_list):
     return style_decorator
 
 
-layouts_all = GtLayout.layouts + ["blockmodel"]
+layouts_all = GtLayout().layouts + ["blockmodel"] + NxLayout().layouts
 def layout(layout_list):
     def layout_decorator(func):
         @wraps(func)

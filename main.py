@@ -10,7 +10,7 @@ from time import sleep
 from twitter import tweet_pic, answerMentions
 from graphs import RandomGraph, synonyms, layouts_all, styles_all
 from graphs import draw_graph, draw_graphtool, draw_blockmodel
-from graphs.visualize import GtLayout
+from graphs.visualize import GtLayout, NxLayout
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
@@ -33,7 +33,9 @@ def createPlot(graphGenerator, folder, seed,
 
     # TODO I need to make this pretty
     try:
-        if layout in GtLayout.layouts or layout == "explicit":
+        if (layout in GtLayout().layouts
+                or layout == "explicit"
+                or layout in NxLayout().layouts):
             path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
         elif layout == "blockmodel":
             path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)
