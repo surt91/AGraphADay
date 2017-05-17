@@ -8,11 +8,15 @@ from collections import defaultdict
 from subprocess import call
 
 import networkx as nx
+import numpy as np
+
+# hack to suppress "Unable to init server: Could not connect: Connection refused"
+# errors on stderr, if not launched from an X session
+os.environ["DISPLAY"] = ":0"
 import graph_tool as gt
 import graph_tool.inference
 import graph_tool.draw
 import graph_tool.centrality
-import numpy as np
 
 from .nx2gt.nx2gt import nx2gt
 
