@@ -32,10 +32,13 @@ the number of nodes.
 ### Layouts
 
     * sfdp
-    * Fruchterman Reingold
+    * Fruchterman Reingold (spring based layout)
     * ARF (attractive and repulsive forces, nodes inside a disk)
     * radial tree
     * blockmodel (stochastic blockmodel based hirachic layout)
+    * dot (from graphviz, a hierarchic layout)
+    * neato (from graphviz also known as Kamada-Kawai)
+    * circular (nodes on a circle)
 
 ## Setup
 
