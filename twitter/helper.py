@@ -42,4 +42,4 @@ def obtain_dm():
 
 def get_my_handle():
     myself = api.me()
-    return f"@{myself.screen_name}"
+    return myself.screen_name
