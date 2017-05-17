@@ -397,7 +397,7 @@ class RandomGraph:
             idx = random.randint(0, len(files)-1)
 
         fname = os.path.join(self.folder, "networks/{}.gml".format(files[idx]))
-        G = nx.read_gml(fname)
+        G = nx.read_gml(fname, label='id')
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
