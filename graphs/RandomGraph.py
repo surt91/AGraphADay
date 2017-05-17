@@ -74,7 +74,7 @@ class RandomGraph:
     @synonym("Erdos Renyi")
     @synonym("Erdős-Rényi")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "neato", "spectral", "circular"])
     def generateErdosRenyi(self, N=None, m=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -91,7 +91,8 @@ class RandomGraph:
     @synonym("Newman Watts Strogatz")
     @synonym("small world")
     @style(styles_all)
-    @layout(["circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -112,7 +113,8 @@ class RandomGraph:
 
     @synonym("Complete")
     @style(styles_all)
-    @layout(["circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateComplete(self, N=None, **kwargs):
         if N is None:
             N = random.randint(3, 40)
@@ -125,7 +127,8 @@ class RandomGraph:
 
     @synonym("Random Regular")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateRandomRegular(self, N=None, d=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -145,7 +148,8 @@ class RandomGraph:
     @synonym("balanced tree")
     @synonym("n-ary tree")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral", "dot"])
     def generateBalancedTree(self, N=None, h=None, r=None, **kwargs):
         if h is None:
             h = random.randint(2, 3)
@@ -183,7 +187,8 @@ class RandomGraph:
 
     @synonym("cycle")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "circular",
+             "neato", "spectral"])
     def generateCycle(self, N=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -210,7 +215,8 @@ class RandomGraph:
     @synonym("Barabasi Albert")
     @synonym("preferential attachment")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -229,7 +235,7 @@ class RandomGraph:
     @synonym("powerlaw cluster")
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
-             "blockmodel"])
+             "blockmodel", "neato", "spectral"])
     def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -247,7 +253,8 @@ class RandomGraph:
 
     @synonym("duplication divergence")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel", "neato", "spectral"])
     def generateDuplicationDivergence(self, N=None, p=None, s=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -266,7 +273,8 @@ class RandomGraph:
 
     @synonym("lobster")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -287,7 +295,8 @@ class RandomGraph:
 
     @synonym("social network")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "blockmodel",
+             "neato", "spectral"])
     def generateSpecial(self, idx=None, **kwargs):
         # special graphs, group under one, such that they are rare
         generators = [gen.karate_club_graph,
@@ -425,7 +434,8 @@ class RandomGraph:
     @synonym("caveman")
     @synonym("clique")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel", "neato", "spectral"])
     def generateCaveman(self, N=None, l=None, k=None, **kwargs):
         if l is None:
             l = random.randint(1, 8)
@@ -433,7 +443,7 @@ class RandomGraph:
             k = random.randint(2, 14)
 
         if N is not None:
-            k = N//l
+            k = N // l
 
         G = nx.caveman_graph(l, k)
         details = dict(name="Caveman Graph", N=l*k, l=l, k=k, seed=self.seed,
@@ -443,7 +453,8 @@ class RandomGraph:
 
     @synonym("relaxed caveman")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel", "neato", "spectral"])
     def generateRelaxedCaveman(self, N=None, l=None, k=None, p=None, s=None, **kwargs):
         if l is None:
             l = random.randint(1, 8)
@@ -498,7 +509,8 @@ class RandomGraph:
 
     @synonym("barbell")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel", "neato", "spectral"])
     def generateBarbell(self, N=None, m1=None, m2=None, **kwargs):
         if m1 is None:
             m1 = random.randint(3, 20)
@@ -517,7 +529,8 @@ class RandomGraph:
 
     @synonym("ladder")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateCircularLadder(self, n=None, **kwargs):
         if n is None:
             n = random.randint(3, 400)
@@ -532,7 +545,8 @@ class RandomGraph:
     @synonym("Dorogovtsev Goltsev Mendes")
     @synonym("fractal")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel", "neato", "spectral"])
     def generateDorogovtsevGoltsevMendes(self, n=None, **kwargs):
         if n is None:
             n = random.randint(2, 7)
@@ -546,7 +560,8 @@ class RandomGraph:
 
     @synonym("partition")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel", "neato", "spectral"])
     def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None, **kwargs):
         if sizes is None:
             sizes = [random.randint(6, 120) for _ in range(random.randint(2, 3))]
@@ -569,7 +584,8 @@ class RandomGraph:
     @synonym("bipartite")
     @synonym("random intersection")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "neato", "spectral"])
     def generateRandomIntersection(self, N=None, m=None, p=None, s=None,
                                    **kwargs):
         if N is None:
