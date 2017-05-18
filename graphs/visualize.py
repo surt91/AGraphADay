@@ -1,10 +1,7 @@
 import os
-import time
 import math
 import random
-import warnings
 import inspect
-from collections import defaultdict
 from subprocess import call
 
 import networkx as nx
@@ -120,7 +117,6 @@ class GtLayout:
         return gt.draw.radial_tree_layout(g, root_node)
 
 
-# TODO methods take g and return a dict that can be splatted into draw_graph
 class GtStyle:
     outsize = (4096, 4096)
 
