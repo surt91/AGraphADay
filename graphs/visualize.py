@@ -90,15 +90,30 @@ class NxLayout:
 
 
 class GtLayout:
-    layouts = ["sfdp",
-               "fruchterman_reingold",
-               "arf",
-               "radial_tree"]
+    def __init__(self):
+        members = inspect.getmembers(GtLayout)
 
-    def randomLayout(self):
-        layout = random.choice(self.layouts)
+        self.layouts = [i[0][6:] for i in sorted(members) if "layout" in i[0]]
+        self.names = {i[0][6:]: i[1] for i in sorted(members) if "layout" in i[0]}
 
-        return layout
+    @staticmethod
+    def layoutSFDP(g):
+        return gt.draw.sfdp_layout(g)
+
+    @staticmethod
+    def layoutFruchtermanReingold(g):
+        return gt.draw.fruchterman_reingold_layout(g)
+
+    @staticmethod
+    def layoutARF(g):
+        return gt.draw.arf_layout(g)
+
+    @staticmethod
+    def layoutRadialTree(g):
+        # take the node with the highest degree as the root
+        deg = g.degree_property_map("total")
+        root_node = deg.a.argmax()
+        return gt.draw.radial_tree_layout(g, root_node)
 
 
 # TODO methods take g and return a dict that can be splatted into draw_graph
@@ -208,8 +223,6 @@ def draw_graphtool(G, basename, absdir, style, layout):
         print(style, "not valid, draw random style")
         style = GtStyle().randomStyle()
 
-    deg = g.degree_property_map("total")
-
     if has_explicit_coordinates(G):
         layout = "explicit"
         pos = g.new_vertex_property("vector<double>")
@@ -220,19 +233,10 @@ def draw_graphtool(G, basename, absdir, style, layout):
         fixed_positions = NxLayout().names[layout](G)
         for n, v in enumerate(G.nodes()):
             pos[g.vertex(n)] = fixed_positions[v]
+    elif layout in GtLayout().layouts:
+        pos = GtLayout().names[layout](g)
     else:
-        if layout == "sfdp":
-            pos = gt.draw.sfdp_layout(g)
-        elif layout == "fruchterman_reingold":
-            pos = gt.draw.fruchterman_reingold_layout(g)
-        elif layout == "arf":
-            pos = gt.draw.arf_layout(g)
-        elif layout == "radial_tree":
-            # take the node with the highest degree as the root
-            root_node = deg.a.argmax()
-            pos = gt.draw.radial_tree_layout(g, root_node)
-        else:
-            pos = gt.draw.sfdp_layout(g)
+        pos = gt.draw.sfdp_layout(g)
 
     details = "style = {}, layout = {}".format(style, layout)
 
@@ -251,7 +255,7 @@ def draw_blockmodel(G, basename, absdir, style, layout):
     g = nx2gt(G)
     state = gt.inference.minimize_nested_blockmodel_dl(g, deg_corr=True)
 
-    details = "style = {}, layout = {}".format("blockmodel", "blockmodel")
+    details = "style = {}, layout = {}".format("Blockmodel", "Blockmodel")
 
     infile = f"{basename}_raw.png"
     outfile = f"{basename}.png"

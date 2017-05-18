@@ -37,7 +37,7 @@ def createPlot(graphGenerator, folder, seed,
                 or layout == "explicit"
                 or layout in NxLayout().layouts):
             path, style_detail = draw_graphtool(G, basename, absdir, style, layout)
-        elif layout == "blockmodel":
+        elif layout == "Blockmodel":
             path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)
         else:
             raise
