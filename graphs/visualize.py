@@ -158,15 +158,10 @@ class GtStyle:
         ebet.a /= ebet.a.max() / 10.
         eorder = ebet.copy()
         eorder.a *= -1
-        control = g.new_edge_property("vector<double>")
-        for e in g.edges():
-            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a)**2)) / 5
-            control[e] = [0.3, d, 0.7, d]
         bg_color = (0.25, 0.25, 0.25, 1.0)
 
         style_dict = dict(vertex_size=vbet, vertex_fill_color=deg, vorder=vbet,
                           edge_color=ebet, eorder=eorder, edge_pen_width=ebet,
-                          edge_control_points=control,
                           output_size=GtStyle.outsize,
                           bg_color=bg_color)
 
