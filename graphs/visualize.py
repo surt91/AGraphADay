@@ -84,6 +84,9 @@ class NxLayout:
     def layoutCircular(G):
         return nx.nx_pydot.graphviz_layout(G, prog="circo")
 
+    @staticmethod
+    def layoutTwoPi(G):
+        return nx.nx_pydot.graphviz_layout(G, prog="twopi")
 
     @staticmethod
     def layoutSpectral(G):

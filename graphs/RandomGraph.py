@@ -93,7 +93,7 @@ class RandomGraph:
     @synonym("small world")
     @style(styles_all)
     @layout(["Circular", "SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -115,7 +115,7 @@ class RandomGraph:
     @synonym("Complete")
     @style(styles_all)
     @layout(["Circular", "SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateComplete(self, N=None, **kwargs):
         if N is None:
             N = random.randint(3, 40)
@@ -129,7 +129,7 @@ class RandomGraph:
     @synonym("Random Regular")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateRandomRegular(self, N=None, d=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -150,7 +150,7 @@ class RandomGraph:
     @synonym("n-ary tree")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral", "dot"])
+             "TwoPi", "Neato", "Spectral", "dot"])
     def generateBalancedTree(self, N=None, h=None, r=None, **kwargs):
         if h is None:
             h = random.randint(2, 3)
@@ -189,7 +189,7 @@ class RandomGraph:
     @synonym("cycle")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree", "Circular",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateCycle(self, N=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -217,7 +217,7 @@ class RandomGraph:
     @synonym("preferential attachment")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -236,7 +236,7 @@ class RandomGraph:
     @synonym("powerlaw cluster")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -255,7 +255,7 @@ class RandomGraph:
     @synonym("duplication divergence")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generateDuplicationDivergence(self, N=None, p=None, s=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -275,7 +275,7 @@ class RandomGraph:
     @synonym("lobster")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
         if N is None:
             N = random.randint(4, 400)
@@ -436,7 +436,7 @@ class RandomGraph:
     @synonym("clique")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generateCaveman(self, N=None, l=None, k=None, **kwargs):
         if l is None:
             l = random.randint(1, 8)
@@ -455,7 +455,7 @@ class RandomGraph:
     @synonym("relaxed caveman")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generateRelaxedCaveman(self, N=None, l=None, k=None, p=None, s=None, **kwargs):
         if l is None:
             l = random.randint(1, 8)
@@ -511,7 +511,7 @@ class RandomGraph:
     @synonym("barbell")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generateBarbell(self, N=None, m1=None, m2=None, **kwargs):
         if m1 is None:
             m1 = random.randint(3, 20)
@@ -531,7 +531,7 @@ class RandomGraph:
     @synonym("ladder")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateCircularLadder(self, n=None, **kwargs):
         if n is None:
             n = random.randint(3, 400)
@@ -547,7 +547,7 @@ class RandomGraph:
     @synonym("fractal")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generateDorogovtsevGoltsevMendes(self, n=None, **kwargs):
         if n is None:
             n = random.randint(2, 7)
@@ -562,7 +562,7 @@ class RandomGraph:
     @synonym("partition")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Blockmodel", "Neato", "Spectral"])
+             "TwoPi", "Blockmodel", "Neato", "Spectral"])
     def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None, **kwargs):
         if sizes is None:
             sizes = [random.randint(6, 120) for _ in range(random.randint(2, 3))]
@@ -586,7 +586,7 @@ class RandomGraph:
     @synonym("random intersection")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
-             "Neato", "Spectral"])
+             "TwoPi", "Neato", "Spectral"])
     def generateRandomIntersection(self, N=None, m=None, p=None, s=None,
                                    **kwargs):
         if N is None:
