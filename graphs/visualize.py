@@ -168,6 +168,48 @@ class GtStyle:
         return style_dict
 
     @staticmethod
+    def styleCurved(g, pos, fixed=False):
+        eig, auth, hub = graph_tool.centrality.hits(g)
+
+        auth.a += 1  # nodes with value zero should be 5% of maximum
+        auth.a = auth.a**2 / (auth.a**2).max() * GtStyle.max_node_size(g, pos, fixed)
+
+        bg_color = (1, 1, 1, 1)
+        # curvature: see http://main-discussion-list-for-the-graph-tool-project.982480.n3.nabble.com/Clarifications-in-docs-about-graph-draw-edge-control-points-and-splines-td4026216.html
+        control = g.new_edge_property("vector<double>")
+        for e in g.edges():
+            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a)**2)) / 5
+            control[e] = [0.0, 0.0, 0.3, d, 0.7, d, 1.0, 0.0]
+
+        style_dict = dict(vertex_fill_color=auth, vertex_size=auth,
+                          edge_control_points=control,
+                          output_size=GtStyle.outsize,
+                          bg_color=bg_color)
+
+        return style_dict
+
+    @staticmethod
+    def styleBlocky(g, pos, fixed=False):
+        lambda1, eig = graph_tool.centrality.eigenvector(g)
+
+        eig.a += 1  # nodes with value zero should be 5% of maximum
+        eig.a = np.sqrt(eig.a) / np.sqrt(eig.a).max() * GtStyle.max_node_size(g, pos, fixed)
+
+        ecol = g.new_edge_property("double")
+        for e in g.edges():
+            ecol[e] = max(eig[e.source()], eig[e.target()])
+
+        bg_color = (0.25, 0.25, 0.25, 1.0)
+
+        style_dict = dict(vertex_fill_color=eig, vertex_size=eig,
+                          vertex_shape="square",
+                          edge_color=ecol,
+                          output_size=GtStyle.outsize,
+                          bg_color=bg_color)
+
+        return style_dict
+
+    @staticmethod
     def mean_distance_from_gt_pos(g, pos, fixed=False):
         ds = []
         max_d = 0
