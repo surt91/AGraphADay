@@ -29,6 +29,17 @@ the number of nodes.
         * white background
         * node size and color dependent on their degree
 
+    * Blocky
+        * dark background
+        * square nodes
+        * node color dependent on their eigenvector
+
+    * Curved
+        * white background
+        * curved edges
+        * node size and color dependent on their HITS score assuming the graph
+          is a citation network
+
 ### Layouts
 
     * sfdp
@@ -38,7 +49,8 @@ the number of nodes.
     * blockmodel (stochastic blockmodel based hirachic layout)
     * dot (from graphviz, a hierarchic layout)
     * neato (from graphviz also known as Kamada-Kawai)
-    * circular (nodes on a circle)
+    * circular (from graphviz, nodes on a circle)
+    * twopi (from graphviz, radial layout)
 
 ## Setup
 
