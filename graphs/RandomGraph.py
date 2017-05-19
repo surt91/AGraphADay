@@ -59,7 +59,8 @@ class RandomGraph:
         except:
             self.folder = "."
 
-        # get all methods that generate graphs (convention: starts with 'generate')
+        # get all methods that generate graphs
+        # convention: method starts with 'generate'
         members = inspect.getmembers(RandomGraph)
         generators = [i[1] for i in sorted(members) if "generate" in i[0]]
 
@@ -75,8 +76,10 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf"])
     def generateErdosRenyi(self, N=None, m=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if m is None: m = abs(int(random.gauss(N, N)))
+        if N is None:
+            N = random.randint(4, 400)
+        if m is None:
+            m = abs(int(random.gauss(N, N)))
 
         G = gen.gnm_random_graph(N, m)
         details = dict(name="Erdős-Rényi Graph", N=N, m=m, seed=self.seed,
@@ -90,10 +93,14 @@ class RandomGraph:
     @style(styles_all)
     @layout(["circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateNewmanWattsStrogatz(self, N=None, k=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if k is None: k = random.randint(2, 5)
-        if p is None: p = random.uniform(0, 0.2)
-        if s is None: s = random.randint(0, 10**7)
+        if N is None:
+            N = random.randint(4, 400)
+        if k is None:
+            k = random.randint(2, 5)
+        if p is None:
+            p = random.uniform(0, 0.2)
+        if s is None:
+            s = random.randint(0, 10**7)
 
         state = random.getstate()
         G = gen.newman_watts_strogatz_graph(N, k, p, s)
@@ -107,7 +114,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["circular", "sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateComplete(self, N=None, **kwargs):
-        if N is None: N = random.randint(3, 40)
+        if N is None:
+            N = random.randint(3, 40)
 
         G = gen.complete_graph(N)
         details = dict(name="Complete Graph", N=N, seed=self.seed,
@@ -119,11 +127,13 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomRegular(self, N=None, d=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if d is None: d = random.randint(1, 5)
+        if N is None:
+            N = random.randint(4, 400)
+        if d is None:
+            d = random.randint(1, 5)
 
         # the product of N*d must be even, otherwise the regular graph does not exist
-        if N*d % 2:
+        if N * d % 2:
             N += 1
 
         G = gen.random_regular_graph(d, N)
@@ -137,10 +147,13 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateBalancedTree(self, N=None, h=None, r=None, **kwargs):
-        if h is None: h = random.randint(2, 3)
-        if r is None: r = random.randint(2, 6)
+        if h is None:
+            h = random.randint(2, 3)
+        if r is None:
+            r = random.randint(2, 6)
 
-        if N is not None: h = round(math.log(N, r))
+        if N is not None:
+            h = round(math.log(N, r))
 
         G = gen.balanced_tree(r, h)
         details = dict(name="Balanced Tree", N=len(G.nodes()), h=h, r=r, seed=self.seed,
@@ -150,17 +163,21 @@ class RandomGraph:
 
     @synonym("binary tree")
     def generateBinaryTree(self, N=None, h=None, **kwargs):
-        if h is None: h = random.randint(2, 9)
+        if h is None:
+            h = random.randint(2, 9)
 
-        if N is not None: h = round(math.log(N, 2))
+        if N is not None:
+            h = round(math.log(N, 2))
 
         return self.generateBalancedTree(N, h, 2)
 
     @synonym("ternary tree")
     def generateTernaryTree(self, N=None, h=None, **kwargs):
-        if h is None: h = random.randint(3, 6)
+        if h is None:
+            h = random.randint(3, 6)
 
-        if N is not None: h = round(math.log(N, 3))
+        if N is not None:
+            h = round(math.log(N, 3))
 
         return self.generateBalancedTree(N, h, 3)
 
@@ -168,7 +185,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateCycle(self, N=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
+        if N is None:
+            N = random.randint(4, 400)
 
         G = gen.cycle_graph(N)
         details = dict(name="Cycle", N=N, seed=self.seed,
@@ -184,8 +202,8 @@ class RandomGraph:
     #     if n is None: n = random.randint(2, 8)
     #
     #     G = gen.hypercube_graph(n)
-    #     details = dict(name="Hypercube", N=len(G.nodes()), n=n, seed=self.seed,
-    #                    template="{name}, n = {n}")
+    #     details = dict(name="Hypercube", N=len(G.nodes()), n=n,
+    #                    seed=self.seed, template="{name}, n = {n}")
     #
     #     return G, details
 
@@ -194,8 +212,10 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateBarabasiAlbert(self, N=None, m=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if m is None: m = random.randint(1, 5)
+        if N is None:
+            N = random.randint(4, 400)
+        if m is None:
+            m = random.randint(1, 5)
 
         G = gen.barabasi_albert_graph(N, m)
         details = dict(name="Barabási-Albert Graph", N=N, m=m, seed=self.seed,
@@ -208,14 +228,19 @@ class RandomGraph:
     @synonym("powerlaw")
     @synonym("powerlaw cluster")
     @style(styles_all)
-    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
+    @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree",
+             "blockmodel"])
     def generatePowerLawCluster(self, N=None, m=None, p=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if m is None: m = random.randint(1, 5)
-        if p is None: p = random.random()
+        if N is None:
+            N = random.randint(4, 400)
+        if m is None:
+            m = random.randint(1, 5)
+        if p is None:
+            p = random.random()
 
         G = gen.powerlaw_cluster_graph(N, m, p)
-        details = dict(name="Powerlaw Cluster Graph", N=N, m=m, p=p, seed=self.seed,
+        details = dict(name="Powerlaw Cluster Graph", N=N, m=m, p=p,
+                       seed=self.seed,
                        template="{name}, N = {N}, m = {m}, p = {p:.2f}")
 
         return G, details
@@ -224,9 +249,12 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateDuplicationDivergence(self, N=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if p is None: p = random.random()
-        if s is None: s = random.randint(0, 10**7)
+        if N is None:
+            N = random.randint(4, 400)
+        if p is None:
+            p = random.random()
+        if s is None:
+            s = random.randint(0, 10**7)
 
         state = random.getstate()
         G = gen.duplication_divergence_graph(N, p, s)
@@ -240,10 +268,14 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateRandomLobster(self, N=None, p1=None, p2=None, s=None, **kwargs):
-        if N is None: N = random.randint(4, 400)
-        if p1 is None: p1 = random.uniform(0, 4)
-        if p2 is None: p2 = random.uniform(0, 4)
-        if s is None: s = random.randint(0, 10**7)
+        if N is None:
+            N = random.randint(4, 400)
+        if p1 is None:
+            p1 = random.uniform(0, 4)
+        if p2 is None:
+            p2 = random.uniform(0, 4)
+        if s is None:
+            s = random.randint(0, 10**7)
 
         state = random.getstate()
         G = gen.random_lobster(N, p1, p2)
@@ -265,9 +297,11 @@ class RandomGraph:
                  "Davis' Southern Women",
                  "Florentine Families"]
 
-        if idx is None: idx = random.randint(0, len(generators)-1)
+        if idx is None:
+            idx = random.randint(0, len(generators) - 1)
         G = generators[idx]()
-        details = dict(name=label[idx], N=len(G.nodes()), idx=idx, seed=self.seed,
+        details = dict(name=label[idx], N=len(G.nodes()), idx=idx,
+                       seed=self.seed,
                        template="{name}, N = {N}")
 
         return G, details
@@ -301,9 +335,11 @@ class RandomGraph:
                  "Les Misérables",
                  "Amazon's copurchases of political books"]
 
-        if idx is None: idx = random.randint(0, len(files)-1)
+        if idx is None:
+            idx = random.randint(0, len(files) - 1)
 
-        G = nx.read_gml(os.path.join(self.folder, "networks/{}.gml".format(files[idx])))
+        fname = os.path.join(self.folder, "networks/{}.gml".format(files[idx]))
+        G = nx.read_gml(fname)
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
@@ -357,9 +393,11 @@ class RandomGraph:
                  "citations high energy physics (1995-2000)",
                  "citations network science (until 2006)"]
 
-        if idx is None: idx = random.randint(0, len(files)-1)
+        if idx is None:
+            idx = random.randint(0, len(files)-1)
 
-        G = nx.read_gml(os.path.join(self.folder, "networks/{}.gml".format(files[idx])))
+        fname = os.path.join(self.folder, "networks/{}.gml".format(files[idx]))
+        G = nx.read_gml(fname)
         details = dict(name=label[idx],
                        N=len(G.nodes()),
                        idx=idx,
@@ -389,10 +427,13 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateCaveman(self, N=None, l=None, k=None, **kwargs):
-        if l is None: l = random.randint(1, 8)
-        if k is None: k = random.randint(2, 14)
+        if l is None:
+            l = random.randint(1, 8)
+        if k is None:
+            k = random.randint(2, 14)
 
-        if N is not None: k = N//l
+        if N is not None:
+            k = N//l
 
         G = nx.caveman_graph(l, k)
         details = dict(name="Caveman Graph", N=l*k, l=l, k=k, seed=self.seed,
@@ -404,17 +445,23 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateRelaxedCaveman(self, N=None, l=None, k=None, p=None, s=None, **kwargs):
-        if l is None: l = random.randint(1, 8)
-        if k is None: k = random.randint(2, 14)
-        if p is None: p = random.uniform(0.05, 0.3)
-        if s is None: s = random.randint(0, 10**7)
+        if l is None:
+            l = random.randint(1, 8)
+        if k is None:
+            k = random.randint(2, 14)
+        if p is None:
+            p = random.uniform(0.05, 0.3)
+        if s is None:
+            s = random.randint(0, 10**7)
 
-        if N is not None: k = N//l
+        if N is not None:
+            k = N // l
 
         state = random.getstate()
         G = nx.relaxed_caveman_graph(l, k, p)
         random.setstate(state)
-        details = dict(name="Relaxed Caveman Graph", N=l*k, l=l, k=k, p=p, s=s, seed=self.seed,
+        details = dict(name="Relaxed Caveman Graph", N=l * k, l=l, k=k, p=p,
+                       s=s, seed=self.seed,
                        template="{name}, N = {N}, l = {l}, k = {k}, p = {p:.2f}, s = {s}")
 
         return G, details
@@ -423,7 +470,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["explicit"])
     def generateRelativeNeighborhood(self, N=None, **kwargs):
-        if N is None: N = random.randint(20, 800)
+        if N is None:
+            N = random.randint(20, 800)
 
         state = random.getstate()
         G = proximity_graphs.relative_neighborhood_graph(N)
@@ -437,7 +485,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["explicit"])
     def generateGabriel(self, N=None, **kwargs):
-        if N is None: N = random.randint(20, 800)
+        if N is None:
+            N = random.randint(20, 800)
 
         state = random.getstate()
         G = proximity_graphs.gabriel_graph(N)
@@ -451,14 +500,17 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateBarbell(self, N=None, m1=None, m2=None, **kwargs):
-        if m1 is None: m1 = random.randint(3, 20)
-        if m2 is None: m2 = random.randint(1, 20)
+        if m1 is None:
+            m1 = random.randint(3, 20)
+        if m2 is None:
+            m2 = random.randint(1, 20)
         if N is not None:
-            m1 = random.randint(3, N/2-2)
-            m2 = N - 2*m1
+            m1 = random.randint(3, N / 2 - 2)
+            m2 = N - 2 * m1
 
         G = gen.barbell_graph(m1, m2)
-        details = dict(name="Barbell Graph", N=len(G.nodes()), m1=m1, m2=m2, seed=self.seed,
+        details = dict(name="Barbell Graph", N=len(G.nodes()), m1=m1, m2=m2,
+                       seed=self.seed,
                        template="{name}, N = {N}, m1 = {m1}, m2 = {m2}")
 
         return G, details
@@ -467,10 +519,12 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
     def generateCircularLadder(self, n=None, **kwargs):
-        if n is None: n = random.randint(3, 400)
+        if n is None:
+            n = random.randint(3, 400)
 
         G = gen.circular_ladder_graph(n)
-        details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n, seed=self.seed,
+        details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n,
+                       seed=self.seed,
                        template="{name}, N = {N}, n = {n}")
 
         return G, details
@@ -480,10 +534,12 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateDorogovtsevGoltsevMendes(self, n=None, **kwargs):
-        if n is None: n = random.randint(2, 7)
+        if n is None:
+            n = random.randint(2, 7)
 
         G = gen.dorogovtsev_goltsev_mendes_graph(n)
-        details = dict(name="Dorogovtsev-Goltsev-Mendes Graph", N=len(G.nodes()), n=n, seed=self.seed,
+        details = dict(name="Dorogovtsev-Goltsev-Mendes Graph",
+                       N=len(G.nodes()), n=n, seed=self.seed,
                        template="{name}, N = {N}, n = {n}")
 
         return G, details
@@ -492,15 +548,20 @@ class RandomGraph:
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree", "blockmodel"])
     def generateRandomPartition(self, sizes=None, p1=None, p2=None, s=None, **kwargs):
-        if sizes is None: sizes = [random.randint(6, 120) for _ in range(random.randint(2, 3))]
-        if p1 is None: p1 = random.uniform(0.2, 0.8)
-        if p2 is None: p2 = random.uniform(0.0, 0.1)
-        if s is None: s = random.randint(0, 10**7)
+        if sizes is None:
+            sizes = [random.randint(6, 120) for _ in range(random.randint(2, 3))]
+        if p1 is None:
+            p1 = random.uniform(0.2, 0.8)
+        if p2 is None:
+            p2 = random.uniform(0.0, 0.1)
+        if s is None:
+            s = random.randint(0, 10**7)
 
         state = random.getstate()
         G = gen.random_partition_graph(sizes, p1, p2, s)
         random.setstate(state)
-        details = dict(name="Random Partition Graph", N=len(G.nodes()), sizes=sizes, p1=p1, p2=p2, s=s, seed=self.seed,
+        details = dict(name="Random Partition Graph", N=len(G.nodes()),
+                       sizes=sizes, p1=p1, p2=p2, s=s, seed=self.seed,
                        template="{name}, N = {N}, sizes = {sizes}, p1 = {p1:.2f}, p2 = {p2:.2f}, s = {s}")
 
         return G, details
@@ -509,17 +570,23 @@ class RandomGraph:
     @synonym("random intersection")
     @style(styles_all)
     @layout(["sfdp", "fruchterman_reingold", "arf", "radial_tree"])
-    def generateRandomIntersection(self, N=None, m=None, p=None, s=None, **kwargs):
-        if N is None: N = random.randint(3, 100)
-        if m is None: m = random.randint(3, 100)
-        if p is None: p = random.random()
-        if s is None: s = random.randint(0, 10**7)
+    def generateRandomIntersection(self, N=None, m=None, p=None, s=None,
+                                   **kwargs):
+        if N is None:
+            N = random.randint(3, 100)
+        if m is None:
+            m = random.randint(3, 100)
+        if p is None:
+            p = random.random()
+        if s is None:
+            s = random.randint(0, 10**7)
 
         state = random.getstate()
         G = gen.uniform_random_intersection_graph(N, m, p, s)
         random.setstate(state)
 
-        details = dict(name="Random Intersection Graph", N=N, m=m, p=p, s=s, seed=self.seed,
+        details = dict(name="Random Intersection Graph", N=N, m=m, p=p, s=s,
+                       seed=self.seed,
                        template="{name}, N = {N}, m = {m}, p = {p:.2f}, s = {s}")
 
         return G, details
@@ -528,7 +595,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["explicit"])
     def generateMinimumRadius(self, N=None, **kwargs):
-        if N is None: N = random.randint(20, 800)
+        if N is None:
+            N = random.randint(20, 800)
 
         state = random.getstate()
         G = proximity_graphs.minimum_radius(N)
@@ -543,8 +611,10 @@ class RandomGraph:
     @style(styles_all)
     @layout(["explicit"])
     def generateGeometric(self, N=None, r=None, **kwargs):
-        if N is None: N = random.randint(20, 800)
-        if r is None: r = random.uniform(0.05, 0.3)
+        if N is None:
+            N = random.randint(20, 800)
+        if r is None:
+            r = random.uniform(0.05, 0.3)
 
         state = random.getstate()
         G = proximity_graphs.minimum_radius(N, r)
@@ -559,7 +629,8 @@ class RandomGraph:
     @style(styles_all)
     @layout(["explicit"])
     def generateMST(self, N=None, **kwargs):
-        if N is None: N = random.randint(20, 800)
+        if N is None:
+            N = random.randint(20, 800)
 
         state = random.getstate()
         G = proximity_graphs.minimum_spanning_tree(N)

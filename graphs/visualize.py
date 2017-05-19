@@ -43,8 +43,8 @@ def draw_graph(G, basename, absdir, command="neato"):
         pos = graphviz_layout(G, command)
 
     nx.draw(G, pos)
-    plt.savefig(basename+".svg")
-    plt.savefig(basename+".png")
+    plt.savefig(basename + ".svg")
+    plt.savefig(basename + ".png")
 
     details = "style = {}, layout = {}".format("default", command)
 
@@ -52,9 +52,9 @@ def draw_graph(G, basename, absdir, command="neato"):
 
 
 def draw_graphviz(G, basename, absdir, command="dot", **kwargs):
-    from networkx.drawing.nx_agraph import to_agraph, graphviz_layout
+    from networkx.drawing.nx_agraph import to_agraph
     A = to_agraph(G)
-    A.write(basename+".dot")
+    A.write(f"{basename}.dot")
 
 
 class NxLayout:
@@ -109,16 +109,17 @@ class GtStyle:
     def styleBetweenness(g, pos, fixed=False):
         deg = g.degree_property_map("total")
         vbet, ebet = gt.centrality.betweenness(g)
-        vbet.a += max(vbet.a.max(), 1)*0.05  # nodes with value zero should be 5% of maximum
+        # nodes with value zero should be 5% of maximum
+        vbet.a += max(vbet.a.max(), 1) * 0.05
         vbet.a = np.sqrt(vbet.a)
         vbet.a /= vbet.a.max() / GtStyle.max_node_size(g, pos, fixed)
-        ebet.a += 0.05*ebet.a.max()
+        ebet.a += 0.05 * ebet.a.max()
         ebet.a /= ebet.a.max() / 10.
         eorder = ebet.copy()
         eorder.a *= -1
         control = g.new_edge_property("vector<double>")
         for e in g.edges():
-            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a) ** 2)) / 5
+            d = math.sqrt(sum((pos[e.source()].a - pos[e.target()].a)**2)) / 5
             control[e] = [0.3, d, 0.7, d]
         bg_color = (0.25, 0.25, 0.25, 1.0)
 
@@ -141,10 +142,10 @@ class GtStyle:
                 ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
         if fixed:
             # fixed nodes -> Geometric graph, take shortest 20% of edges
-            short_edges = sorted(ds)[:max(1, len(ds)//5)]
+            short_edges = sorted(ds)[:max(1, len(ds) // 5)]
         else:
             # not fixed -> take shortes 5% of egdes
-            short_edges = sorted(ds)[:max(1, len(ds)//20)]
+            short_edges = sorted(ds)[:max(1, len(ds) // 20)]
         d = sum(short_edges) / len(short_edges)
 
         for v in g.vertices():
@@ -168,7 +169,6 @@ class GtStyle:
 
 
 def draw_graphtool(G, basename, absdir, style, layout):
-    N = len(G.nodes())
     g = nx2gt(G)
 
     if style not in GtStyle().styles:
@@ -177,13 +177,11 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
     deg = g.degree_property_map("total")
 
-    # assign locations manual
-    locations = []
     if has_explicit_coordinates(G):
         layout = "explicit"
         pos = g.new_vertex_property("vector<double>")
         for n, v in enumerate(G.nodes()):
-            pos[g.vertex(n)] = [v[0]*1000, v[1]*1000]
+            pos[g.vertex(n)] = [v[0] * 1000, v[1] * 1000]
     else:
         if layout == "sfdp":
             pos = gt.draw.sfdp_layout(g)

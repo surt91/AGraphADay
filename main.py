@@ -19,11 +19,13 @@ absdir = os.path.abspath(os.path.dirname(__file__))
 my_handle = "randomGraphs"
 
 
-def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, layout=None):
+def createPlot(graphGenerator, folder, seed,
+               comment="no comment", style=None, layout=None):
     G, details = graphGenerator()
 
     os.makedirs(folder, exist_ok=True)
-    basename = str(int(datetime.timestamp(datetime.now()))) + "_" + seed.replace("/", "-")
+    basename = "{:.0f}_{}".format(datetime.timestamp(datetime.now()),
+                                  seed.replace("/", "-"))
     basename = os.path.join(folder, basename)
 
     if style is None:
@@ -41,12 +43,12 @@ def createPlot(graphGenerator, folder, seed, comment="no comment", style=None, l
         else:
             raise
     except:
-        import traceback
+        from traceback import print_exc
         # print("unexpected error:", sys.exc_info())
         print_exc()
         path, style = draw_graph(G, basename, absdir, "neato")
 
-    with open(basename+".txt", "w") as f:
+    with open(basename + ".txt", "w") as f:
         f.write(details["seed"])
         f.write("\n")
         f.write(comment)
@@ -70,12 +72,12 @@ def guess_graph(text=None, handle=""):
         numbers = [int(s) for s in text.split() if s.isdigit() and int(s) < 1024]
         if numbers:
             N = random.choice(numbers)
-            print("regocnized {} nodes".format(N))
+            print("recognized {} nodes".format(N))
         else:
             N = None
 
         key, certainty = match(text, synonyms.keys())
-        gen = lambda : synonyms[key](GraphGenerator, N=N)
+        gen = lambda: synonyms[key](GraphGenerator, N=N)
 
         styleKey, styleCertainty = match(text, styles_all)
 
@@ -86,7 +88,7 @@ def guess_graph(text=None, handle=""):
         layoutKey, layoutCertainty = match(text, layouts_all)
 
         if layoutCertainty >= 80:
-            print("regocnized layout: {} ({})".format(layoutKey, layoutCertainty))
+            print("recognized layout: {} ({})".format(layoutKey, layoutCertainty))
             layout = layoutKey
 
     if not text or certainty < 20:
@@ -106,7 +108,7 @@ def guess_graph(text=None, handle=""):
 
     name = details["name"]
     if handle and handle[0] != "@":
-        handle = "@"+handle
+        handle = "@" + handle
 
     if certainty < 50:
         answer = "{handle} I am not sure what you mean, but I drew a {graph} for you! ({N} nodes)"
@@ -142,7 +144,8 @@ class MyStreamListener(tweepy.StreamListener):
         if mentioned:
             print(status.text)
             text = status.text.replace(my_handle, "")
-            path, answer = guess_graph(text=text, handle=status.user.screen_name)
+            path, answer = guess_graph(text=text,
+                                       handle=status.user.screen_name)
             tweet_pic(path, answer, status.id)
 
             self.last_id = status.id
@@ -157,7 +160,7 @@ def answerMentions():
         print(len(todo), "new messages")
         for d in todo:
             text = d["text"].replace(my_handle, "")
-            path, answer = guess_graph(text=d["text"], handle=d["handle"])
+            path, answer = guess_graph(text=text, handle=d["handle"])
             tweet_pic(path, answer, d["id"])
     except:
         print("something went wrong", sys.exc_info())
@@ -186,7 +189,7 @@ if __name__ == "__main__":
     else:
         seed = base64.b64encode(os.urandom(8)).decode("ascii")
 
-    if not "test" in sys.argv:
+    if "test" not in sys.argv:
         folder = os.path.join(absdir, "archive")
     else:
         folder = os.path.join(absdir, "test")
@@ -196,5 +199,5 @@ if __name__ == "__main__":
 
     text = "{name} ({N} nodes)".format(**details)
 
-    if not "test" in sys.argv:
+    if "test" not in sys.argv:
         tweet_pic(path, text)

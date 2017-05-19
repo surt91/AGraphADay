@@ -6,7 +6,7 @@ import networkx as nx
 def generateRandomCoordinates(N=100):
     out = []
     for i in range(N):
-        out.append((random.random(),random.random()))
+        out.append((random.random(), random.random()))
     return out
 
 
@@ -38,8 +38,8 @@ def gg(G):
         for c2 in G.nodes():
             if c1 == c2:
                 continue
-            mid = ((c1[0]+c2[0])/2, (c1[1]+c2[1])/2)
-            r = dist(c1, c2)/2
+            mid = ((c1[0] + c2[0]) / 2, (c1[1] + c2[1]) / 2)
+            r = dist(c1, c2) / 2
             for possible_blocker in G.nodes():
                 if c1 == possible_blocker or c2 == possible_blocker:
                     continue

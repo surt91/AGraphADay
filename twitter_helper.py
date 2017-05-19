@@ -2,8 +2,10 @@ import tweepy
 
 from keys_and_secrets import keys_and_secrets
 
-auth = tweepy.OAuthHandler(keys_and_secrets["consumer_key"], keys_and_secrets["consumer_secret"])
-auth.set_access_token(keys_and_secrets["access_token_key"], keys_and_secrets["access_token_secret"])
+auth = tweepy.OAuthHandler(keys_and_secrets["consumer_key"],
+                           keys_and_secrets["consumer_secret"])
+auth.set_access_token(keys_and_secrets["access_token_key"],
+                      keys_and_secrets["access_token_secret"])
 
 api = tweepy.API(auth)
 

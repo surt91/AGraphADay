@@ -15,4 +15,3 @@ if __name__ == "__main__":
 
     for d in todo:
         guess_graph(text=d["text"], handle=d["handle"])
-
