@@ -7,7 +7,10 @@ auth = tweepy.OAuthHandler(keys_and_secrets["consumer_key"],
 auth.set_access_token(keys_and_secrets["access_token_key"],
                       keys_and_secrets["access_token_secret"])
 
-api = tweepy.API(auth)
+# wait if we hit twitters rate limit (15 requests in 15 minutes)
+# this way all tweets will be accepted and we have a rudimentary DOS protection
+# if this bot is too successful. Twitter itself will protect us from malicious DOS
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 def tweet_pic(path, text=None, reply_to=None):

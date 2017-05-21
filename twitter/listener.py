@@ -39,6 +39,12 @@ class MyStreamListener(tweepy.StreamListener):
             with open("last_id.dat", "w") as f:
                 f.write(str(self.last_id))
 
+    def on_error(self, status_code):
+        # if we hit the rate limit, raise an error
+        # this will crash this program an send a mail (if started via cron)
+        if status_code == 420:
+            raise Exception("hit streaming API rate limit")
+
 
 def answerMentions(guess_graph):
     """Answers mentions with images of graphs.
