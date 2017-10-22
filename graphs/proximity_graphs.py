@@ -16,7 +16,7 @@ def dist(n1, n2):
 
 
 def dt(G):
-    points = G.nodes()
+    points = list(G.nodes())
     delaunay = scipy.spatial.Delaunay(points, qhull_options="QJ")
 
     # create a set for edges that are indexes of the points
