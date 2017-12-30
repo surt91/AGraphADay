@@ -26,8 +26,19 @@ def has_explicit_coordinates(G):
         if len(list(G.nodes())[0]) != 2:
             raise
         graph_has_coordinates = True
-    except TypeError:
+    except IndexError:
+        # if we can not get enough elements, it can not be coordinates
         graph_has_coordinates = False
+    except TypeError:
+        # if we can not get the zeroths element, it can not be coordinates
+        graph_has_coordinates = False
+    except ValueError:
+        # if we can not convert it to float, it can not be coordinates
+        graph_has_coordinates = False
+    except:
+        # otherwise: panic!
+        print(list(G.nodes()))
+        raise
     return graph_has_coordinates
 
 
