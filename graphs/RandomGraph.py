@@ -536,7 +536,7 @@ class RandomGraph:
         if n is None:
             n = random.randint(3, 400)
 
-        G = gen.Circular_ladder_graph(n)
+        G = gen.circular_ladder_graph(n)
         details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n,
                        seed=self.seed,
                        template="{name}, N = {N}, n = {n}")
