@@ -534,7 +534,7 @@ class RandomGraph:
              "TwoPi", "Neato", "Spectral"])
     def generateCircularLadder(self, n=None, **kwargs):
         if n is None:
-            n = random.randint(3, 400)
+            n = random.randint(3, 200)
 
         G = gen.circular_ladder_graph(n)
         details = dict(name="Circular Ladder Graph", N=len(G.nodes()), n=n,
