@@ -10,6 +10,7 @@ from time import sleep
 from twitter import tweet_pic, answerMentions
 from graphs import RandomGraph, synonyms, layouts_all, styles_all
 from graphs import draw_graph, draw_graphtool, draw_blockmodel
+from graphs import RetryableError
 from graphs.visualize import GtLayout, NxLayout
 from parse import match
 
@@ -41,6 +42,11 @@ def createPlot(graphGenerator, folder, seed,
             path, style_detail = draw_blockmodel(G, basename, absdir, "None", layout)
         else:
             raise
+    # sometimes errors will be thrown because a particular instance can not
+    # be drawn with some mehtod, in this case, try again
+    except RetryableError:
+        print("try again")
+        path, style_detail = createPlot(graphGenerator, folder, "1"+seed, comment, style, layout)
     except:
         from traceback import print_exc
         # print("unexpected error:", sys.exc_info())
@@ -56,7 +62,7 @@ def createPlot(graphGenerator, folder, seed,
         f.write("\n")
         f.write(details["template"].format(**details))
         f.write("\n")
-        f.write(style_detail)
+        f.write(str(style_detail))
         f.write("\n")
 
     return path, details
@@ -145,6 +151,7 @@ if __name__ == "__main__":
         folder = os.path.join(absdir, "test")
 
     GraphGenerator = RandomGraph(seed)
+
     path, details = createPlot(GraphGenerator.randomGraph, folder, seed)
 
     text = "{name} ({N} nodes)".format(**details)

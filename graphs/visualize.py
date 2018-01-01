@@ -14,8 +14,13 @@ import graph_tool as gt
 import graph_tool.inference
 import graph_tool.draw
 import graph_tool.centrality
+import cairo
 
 from .nx2gt.nx2gt import nx2gt
+
+
+class RetryableError(Exception):
+    pass
 
 
 def has_explicit_coordinates(G):
@@ -228,7 +233,11 @@ class GtStyle:
             for w in v.out_neighbours():
                 i = pos[v]
                 j = pos[w]
-                ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
+                try:
+                    ds.append(math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2))
+                except IndexError:
+                    print(v, w, i, j)
+                    raise RetryableError
         if fixed:
             # fixed nodes -> Geometric graph, take shortest 20% of edges
             short_edges = sorted(ds)[:max(1, len(ds) // 5)]
@@ -241,7 +250,11 @@ class GtStyle:
             for w in g.vertices():
                 i = pos[v]
                 j = pos[w]
-                tmp = math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
+                try:
+                    tmp = math.sqrt((i[0] - j[0])**2 + (i[1] - j[1])**2)
+                except IndexError:
+                    print(v, w, i, j)
+                    raise RetryableError
                 max_d = max(tmp, max_d)
 
         return d, max_d
@@ -293,9 +306,18 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
     style_dict = GtStyle().names[style](g, pos, fixed=layout == "explicit")
 
-    gt.draw.graph_draw(g, pos=pos, output=infile, **style_dict)
+    try:
+        gt.draw.graph_draw(g, pos=pos, output=infile, **style_dict)
+    except cairo.Error:
+        print("some cairo error")
+        raise RetryableError
 
     call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
+
+    # test if the file is smaller than 5 kB, in that case something went wrong
+    if os.path.getsize(outfile) < 5e3:
+        print("apparently the output is empty, try again")
+        raise RetryableError
     return outfile, details
 
 
