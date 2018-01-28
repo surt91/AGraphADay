@@ -230,10 +230,41 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("power law graph")
+    @synonym("scale free")
+    @style(styles_all)
+    @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
+             "TwoPi", "Neato", "Spectral"])
+    def generatePowerLaw(self, N=None, gamma=None, **kwargs):
+        if N is None:
+            N = random.randint(10, 400)
+        if gamma is None:
+            gamma = random.uniform(2.0, 4.0)
+
+        w = nx.utils.powerlaw_sequence(N, gamma)
+        G = gen.expected_degree_graph(w)
+        details = dict(name="Powerlaw Graph", N=N, gamma=gamma, seed=self.seed,
+                       template="{name}, N = {N}, gamma = {gamma}")
+
+        return G, details
+
+    @synonym("power law tree")
+    @style(styles_all)
+    @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
+             "TwoPi", "Neato", "Spectral"])
+    def generatePowerLaw(self, N=None, gamma=None, **kwargs):
+        if N is None:
+            N = random.randint(10, 100)
+        if gamma is None:
+            gamma = random.uniform(2.0, 3.0)
+
+        G = gen.random_powerlaw_tree(N, gamma, tries=10000)
+        details = dict(name="Powerlaw Tree", N=N, gamma=gamma, seed=self.seed,
+                       template="{name}, N = {N}, gamma = {gamma}")
+
+        return G, details
+
     @synonym("power law cluster")
-    @synonym("power law")
-    @synonym("powerlaw")
-    @synonym("powerlaw cluster")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
              "TwoPi", "Blockmodel", "Neato", "Spectral"])
