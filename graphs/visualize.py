@@ -314,8 +314,9 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
     call([os.path.join(absdir, "svg2png.sh"), infile, outfile])
 
-    # test if the file is smaller than 5 kB, in that case something went wrong
-    if os.path.getsize(outfile) < 5e3:
+    # test if the file is smaller than 60 kB, in that case something went wrong
+    # or it is probably too boring
+    if os.path.getsize(outfile) < 60e3:
         print("apparently the output is empty, try again")
         raise RetryableError
     return outfile, details
