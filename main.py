@@ -46,7 +46,7 @@ def createPlot(graphGenerator, folder, seed,
     # be drawn with some mehtod, in this case, try again
     except RetryableError:
         print("try again")
-        path, style_detail = createPlot(graphGenerator, folder, "1"+seed, comment, style, layout)
+        path, details = createPlot(graphGenerator, folder, "1"+seed, comment, style, layout)
     except:
         from traceback import print_exc
         # print("unexpected error:", sys.exc_info())
