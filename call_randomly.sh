@@ -7,5 +7,6 @@ while true; do
     sleep $(echo "18*3600 + ( ($RANDOM / 32767) * (12*3600) )" | bc -l)s
     until timeout 7200 python3 main.py; do
         echo "killed ... retry"
+        sleep 300
     done
 done
