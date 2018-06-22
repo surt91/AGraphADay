@@ -26,6 +26,8 @@ class RetryableError(Exception):
 def has_explicit_coordinates(G):
     # Guess if the graph has explicit coordinates
     try:
+        if isinstance(list(G.nodes())[0], str):
+            raise TypeError
         float(list(G.nodes())[0][0])
         # we can only use d=2
         if len(list(G.nodes())[0]) != 2:

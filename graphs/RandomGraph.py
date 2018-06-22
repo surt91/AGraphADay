@@ -463,6 +463,35 @@ class RandomGraph:
     def netsci(self, **kwargs):
         return self.generateScience(5, **kwargs)
 
+    @synonym("stanford")
+    @style(styles_all)
+    @layout(["Blockmodel"])
+    def generateStanford(self, idx=None, **kwargs):
+        files = [
+            "p2p",
+        ]
+        label = [
+            "Gnutella p2p Network (2002)",
+        ]
+
+        if idx is None:
+            idx = random.randint(0, len(files)-1)
+
+        fname = os.path.join(self.folder, "networks/{}.txt".format(files[idx]))
+        G = nx.read_edgelist(fname)
+        details = dict(name=label[idx],
+                       N=len(G.nodes()),
+                       idx=idx,
+                       seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
+    @synonym("gnutella")
+    @synonym("internet p2p")
+    def gnutella(self, **kwargs):
+        return self.generateStanford(0, **kwargs)
+
     @synonym("caveman")
     @synonym("clique")
     @style(styles_all)
