@@ -19,8 +19,9 @@ border=5%x5%
 # we will add a transparent border of 1px. this way twitter will not convert
 # it to jpg and add compression artifacts
 # here, we account for the extra 2 pixels in both directions
-X=$((X-2))
-Y=$((Y-2))
+# has apparently no effect anymore
+#X=$((X-2))
+#Y=$((Y-2))
 
 # get background color
 color="$(convert "$IN" -format "%[pixel:p{1,1}]" info:)"
@@ -35,7 +36,7 @@ else
 fi
 
 # create background, this way we will always get the same aspect ratio
-convert -size "$X"x"$Y" canvas:"$color" -alpha on -channel RGBA -bordercolor "rgba(0,0,0,0)" -border "1x1" "$BG"
+convert -size "$X"x"$Y" canvas:"$color" "$BG"
 
 # place the graph in the center of the background
 composite -gravity center "$TMP" "$BG" "$OUT"
