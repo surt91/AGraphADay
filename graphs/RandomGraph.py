@@ -238,6 +238,23 @@ class RandomGraph:
 
         return self.generateBalancedTree(N, h, 3)
 
+    @synonym("binomial tree")
+    @style(styles_all)
+    @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
+             "TwoPi", "Neato", "Spectral", "dot"])
+    def generateBinomialTree(self, N=None, h=None, **kwargs):
+        if h is None:
+            h = random.randint(2, 9)
+
+        if N is not None:
+            h = round(math.log(N, 2))
+
+        G = gen.binomial_tree(h)
+        details = dict(name="Binomial Tree", N=len(G.nodes()), h=h, seed=self.seed,
+                       template="{name}, h = {h}")
+
+        return G, details
+
     @synonym("cycle")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree", "Circular",
