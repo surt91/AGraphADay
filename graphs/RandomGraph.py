@@ -88,6 +88,58 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("planted partition")
+    @style(styles_all)
+    @layout(["Blockmodel", "Neato", "ARF", "Circular", "SFDP"])
+    def generatePlantedPartition(self, N=None, l=None, k=None, c_in=None, c_out=None, assortative=True, s=None, **kwargs):
+        if l is None:
+            l = random.randint(2, 4)
+        if k is None:
+            k = random.randint(5, 200)
+        if assortative is None:
+            assortative = random.randint(0, 1) == 1
+        if N is not None:
+            k = N // l
+        else:
+            N = k*l
+
+        # assert that the two c are not too similar
+        # we use Decelle's criterion (10.1103/PhysRevE.84.066106)
+        # with a buffer factor of 1.5, since we are generating mostly small graphs
+        buffer = 1.5
+        if c_in is None or c_out is None:
+            while True:
+                c_low = random.uniform(0, 2)
+                c_high = random.uniform(1, 20)
+                if assortative:
+                    c_in, c_out = c_high, c_low
+                else:
+                    c_in, c_out = c_low, c_high
+                c = l*(l-1)*c_out*(1/l)**2 + l*c_in*(1/l)**2
+
+                print(l, k, c_in, c_out, c)
+                print(abs(c_in - c_out), l * c**0.5)
+
+                if abs(c_in - c_out) > buffer * l * c**0.5:
+                    break
+
+        if s is None:
+            s = random.randint(0, 10**7)
+
+
+        p_in = c_in / N
+        p_out = c_out / N
+
+        print(p_in, p_out)
+
+        state = random.getstate()
+        G = gen.planted_partition_graph(l, k, p_in, p_out, seed=s)
+        random.setstate(state)
+        details = dict(name="Planted partition", N=N, l=l, k=k, c_in=c_in, c_out=c_out, s=s, seed=self.seed,
+                       template="{name}, N = {N}, q = {l}, k = {k}, c_in = {c_in:.2f}, c_out = {c_out:.2f}, s = {s}")
+
+        return G, details
+
     @synonym("Watts Strogatz")
     @synonym("Newman Watts Strogatz")
     @synonym("small world")
