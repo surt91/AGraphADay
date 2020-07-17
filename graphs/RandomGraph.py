@@ -894,3 +894,22 @@ class RandomGraph:
                        template="{name}, N = {N}, n = {n}, m = {m}")
 
         return G, details
+
+    @synonym("hypercube")
+    @style(styles_all)
+    @layout(layouts_all)
+    def generateTriangularLattice(self, N=None, d=None, **kwargs):
+        if d is None:
+            d = random.randint(2, 9)
+
+        if N is not None:
+            d = round(math.log(N, 2))
+        else:
+            N = d**2
+
+        G = gen.hypercube_graph(d)
+
+        details = dict(name="hypercube", N=N, d=d, seed=self.seed,
+                       template="{name}, N = {N}, d = {d}")
+
+        return G, details

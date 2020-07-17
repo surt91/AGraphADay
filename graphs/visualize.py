@@ -31,7 +31,7 @@ def has_explicit_coordinates(G):
         float(list(G.nodes())[0][0])
         # we can only use d=2
         if len(list(G.nodes())[0]) != 2:
-            raise
+            graph_has_coordinates = False
         graph_has_coordinates = True
     except IndexError:
         # if we can not get enough elements, it can not be coordinates
