@@ -831,3 +831,66 @@ class RandomGraph:
                        template="{name}, N = {N}")
 
         return G, details
+
+    @synonym("square lattice")
+    @style(styles_all)
+    @layout(layouts_all)
+    def generateSqaureLattice(self, N=None, n=None, m=None, **kwargs):
+        if n is None:
+            n = random.randint(3, 30)
+        if m is None:
+            m = random.randint(3, 30)
+
+        if N is not None:
+            m = N // n
+        else:
+            N = n * m
+
+        G = gen.grid_2d_graph(n, m)
+
+        details = dict(name="square lattice", N=N, n=n, m=m, seed=self.seed,
+                       template="{name}, N = {N}, n = {n}, m = {m}")
+
+        return G, details
+
+    @synonym("hexagonal lattice")
+    @style(styles_all)
+    @layout(layouts_all)
+    def generateHexagonalLattice(self, N=None, n=None, m=None, **kwargs):
+        if n is None:
+            n = random.randint(3, 30)
+        if m is None:
+            m = random.randint(3, 30)
+
+        if N is not None:
+            m = N // n
+        else:
+            N = n * m
+
+        G = gen.hexagonal_lattice_graph(n, m)
+
+        details = dict(name="hexagonal lattice", N=N, n=n, m=m, seed=self.seed,
+                       template="{name}, N = {N}, n = {n}, m = {m}")
+
+        return G, details
+
+    @synonym("triangular lattice")
+    @style(styles_all)
+    @layout(layouts_all)
+    def generateTriangularLattice(self, N=None, n=None, m=None, **kwargs):
+        if n is None:
+            n = random.randint(3, 30)
+        if m is None:
+            m = random.randint(3, 30)
+
+        if N is not None:
+            m = N // n
+        else:
+            N = n * m
+
+        G = gen.triangular_lattice_graph(n, m)
+
+        details = dict(name="triangular lattice", N=N, n=n, m=m, seed=self.seed,
+                       template="{name}, N = {N}, n = {n}, m = {m}")
+
+        return G, details
