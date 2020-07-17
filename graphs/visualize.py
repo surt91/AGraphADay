@@ -97,7 +97,11 @@ class NxLayout:
 
     @staticmethod
     def layoutCircular(G):
-        return nx.nx_pydot.graphviz_layout(G, prog="circo")
+        return nx.circular_layout(G)
+
+    @staticmethod
+    def layoutShell(G):
+        return nx.shell_layout(G)
 
     @staticmethod
     def layoutTwoPi(G):
@@ -137,6 +141,7 @@ class GtLayout:
 
 class GtStyle:
     outsize = (4096, 4096)
+    # outsize = (2046, 1022)
 
     def __init__(self):
         # get all methods that generate graphs (convention: starts with 'style')
