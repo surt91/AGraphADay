@@ -194,6 +194,19 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("wheel")
+    @style(styles_all)
+    @layout(layouts_all)
+    def generateWheel(self, N=None, **kwargs):
+        if N is None:
+            N = random.randint(4, 400)
+
+        G = gen.wheel_graph(N)
+        details = dict(name="Wheel Graph", N=N, seed=self.seed,
+                       template="{name}, N = {N}")
+
+        return G, details
+
     @synonym("Random Regular")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
