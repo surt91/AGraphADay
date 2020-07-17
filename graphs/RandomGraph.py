@@ -178,6 +178,22 @@ class RandomGraph:
 
         return G, details
 
+    @synonym("Turan")
+    @style(styles_all)
+    @layout(["Circular", "SFDP", "FruchtermanReingold", "ARF", "RadialTree",
+             "TwoPi", "Neato", "Spectral"])
+    def generateTuran(self, N=None, r=None, **kwargs):
+        if r is None:
+            r = random.randint(2, 4)
+        if N is None:
+            N = random.randint(2*r, 4*r)
+
+        G = gen.turan_graph(N, r)
+        details = dict(name="Turan Graph", N=N, r=r, seed=self.seed,
+                       template="{name}, N = {N}, r = {r}")
+
+        return G, details
+
     @synonym("Random Regular")
     @style(styles_all)
     @layout(["SFDP", "FruchtermanReingold", "ARF", "RadialTree",
