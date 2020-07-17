@@ -84,14 +84,6 @@ class NxLayout:
         self.names = {i[0][6:]: i[1] for i in sorted(members) if "layout" in i[0]}
 
     @staticmethod
-    def layoutDot(G):
-        return nx.nx_pydot.graphviz_layout(G, prog="dot")
-
-    @staticmethod
-    def layoutNeato(G):
-        return nx.nx_pydot.graphviz_layout(G, prog="neato")
-
-    @staticmethod
     def layoutKamadaKawai(G):
         return NxLayout.layoutNeato(G)
 
@@ -104,12 +96,28 @@ class NxLayout:
         return nx.shell_layout(G)
 
     @staticmethod
-    def layoutTwoPi(G):
-        return nx.nx_pydot.graphviz_layout(G, prog="twopi")
-
-    @staticmethod
     def layoutSpectral(G):
         return nx.spectral_layout(G)
+
+
+class GvLayout:
+    def __init__(self):
+        members = inspect.getmembers(GvLayout)
+
+        self.layouts = [i[0][6:] for i in sorted(members) if "layout" in i[0]]
+        self.names = {i[0][6:]: i[1] for i in sorted(members) if "layout" in i[0]}
+
+    @staticmethod
+    def layoutDot(G):
+        return nx.nx_pydot.graphviz_layout(G, prog="dot")
+
+    @staticmethod
+    def layoutNeato(G):
+        return nx.nx_pydot.graphviz_layout(G, prog="neato")
+
+    @staticmethod
+    def layoutTwoPi(G):
+        return nx.nx_pydot.graphviz_layout(G, prog="twopi")
 
 
 class GtLayout:

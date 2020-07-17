@@ -8,7 +8,7 @@ import networkx as nx
 from networkx import generators as gen
 
 from . import proximity_graphs
-from .visualize import GtLayout, NxLayout, GtStyle
+from .visualize import GtLayout, NxLayout, GvLayout, GtStyle
 
 
 # decorator to add synonyms of the graph types
@@ -37,7 +37,7 @@ def style(style_list):
     return style_decorator
 
 
-layouts_all = GtLayout().layouts + ["Blockmodel"] + NxLayout().layouts
+layouts_all = GtLayout().layouts + ["Blockmodel"] + NxLayout().layouts + GvLayout().layouts
 def layout(layout_list):
     def layout_decorator(func):
         @wraps(func)
@@ -834,7 +834,7 @@ class RandomGraph:
 
     @synonym("square lattice")
     @style(styles_all)
-    @layout(layouts_all)
+    @layout(GtLayout().layouts + ["Blockmodel"] + NxLayout().layouts)
     def generateSqaureLattice(self, N=None, n=None, m=None, **kwargs):
         if n is None:
             n = random.randint(3, 30)
@@ -855,7 +855,7 @@ class RandomGraph:
 
     @synonym("hexagonal lattice")
     @style(styles_all)
-    @layout(layouts_all)
+    @layout(GtLayout().layouts + ["Blockmodel"] + NxLayout().layouts)
     def generateHexagonalLattice(self, N=None, n=None, m=None, **kwargs):
         if n is None:
             n = random.randint(3, 30)
@@ -876,7 +876,7 @@ class RandomGraph:
 
     @synonym("triangular lattice")
     @style(styles_all)
-    @layout(layouts_all)
+    @layout(GtLayout().layouts + ["Blockmodel"] + NxLayout().layouts)
     def generateTriangularLattice(self, N=None, n=None, m=None, **kwargs):
         if n is None:
             n = random.randint(3, 30)
