@@ -11,7 +11,7 @@ from twitter import tweet_pic, answerMentions
 from graphs import RandomGraph, synonyms, layouts_all, styles_all
 from graphs import draw_graph, draw_graphtool, draw_blockmodel
 from graphs import RetryableError
-from graphs.visualize import GtLayout, NxLayout
+from graphs.visualize import GtLayout, NxLayout, GvLayout
 from parse import match
 
 absdir = os.path.abspath(os.path.dirname(__file__))
