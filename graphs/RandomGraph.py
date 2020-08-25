@@ -676,7 +676,7 @@ class RandomGraph:
         if m2 is None:
             m2 = random.randint(1, 20)
         if N is not None:
-            m1 = random.randint(3, N / 2 - 2)
+            m1 = random.randint(3, N // 2 - 2)
             m2 = N - 2 * m1
 
         G = gen.barbell_graph(m1, m2)
