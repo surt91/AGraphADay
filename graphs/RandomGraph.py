@@ -905,9 +905,16 @@ class RandomGraph:
         if N is not None:
             d = round(math.log(N, 2))
         else:
-            N = d**2
+            N = 2**d
 
         G = gen.hypercube_graph(d)
+
+        # usually the node labels are coordinate tuples
+        # the visualization will then assume that the positions
+        # should at the corresponding position -- to work around we convert
+        # the tuples to strings
+        mapping = {i: str(i) for i in G.nodes}
+        nx.relabel_nodes(G, mapping, copy=False)
 
         details = dict(name="hypercube", N=N, d=d, seed=self.seed,
                        template="{name}, N = {N}, d = {d}")
