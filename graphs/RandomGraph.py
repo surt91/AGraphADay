@@ -517,7 +517,7 @@ class RandomGraph:
     @synonym("science")
     @synonym("citation")
     @style(styles_all)
-    @layout(["sfpd", "ARF", "RadialTree", "Blockmodel"])
+    @layout(["SFDP", "ARF", "RadialTree", "Blockmodel"])
     def generateScience(self, idx=None, **kwargs):
         files = ["astro-ph",
                  "cond-mat",
