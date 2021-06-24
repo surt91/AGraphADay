@@ -1,7 +1,7 @@
 try:
     from .helper import tweet_pic, get_my_handle, obtain_dm
     from .listener import answerMentions
-    from .networks import ego_network
+    from .networks import ego_network, list_network
 except:
     print("Twitter package is broken")
     def tweet_pic(*args):
@@ -15,4 +15,6 @@ except:
     def answerMentions(*args):
         print("Twitter package is broken")
     def ego_network(*args):
+        print("Twitter package is broken")
+    def list_network(*args):
         print("Twitter package is broken")
