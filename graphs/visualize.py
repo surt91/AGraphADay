@@ -339,7 +339,7 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
 def draw_blockmodel(G, basename, absdir, style, layout):
     g = nx2gt(G)
-    state = gt.inference.minimize_nested_blockmodel_dl(g, deg_corr=True)
+    state = gt.inference.minimize_nested_blockmodel_dl(g)
 
     details = "style = {}, layout = {}".format("Blockmodel", "Blockmodel")
 
