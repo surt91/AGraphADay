@@ -1,7 +1,12 @@
 # A Graph A Day
 
-This is a Twitter bot, which can tweet pictures of random graphs.
-It also listens for mentions and answers them with pictures of graphs
+<a href="https://twitter.com/randomGraphs/status/1342751042891624449" target="_blank"><img align="right" width="256" height="256" alt="Dorogovtsev-Goltsev-Mendes Graph" src="extra/example_graph.webp"></a>
+
+This is a Twitter bot which tweets pictures of random graphs.
+
+There is a short [blog article](https://blog.schawe.me/randomGraphs.html) about the tech and -- more importantly -- showing a few example pictures.
+
+The bot can also listen for mentions and answers them with pictures of graphs
 it detects in the tweet. The layout ans styles are also extracted from the
 tweet if possible. If a number smaller than 1025 is detected, it is used as
 the number of nodes.
