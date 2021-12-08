@@ -63,10 +63,27 @@ Every time the program runs it will create a graph, save it as `png`
 and its details in a `txt` named after the current unix timestamp and tweets
 it.
 
-**Important:** Do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
+**Important:** If you want to connect to Twitter, do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
 
 Also there is at least one submodule which should be loaded from GitHub,
 therefore run `git submodule update --init --recursive` after cloning.
+
+## :whale: Docker
+
+You can also use a docker container:
+
+```bash
+# build it
+docker build . -t graph
+# run it
+mkdir -p img test
+docker run \
+    -v $PWD/img:/AGraphADay/archive \
+    -v $PWD/test:/AGraphADay/test \
+    -v $PWD/keys_and_secrets.py:/AGraphADay/keys_and_secrets.py \
+    graph test
+# the generated graphs will be saved to the mounted volumes `img` or `test`
+```
 
 ## Dependencies
 
