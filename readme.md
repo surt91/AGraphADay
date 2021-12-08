@@ -1,4 +1,4 @@
-# A Graph A Day
+# :art: A Graph A Day
 
 <a href="https://twitter.com/randomGraphs/status/1342751042891624449" target="_blank"><img align="right" width="256" height="256" alt="Dorogovtsev-Goltsev-Mendes Graph" src="extra/example_graph.webp"></a>
 
@@ -11,59 +11,13 @@ it detects in the tweet. The layout ans styles are also extracted from the
 tweet if possible. If a number smaller than 1025 is detected, it is used as
 the number of nodes.
 
-## Selection of Recognized Keywords
-
-### Graph Types
-
-    * Watts-Strogatz
-    * Barabási-Albert
-    * Powerlaw cluster graph
-    * Delaunay triangulation and some subgraphs
-    * Minimum Radius graph
-    * some real world networks (source: http://www-personal.umich.edu/~mejn/netdata/)
-    * Caveman graph
-
-### Styles
-
-    * Betweenness
-        * dark background
-        * node color and size dependent on betweenness centrality
-        * edge thickness dependent on betweenness centrality
-
-    * Degree
-        * white background
-        * node size and color dependent on their degree
-
-    * Blocky
-        * dark background
-        * square nodes
-        * node color dependent on their eigenvector
-
-    * Curved
-        * white background
-        * curved edges
-        * node size and color dependent on their HITS score assuming the graph
-          is a citation network
-
-### Layouts
-
-    * sfdp
-    * Fruchterman Reingold (spring based layout)
-    * ARF (attractive and repulsive forces, nodes inside a disk)
-    * radial tree
-    * blockmodel (stochastic blockmodel based hirachic layout)
-    * dot (from graphviz, a hierarchic layout)
-    * neato (from graphviz also known as Kamada-Kawai)
-    * circular (from graphviz, nodes on a circle)
-    * twopi (from graphviz, radial layout)
-
-## Setup
+## :hammer_and_wrench: Setup
 
 Every time the program runs it will create a graph, save it as `png`
-and its details in a `txt` named after the current unix timestamp and tweets
+and its details in a `txt` named after the current Unix timestamp and tweets
 it.
 
-**Important:** If you want to connect to Twitter, do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
+:key: **Important:** If you want to connect to Twitter, do not forget to put in valid keys and secrets in `keys_and_secrets.py`.
 
 Also there is at least one submodule which should be loaded from GitHub,
 therefore run `git submodule update --init --recursive` after cloning.
@@ -85,16 +39,67 @@ docker run \
 # the generated graphs will be saved to the mounted volumes `img` or `test`
 ```
 
-## Dependencies
+## :herb: Dependencies
 
-    * from PyPI
-        * networkx
-        * matplotlib
-        * scipy
-        * python-pygraphviz
-        * tweepy
-        * fuzzywuzzy
-        * graph-tool
+* python packages:
+  * networkx
+  * matplotlib
+  * scipy
+  * pygraphviz
+  * tweepy
+  * fuzzywuzzy
+  * graph-tool
 
-    * Imagemagick
-    * optipng
+* Imagemagick
+* optipng
+
+
+## :scroll: Selection of Recognized Keywords
+
+If the bot is listening for mentions or the `test.py` script is called
+the input text is searched fuzzily for keywords. Here is a selection of
+recognized keywords.
+
+### Graph Types
+
+* Watts-Strogatz
+* Barabási-Albert
+* Powerlaw cluster graph
+* Delaunay triangulation and some subgraphs
+* Minimum Radius graph
+* some real world networks (source: http://www-personal.umich.edu/~mejn/netdata/)
+* Caveman graph
+
+### Styles
+
+* Betweenness
+  * dark background
+  * node color and size dependent on betweenness centrality
+  * edge thickness dependent on betweenness centrality
+
+* Degree
+  * white background
+  * node size and color dependent on their degree
+
+* Blocky
+  * dark background
+  * square nodes
+  * node color dependent on their eigenvector
+
+* Curved
+  * white background
+  * curved edges
+  * node size and color dependent on their HITS score assuming the graph
+        is a citation network
+
+### Layouts
+
+* sfdp
+* Fruchterman Reingold (spring based layout)
+* ARF (attractive and repulsive forces, nodes inside a disk)
+* radial tree
+* blockmodel (stochastic blockmodel based hirachic layout)
+* dot (from graphviz, a hierarchic layout)
+* neato (from graphviz also known as Kamada-Kawai)
+* circular (from graphviz, nodes on a circle)
+* twopi (from graphviz, radial layout)
