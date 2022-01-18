@@ -180,7 +180,7 @@ class GtStyle:
     @staticmethod
     def styleBetweenness(g, pos, fixed=False):
         deg = g.degree_property_map("total")
-        vbet, ebet = gt.centrality.betweenness(g)
+        vbet, ebet = gt.betweenness(g)
         # nodes with value zero should be 5% of maximum
         vbet.a += max(vbet.a.max(), 1) * 0.05
         vbet.a = np.sqrt(vbet.a)
