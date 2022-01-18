@@ -323,6 +323,7 @@ class RandomGraph:
             m = random.randint(1, 5)
 
         G = gen.barabasi_albert_graph(N, m)
+
         details = dict(name="Barabási-Albert Graph", N=N, m=m, seed=self.seed,
                        template="{name}, N = {N}, m = {m}")
 
@@ -563,19 +564,21 @@ class RandomGraph:
 
     @synonym("stanford")
     @style(styles_all)
-    @layout(["Blockmodel"])
-    def generateStanford(self, idx=None, **kwargs):
+    @layout(["SFDP", "Blockmodel"])
+    def generateFromEdgelist(self, idx=None, **kwargs):
         files = [
             "p2p",
+            "networks2021",
         ]
         label = [
             "Gnutella p2p Network (2002)",
+            "Networks 2021 participants",
         ]
 
         if idx is None:
-            idx = random.randint(0, len(files)-1)
+            idx = random.randint(0, len(files) - 1)
 
-        fname = os.path.join(self.folder, "networks/{}.txt".format(files[idx]))
+        fname = os.path.join(self.folder, "networks/{}.edgelist".format(files[idx]))
         G = nx.read_edgelist(fname)
         details = dict(name=label[idx],
                        N=len(G.nodes()),
@@ -588,7 +591,11 @@ class RandomGraph:
     @synonym("gnutella")
     @synonym("internet p2p")
     def gnutella(self, **kwargs):
-        return self.generateStanford(0, **kwargs)
+        return self.generateFromEdgelist(0, **kwargs)
+
+    @synonym("networks2021")
+    def networks2021(self, **kwargs):
+        return self.generateFromEdgelist(1, **kwargs)
 
     @synonym("caveman")
     @synonym("clique")
@@ -848,6 +855,13 @@ class RandomGraph:
 
         G = gen.grid_2d_graph(n, m)
 
+        # usually the node labels are coordinate tuples
+        # the visualization will then assume that the positions
+        # should at the corresponding position -- to work around we convert
+        # the tuples to strings
+        mapping = {i: str(i) for i in G.nodes}
+        nx.relabel_nodes(G, mapping, copy=False)
+
         details = dict(name="square lattice", N=N, n=n, m=m, seed=self.seed,
                        template="{name}, N = {N}, n = {n}, m = {m}")
 
@@ -869,6 +883,13 @@ class RandomGraph:
 
         G = gen.hexagonal_lattice_graph(n, m)
 
+        # usually the node labels are coordinate tuples
+        # the visualization will then assume that the positions
+        # should at the corresponding position -- to work around we convert
+        # the tuples to strings
+        mapping = {i: str(i) for i in G.nodes}
+        nx.relabel_nodes(G, mapping, copy=False)
+
         details = dict(name="hexagonal lattice", N=N, n=n, m=m, seed=self.seed,
                        template="{name}, N = {N}, n = {n}, m = {m}")
 
@@ -889,6 +910,13 @@ class RandomGraph:
             N = n * m
 
         G = gen.triangular_lattice_graph(n, m)
+
+        # usually the node labels are coordinate tuples
+        # the visualization will then assume that the positions
+        # should at the corresponding position -- to work around we convert
+        # the tuples to strings
+        mapping = {i: str(i) for i in G.nodes}
+        nx.relabel_nodes(G, mapping, copy=False)
 
         details = dict(name="triangular lattice", N=N, n=n, m=m, seed=self.seed,
                        template="{name}, N = {N}, n = {n}, m = {m}")
