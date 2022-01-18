@@ -1,0 +1,5 @@
+fuzzywuzzy==0.18.0
+networkx==2.6.3
+tweepy==4.4.0
+matplotlib
+pygraphviz

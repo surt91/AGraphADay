@@ -3,6 +3,7 @@ __pycache__
 *.svg
 *.png
 *.txt
+!requirements.txt
 *.dot
 *.gml
 
