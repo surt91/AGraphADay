@@ -5,7 +5,9 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key 612DEFB798507F25
 RUN apt-get update && apt-get install -y python3-graph-tool && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
-RUN git clone --depth=1 https://github.com/surt91/AGraphADay.git
+
+ADD https://api.github.com/repos/surt91/AGraphADay/git/refs/heads/master version.json
+RUN git clone --recurse-submodules --depth=1 https://github.com/surt91/AGraphADay.git
+
 WORKDIR /AGraphADay
-RUN git submodule update --init --recursive
 ENTRYPOINT ["python3", "main.py"]
