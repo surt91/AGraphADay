@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 import tweepy
 
 from keys_and_secrets import keys_and_secrets
@@ -14,7 +16,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 def tweet_pic(path, text=None, reply_to=None):
-    api.update_with_media(path, text, in_reply_to_status_id=reply_to)
+    api.update_status_with_media(status=text, filename=path, in_reply_to_status_id=reply_to)
 
 
 def obtain_dm():
@@ -43,6 +45,16 @@ def obtain_dm():
     return todo
 
 
+@lru_cache()
+def get_my_user():
+    return api.verify_credentials()
+
+
 def get_my_handle():
-    myself = api.me()
+    myself = get_my_user()
     return myself.screen_name
+
+
+def get_my_id():
+    myself = get_my_user()
+    return myself.id

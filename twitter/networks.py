@@ -4,6 +4,7 @@ import pickle
 import tweepy
 
 from .helper import api
+from twitter import helper
 
 
 os.makedirs("cache", exist_ok=True)
@@ -15,8 +16,8 @@ def get_followers(id):
     except:
         print("download followers", id)
         try:
-            lst = [user_id for user_id in tweepy.Cursor(api.followers_ids, id=id).items()]
-        except tweepy.error.TweepError as e:
+            lst = [user_id for user_id in tweepy.Cursor(api.get_follower_ids, user_id=id).items()]
+        except tweepy.errors.TweepyException as e:
             print("twitter error:", e)
             lst = []
         else:
@@ -33,8 +34,8 @@ def get_friends(id):
     except:
         print("download friends", id)
         try:
-            lst = [user_id for user_id in tweepy.Cursor(api.friends_ids, id=id).items()]
-        except tweepy.error.TweepError as e:
+            lst = [user_id for user_id in tweepy.Cursor(api.get_friend_ids, user_id=id).items()]
+        except tweepy.errors.TweepyException as e:
             print("twitter error:", e)
             lst = []
         else:
@@ -51,9 +52,9 @@ def get_list_members(list_id):
     except:
         print("download list members", list_id)
         try:
-            users = tweepy.Cursor(api.list_members, list_id=list_id).items()
-            lst = [user.id for user in tweepy.Cursor(api.list_members, list_id=list_id).items()]
-        except tweepy.error.TweepError as e:
+            users = tweepy.Cursor(api.get_list_members, list_id=list_id).items()
+            lst = [user.id for user in tweepy.Cursor(api.get_list_members, list_id=list_id).items()]
+        except tweepy.errors.TweepyException as e:
             print("twitter error:", e)
             lst = []
         else:
@@ -67,13 +68,13 @@ def get_list_members(list_id):
                 f.write(f"{u.id},@{u.screen_name}\n")
     except:
         pass
-        
+
     return lst
 
 
 def ego_network(id=None):
     if id is None:
-        id = api.me().id
+        id = helper.get_my_id()
     followers = set(get_followers(id))
     friends = set(get_friends(id))
 
@@ -110,4 +111,3 @@ def list_network(list_id=1393908329584398340):
             for i in friends:
                 if i in members:
                     f.write(f"{id},{i}\n")
-

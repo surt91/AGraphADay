@@ -7,7 +7,7 @@ from .helper import api, tweet_pic, obtain_dm, get_my_handle
 my_handle = get_my_handle()
 
 
-class MyStreamListener(tweepy.StreamListener):
+class MyStreamListener(tweepy.Stream):
     def __init__(self, guess_graph, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.guess_graph = guess_graph
