@@ -409,9 +409,9 @@ class RandomGraph:
         if N is None:
             N = random.randint(4, 400)
         if p1 is None:
-            p1 = random.uniform(0, 4)
+            p1 = random.uniform(0, 1)
         if p2 is None:
-            p2 = random.uniform(0, 4)
+            p2 = random.uniform(0, 1)
         if s is None:
             s = random.randint(0, 10**7)
 
