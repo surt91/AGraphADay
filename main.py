@@ -50,11 +50,11 @@ def createPlot(graphGenerator, folder, seed,
         path, details = createPlot(graphGenerator, folder, "1"+seed, comment, style, layout)
     except:
         from traceback import print_exc
-        # print("unexpected error:", sys.exc_info())
+        print("unexpected error:", sys.exc_info())
         print(layout, style)
         print(details)
         print_exc()
-        path, style_detail = draw_graph(G, basename, absdir, "neato")
+        exit(1)
 
     with open(basename + ".txt", "w") as f:
         f.write(details["seed"])
