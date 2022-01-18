@@ -10,10 +10,10 @@ import numpy as np
 # hack to suppress "Unable to init server: Could not connect: Connection refused"
 # errors on stderr, if not launched from an X session
 os.environ["DISPLAY"] = ":0"
-import graph_tool as gt
-import graph_tool.inference
-import graph_tool.draw
-import graph_tool.centrality
+import graph_tool.all as gt
+#import graph_tool.inference
+#import graph_tool.draw
+#import graph_tool.centrality
 import cairo
 
 from .nx2gt.nx2gt import nx2gt
@@ -129,22 +129,22 @@ class GtLayout:
 
     @staticmethod
     def layoutSFDP(g):
-        return gt.draw.sfdp_layout(g)
+        return gt.sfdp_layout(g)
 
     @staticmethod
     def layoutFruchtermanReingold(g):
-        return gt.draw.fruchterman_reingold_layout(g)
+        return gt.fruchterman_reingold_layout(g)
 
     @staticmethod
     def layoutARF(g):
-        return gt.draw.arf_layout(g)
+        return gt.arf_layout(g)
 
     @staticmethod
     def layoutRadialTree(g):
         # take the node with the highest degree as the root
         deg = g.degree_property_map("total")
         root_node = deg.a.argmax()
-        return gt.draw.radial_tree_layout(g, root_node)
+        return gt.radial_tree_layout(g, root_node)
 
 
 class GtStyle:
@@ -200,7 +200,7 @@ class GtStyle:
 
     @staticmethod
     def styleCurved(g, pos, fixed=False):
-        eig, auth, hub = graph_tool.centrality.hits(g)
+        eig, auth, hub = gt.hits(g)
 
         auth.a += 1  # nodes with value zero should be 5% of maximum
         auth.a = auth.a**2 / (auth.a**2).max() * GtStyle.max_node_size(g, pos, fixed)
@@ -221,7 +221,7 @@ class GtStyle:
 
     @staticmethod
     def styleBlocky(g, pos, fixed=False):
-        lambda1, eig = graph_tool.centrality.eigenvector(g)
+        lambda1, eig = gt.eigenvector(g)
 
         eig.a += 1  # nodes with value zero should be 5% of maximum
         eig.a = np.sqrt(eig.a) / np.sqrt(eig.a).max() * GtStyle.max_node_size(g, pos, fixed)
@@ -312,7 +312,7 @@ def draw_graphtool(G, basename, absdir, style, layout):
     elif layout in GtLayout().layouts:
         pos = GtLayout().names[layout](g)
     else:
-        pos = gt.draw.sfdp_layout(g)
+        pos = gt.sfdp_layout(g)
 
     details = "style = {}, layout = {}".format(style, layout)
 
@@ -322,7 +322,7 @@ def draw_graphtool(G, basename, absdir, style, layout):
     style_dict = GtStyle().names[style](g, pos, fixed=layout == "explicit")
 
     try:
-        gt.draw.graph_draw(g, pos=pos, output=infile, **style_dict)
+        gt.graph_draw(g, pos=pos, output=infile, **style_dict)
     except cairo.Error:
         print("some cairo error")
         raise RetryableError
@@ -339,14 +339,14 @@ def draw_graphtool(G, basename, absdir, style, layout):
 
 def draw_blockmodel(G, basename, absdir, style, layout):
     g = nx2gt(G)
-    state = gt.inference.minimize_nested_blockmodel_dl(g)
+    state = gt.minimize_nested_blockmodel_dl(g)
 
     details = "style = {}, layout = {}".format("Blockmodel", "Blockmodel")
 
     infile = f"{basename}_raw.png"
     outfile = f"{basename}.png"
 
-    gt.draw.draw_hierarchy(state,
+    gt.draw_hierarchy(state,
                            bg_color=(0.25, 0.25, 0.25, 1.0),
                            output_size=(4096, 4096),
                            output=infile)
